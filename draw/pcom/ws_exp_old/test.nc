@@ -1,0 +1,1 @@
+/home/ou/archive/data/plot/pcom/ws_exp/stress_zonal_avg_evolve.nc

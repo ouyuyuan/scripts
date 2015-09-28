@@ -1,0 +1,6 @@
+
+let my_temp = temp*varmask
+let $1 = rho*cp*my_temp[x=@din, y=@din, z=@din]
+
+set var/title="`title`" /units="J" $1
+save/append/file="`outfile`" $1

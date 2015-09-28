@@ -1,0 +1,2 @@
+slidex: slide.x
+slidey: slide.y

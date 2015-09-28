@@ -1,0 +1,1 @@
+rst_style: rst_prefix

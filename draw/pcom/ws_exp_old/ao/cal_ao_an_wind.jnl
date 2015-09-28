@@ -1,0 +1,40 @@
+
+let outfile = "$1"
+cancel mode upcase_output
+set memory/size = 200
+
+set data "/home/ou/archive/data/plot/pcom/ws_exp/ao_slp_eof.nc"
+set data "/home/ou/archive/data/pcom/input/pcom_bcf_yr.nc"
+save/clobber/file="`outfile`" ts_sd[d=1]
+
+let px = 100*eof_regres[x=@DDF,d=1] ! 100: change hPa to Pa
+let py = 100*eof_regres[y=@DDF,d=1]
+
+let pi = 3.141592653589793
+let torad = pi/180.0
+let omega  = pi/43082.0 ! angular velocity of the earth
+let r = 6371*10^3 ! radius of the earth
+let rho = 1.3 ! kg/m^3, density of air
+let lat = y[gy=eof_regres,d=1]
+let f = 2*omega*sin(lat*torad)
+
+let ug = (-1)*py/(rho*f)
+set var/title="zonal geostrophic wind anomaly of AO"/units="m/s" ug
+save/append/file="`outfile`" ug[gxy=bcu@ave]
+
+let vg = px/(rho*f)
+set var/title="meridional geostrophic wind anomaly of AO"/units="m/s" vg
+save/append/file="`outfile`" vg[gxy=bcu@ave]
+
+! tau = rho cd u10^2 = rho * ustar^2, follows Large and Yeager 2008, eq 10
+let a1 = 0.00270
+let a2 = 0.000142
+let a3 = 0.0000764
+! 10: change N/m^2 to dyne/cm^2
+let an_bcu = 10 * rho * (a1*ug + a2*ug^2 + a3*ug^3)
+set var/title="zonal geostrophic wind stress anomaly of AO"/units="dyne/cm^2" an_bcu
+save/append/file="`outfile`" an_bcu[gxy=bcu@ave]
+
+let an_bcv = 10 * rho * (a1*vg + a2*vg^2 + a3*vg^3)
+set var/title="meridional geostrophic wind stress anomaly of AO"/units="dyne/cm^2" an_bcv
+save/append/file="`outfile`" an_bcv[gxy=bcu@ave]

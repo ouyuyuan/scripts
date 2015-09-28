@@ -1,0 +1,12 @@
+
+/*$TA: T_A$*/
+/*$TB: T_B$*/
+
+                                            outfile: "maxima.out"$
+eq: k*'diff(T, x, 2) = 0$                   with_stdout(outfile, tex(%))$
+                                            file_output_append: true$
+gen_solu: ode2(eq, T, x)$                   with_stdout(outfile, tex(gen_solu))$
+
+spe_solu: bc2(gen_solu, x=0, T=TA, x=1/2, T=TB)$
+                                            with_stdout(outfile, tex(spe_solu))$
+subst([TA=100, TB=500], spe_solu)$          with_stdout(outfile, tex(%))$

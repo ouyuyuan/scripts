@@ -1,0 +1,31 @@
+
+/*$dx: d_x$*/
+/*$dy: d_y$*/
+/*$dz: d_z$*/
+/*$TE: T_{E}$*/
+/*$TW: T_{W}$*/
+/*$TN: T_{N}$*/
+/*$TS: T_{S}$*/
+/*$TP: T_{P}$*/
+/*$TA: T_{A}$*/
+
+                                        outfile: "maxima.out"$
+dTdx_e: (TE-TP)/dx$
+/*dTdx_e: 0$*/
+
+dTdx_w: (TP-TW)/dx$
+/*dTdx_w: q$*/
+
+dTdy_n: (TN-TP)/dy$
+/*dTdy_n: (TA-TP)/(dx/2)$*/
+
+dTdy_s: (TP-TS)/dy$
+/*dTdy_s: 0$*/
+
+eq: k*dy*dz*dTdx_e - k*dy*dz*dTdx_w + k*dx*dz*dTdy_n - k*dx*dz*dTdy_s = 0$
+                                        with_stdout(outfile, tex(%))$
+                                        file_output_append: true$
+factor(expand( solve(eq, TP) ))$
+/*expand( solve(eq, TP) )$*/
+
+with_stdout(outfile,tex(%))$

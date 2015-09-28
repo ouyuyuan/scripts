@@ -1,0 +1,44 @@
+
+! Description: surface horizontal velocity
+!
+!      Author: OU Yuyuan <ouyuyuan@lasg.iap.ac.cn>
+!     Created: 2013-09-10 19:33:34 CST
+! Last Change: 2013-10-04 10:06:00 CST
+
+cancel mode logo
+
+set graphics unmapped
+set mode metafile:"/home/ou/archive/drawing/pcom/assess/png/unmodified/uv.png"
+!set mode metafile:"/home/ou/archive/drawing/pcom/assess/png/ts_restored/uv.png"
+!set mode metafile:"/home/ou/archive/drawing/pcom/assess/png/t_restored/uv.png"
+
+let data_dir = "/media/scidata"
+
+let soda = "`data_dir`/soda/climate/climate_1981-2000.nc"
+let hycom_u = "`data_dir`/hycom/PACa0.08/climate/uvel_1981-2000.nc"
+let hycom_v = "`data_dir`/hycom/PACa0.08/climate/vvel_1981-2000.nc"
+let licom = "`data_dir`/licom/unmodified/climate/climate_081-100.nc"
+let pcom = "`data_dir`/pcom/unmodified/climate/climate_081-100.nc"
+!let pcom = "`data_dir`/pcom/ts_restored/climate/climate_33months.nc"
+!let pcom = "`data_dir`/pcom/t_restored/climate/climate_021-040.nc"
+
+set region/x=98E:78W/y=20S:65.8N
+
+use "`soda`"
+set viewport ul
+vector/k=1 u,v
+
+let len = "0.231"
+
+use "`hycom_u`"
+use "`hycom_v`"
+set viewport ur
+vector/k=1/len=`len` u[D=`hycom_u`],v
+
+use "`licom`"
+set viewport ll
+vector/k=30/len=`len` us,vs
+
+use "`pcom`"
+set viewport lr
+vector/k=1/len=`len` u,v

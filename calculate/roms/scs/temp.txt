@@ -1,0 +1,50 @@
+About to run "ncl interp_init.ncl" with: 
+ Copyright (C) 1995-2012 - All Rights Reserved
+ University Corporation for Atmospheric Research
+ NCAR Command Language Version 6.1.0
+ The use of this software is governed by a License Agreement.
+ See http://www.ncl.ucar.edu/ for more details.
+(0)	-5000
+(1)	-4000
+(2)	-3000
+(3)	-2500
+(4)	-2000
+(5)	-1500
+(6)	-1250
+(7)	-1000
+(8)	-900
+(9)	-800
+(10)	-700
+(11)	-600
+(12)	-500
+(13)	-400
+(14)	-350
+(15)	-300
+(16)	-250
+(17)	-200
+(18)	-150
+(19)	-125
+(20)	-100
+(21)	 -90
+(22)	 -80
+(23)	 -70
+(24)	 -60
+(25)	 -50
+(26)	 -45
+(27)	 -40
+(28)	 -35
+(29)	 -30
+(30)	 -25
+(31)	 -20
+(32)	 -15
+(33)	 -12
+(34)	 -10
+(35)	  -8
+(36)	  -6
+(37)	  -4
+(38)	  -2
+(39)	   0
+fatal:Variable (s_rho) is undefined
+fatal:["Execute.c":7743]:Execute: Error occurred at or near line 61 in file interp_init.ncl
+
+

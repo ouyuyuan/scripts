@@ -1,0 +1,35 @@
+
+! Description: the depth of thermalcline
+!
+!      Author: OU Yuyuan <ouyuyuan@lasg.iap.ac.cn>
+!     Created: 2014-10-12 08:38:24 BJT
+! Last Change: 2014-10-13 20:20:47 BJT
+
+let infile = "$1"
+let outfile = "$2"
+
+set data "`infile`"
+
+let dtdz_b = pt[z=@DDB]
+let dtdz_f = pt[z=@DDF]
+let dtdz_c = pt[z=@DDC]
+
+let ddtddz_b = dtdz_b[z=@DDF]
+let ddtddz_f = dtdz_f[z=@DDF]
+let ddtddz_c = dtdz_c[z=@DDF]
+
+set var/title="dpt/dz, backward"/units="degC/m" dtdz_b
+set var/title="dpt/dz, forward"/units="degC/m" dtdz_f
+set var/title="dpt/dz, centered"/units="degC/m" dtdz_c
+
+set var/title="second order dpt/dz, backward first, forward second"/units="degC/m^2" ddtddz_b
+set var/title="second order dpt/dz, forward first, forward second"/units="degC/m^2" ddtddz_f
+set var/title="second order dpt/dz, centered first, forward second"/units="degC/m^2" ddtddz_c
+
+cancel mode upcase_output
+save/clobber/file="`outfile`" dtdz_b
+save/append/file="`outfile`" dtdz_f
+save/append/file="`outfile`" dtdz_c
+save/append/file="`outfile`" ddtddz_b
+save/append/file="`outfile`" ddtddz_f
+save/append/file="`outfile`" ddtddz_c

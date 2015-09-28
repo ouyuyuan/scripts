@@ -1,0 +1,15 @@
+
+eq: k*'diff(T, x, 2) = 0$
+tex(%);
+
+gen_solu: ode2(eq, T, x)$
+tex(gen_solu);
+
+/*$TA: T_A$*/
+/*$TB: T_B$*/
+
+spe_solu: bc2(gen_solu, x=0, T=TA, x=1/2, T=TB)$
+tex(spe_solu);
+
+subst([TA=100, TB=500], spe_solu)$
+tex(%);

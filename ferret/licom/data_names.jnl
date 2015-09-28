@@ -1,0 +1,14 @@
+\cancel mode verify
+
+! Description: relevant data names
+!
+!      Author: OU Yuyuan <ouyuyuan@lasg.iap.ac.cn>
+!     Created: 2013-03-27 16:47:31 CST
+! Last Change: 2013-04-03 09:25:52 CST
+
+!set mode metafile: "/home/ou/arhcive/drawing/test_ferret.png"
+set mode / last verify
+
+define symbol nc_force = "/home/ou/archive/data/ser101/licom/model_force.nc"
+define symbol nc_index = "/home/ou/archive/data/ser101/licom/index.nc"
+define symbol nc_ts    = "/home/ou/archive/data/ser101/licom/levitus_ts.nc"

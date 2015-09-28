@@ -1,0 +1,17 @@
+
+! Description: 
+!
+!      Author: OU Yuyuan <ouyuyuan@lasg.iap.ac.cn>
+!     Created: 2013-03-27 16:47:31 CST
+! Last Change: 2013-03-30 07:49:33 CST
+
+!set data levitus_climatology
+!shade/k=1/lev=(-2,32,1) temp
+
+!frame/file="/home/ou/archive/drawing/test_ferret.gif"
+
+let data_dir = "/home/ou/archive/"
+
+
+exit
+

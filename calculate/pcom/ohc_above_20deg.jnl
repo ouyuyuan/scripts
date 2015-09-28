@@ -1,0 +1,10 @@
+
+let infile = "/home/ou/archive/data/pcom/exp08_fkh1/year_501-550.nc"
+let outfile = "/home/ou/archive/data/plot/pcom/ws_exp/ohc_above_20deg.nc"
+cancel mode upcase_output
+
+set data "`infile`"
+let temp = if pt ge 20 then pt else 0
+let ctr_g= 1029*3901*temp[x=@din, y=@din, z=@din]
+set var/title="global, control run "/units="J" ctr_g
+save/append/file="`outfile`" ctr_g

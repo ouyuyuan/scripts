@@ -1,0 +1,19 @@
+
+! Description:
+!
+!      Author: OU Yuyuan <ouyuyuan@lasg.iap.ac.cn>
+!     Created: 2014-10-12 08:38:24 BJT
+! Last Change: 2014-10-15 17:04:52 BJT
+
+set data "/home/ou/archive/data/pcom/input/pcom_ini.nc"
+
+let dtdz_f = ct[z=@DDF]
+let ddtddz_f = dtdz[z=@DDF]
+
+set var/title="dpt/dz, forward"/units="degC/m" dtdz
+set var/title="second order dpt/dz, backward first, forward second"/units="degC/m^2" ddtddz
+
+let outfile = "/home/ou/archive/data/pcom/plot/ws_exp/thc_ini.nc"
+cancel mode upcase_output
+save/clobber/file="`outfile`" dtdz
+save/append/file="`outfile`" ddtddz

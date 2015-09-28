@@ -1,0 +1,17 @@
+
+/*$ g11: g^{11} $*/
+/*$ g12: g^{12} $*/
+/*$ g13: g^{13} $*/
+
+eq1: 2*g11 + g12 + g13 = 1$
+tex(%);
+
+eq2: g11 + 2*g12 + g13 = 0$
+tex(%);
+
+eq3: g11 + g12 + 2*g13 = 0$
+tex(%);
+
+"Solve the above three equations, yields";
+solve([eq1, eq2, eq3], [g11, g12, g13])$
+tex(%);

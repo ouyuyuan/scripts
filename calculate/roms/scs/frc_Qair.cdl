@@ -1,0 +1,27 @@
+netcdf frc_bulk {
+
+dimensions:
+	xi_rho = 186 ;
+	eta_rho = 286 ;
+	time = UNLIMITED ; // (0 currently)
+
+variables:
+	double time(time) ;
+		time:long_name = "atmospheric forcing time" ;
+        time:units = "days since 2006-01-01 00:00:00" ;
+		time:field = "time, scalar, series" ;
+        time:calendar = "gregorian" ;
+		time:begin_date = "2006-01-01 00:00:00" ;
+		time:end_date = "2006-06-08 23:00:00" ;
+	double Qair(time, eta_rho, xi_rho) ;
+		Qair:long_name = "Specific humidity" ;
+		Qair:units = "g/kg" ;
+		Qair:field = "Qair scalar, series" ;
+		Qair:time = "time" ;
+
+// global attributes:
+		:type = "ROMS forcing file" ;
+        :title = "South China Sea, Atmospheric Fields" ;
+        :source = "NCEP_CFSR dataset" ;
+
+}

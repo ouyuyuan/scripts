@@ -1,0 +1,33 @@
+
+let draw_dir = "/home/ou/archive/drawing/numer_ex/euler"
+
+set graphics unmapped
+use "/home/ou/archive/data/numer_ex/euler.nc"
+
+set mode metafile: "`draw_dir`/values.png"
+plot exact, euler, imp, exp, taylor, sec, frog
+
+set mode metafile: "`draw_dir`/values_ln.png"
+plot ln(exact), ln(euler), ln(imp), ln(exp), ln(taylor), ln(sec), ln(frog)
+
+let err_ex = (exp-exact)/exact
+let err_ta = (taylor-exact)/exact
+let err_se = (sec-exact)/exact
+let err_im = (imp-exact)/exact
+let err_eu = (euler-exact)/exact
+let err_fr = (frog-exact)/exact
+
+set mode metafile: "`draw_dir`/err_all.png"
+plot err_ex, err_ta, err_se, err_im, err_eu, err_fr
+
+set mode metafile: "`draw_dir`/err_4.png"
+plot err_ex, err_ta, err_se, err_im
+
+set mode metafile: "`draw_dir`/err_3.png"
+plot err_ex, err_ta, err_se
+
+set mode metafile: "`draw_dir`/err_2.png"
+plot err_ex, err_ta
+
+set mode metafile: "`draw_dir`/err_1.png"
+plot err_ex

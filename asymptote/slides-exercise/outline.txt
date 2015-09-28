@@ -1,0 +1,12 @@
+Simple Examples<slide-simple.asy>
+Creative Examples
+	Geometry<slide-creative-a.asy>
+	Pavage<slide-creative-b.asy>
+	Stars<slide-creative-c.asy>
+	Automata<slide-creative-d.asy>
+Graph Module
+	a<slide-graph-a.asy>
+	Marker<slide-graph-b.asy>
+	d<slide-graph-d.asy>
+	c<slide-graph-c.asy>
+	e<slide-graph-e.asy>

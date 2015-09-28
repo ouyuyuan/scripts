@@ -1,0 +1,42 @@
+
+/*
+ * Description: numerical scheme for steady-state heat distribution
+ *
+ *      Author: OU Yuyuan <ouyuyuan@lasg.iap.ac.cn>
+ *     Created: 2013-06-05 18:41:35 CST
+ * Last Change: 2013-06-06 10:35:33 CST
+ */
+
+/* symbol for substitute in Perl script <<<1*/
+
+/*$g: \Gamma$*/
+/*$dx: \triangle x$*/
+/*$fE: T_{i+1}$*/
+/*$fW: T_{i-1}$*/
+/*$fP: T_{i}$*/
+/*$fA: T_{A}$*/
+/*$fB: T_{B}$*/
+/*$S: \overline{S}$*/
+
+outfile: "maxima.out"$
+
+declare(g, constant, S, constant, dx, constant, fA, constant, fB, constant)$
+
+/* inner diff. <<<1 */
+
+/*dfdx_e: (fE-fP)/dx$*/
+dfdx_w: (fP-fW)/dx$
+
+/* boundary diff. <<<1 */
+
+dfdx_e: (fB-fP)/(dx/2)$
+/*dfdx_w: (fP-fA)/(dx/2)$*/
+
+eq: k*dfdx_e - k*dfdx_w = 0$
+
+/* output <<<1 */
+
+/*expand(%);*/
+expand( solve(eq, fP) )$
+
+with_stdout(outfile,tex(%));

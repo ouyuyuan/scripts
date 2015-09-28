@@ -1,0 +1,37 @@
+cancel var/all
+cancel data/all
+set window/clear
+cancel mode logo
+
+!set region/x=228E
+!let levels_pt="(-2,30,2)"
+!let levels_dtdz="(-0.22,0.12,0.02)"
+!let vlimts="1500:0:100"
+let it = 134
+!let it = 506
+let dir = "/home/ou/archive/data/plot/pcom/ws_exp"
+
+set data "`dir`/ao_hgt_eof.nc"
+set viewport ul
+!fill/vlimts=`vlimts`/levels=`levels_pt` pt
+!shade eof*ts[l=`it`]
+shade eof_regres*ts_sd[l=`it`]
+!shade eof[x=@ddf]*ts[l=`it`]*10^5
+go land
+
+set viewport ur
+plot ts_sd
+
+set data "`dir`/ao_slp_eof.nc"
+
+set viewport ll
+!shade an[x=@ddf,l=`it`]*10^5
+!shade an[l=`it`]
+!shade eof*ts[l=`it`]
+shade eof_regres*ts_sd[l=`it`]
+go land
+!fill/vlimts=`vlimts`/levels=`levels_pt` temp
+
+set viewport lr
+!plot ts_sd[l=373:636]
+plot ts_sd

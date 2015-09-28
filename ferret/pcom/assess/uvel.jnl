@@ -1,0 +1,36 @@
+
+! Description: zonal velocity
+!
+!      Author: OU Yuyuan <ouyuyuan@lasg.iap.ac.cn>
+!     Created: 2013-09-10 10:53:51 CST
+! Last Change: 2013-10-04 10:02:48 CST
+
+cancel mode logo
+
+set graphics unmapped
+set mode metafile:"/home/ou/archive/drawing/pcom/assess/png/unmodified/uvel.png"
+!set mode metafile:"/home/ou/archive/drawing/pcom/assess/png/ts_restored/uvel.png"
+!set mode metafile:"/home/ou/archive/drawing/pcom/assess/png/t_restored/uvel.png"
+
+let data_dir = "/media/scidata"
+set region/x=98E:78W/y=20S:65.8N
+
+set data "`data_dir`/soda/climate/climate_1981-2000.nc"
+set viewport ul
+shade/k=1 u
+
+let levels = "(-0.7,0.9,0.05)"
+
+set data "`data_dir`/hycom/PACa0.08/climate/uvel_1981-2000.nc"
+set viewport ur
+shade/k=1/levels=`levels` u
+
+set data "`data_dir`/licom/unmodified/climate/climate_081-100.nc"
+set viewport ll
+shade/k=30/levels=`levels` us
+
+set data "`data_dir`/pcom/unmodified/climate/climate_081-100.nc"
+!set data "`data_dir`/pcom/ts_restored/climate/climate_33months.nc"
+!set data "`data_dir`/pcom/t_restored/climate/climate_021-040.nc"
+set viewport lr
+shade/k=1/levels=`levels` u

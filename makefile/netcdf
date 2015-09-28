@@ -1,0 +1,14 @@
+# NLIB =  -L/usr/lib -lnetcdff -lnetcdf
+# ILIB =  -I/usr/include
+NETCDF = /home/ou/opt/ifc/netcdf
+NLIB = -L$(NETCDF)/lib -lnetcdf -lnetcdff
+# ILIB = -I$(NETCDF)/include
+FC   =  ifort
+# FC   =  gfortran -O3 -fdefault-real-8
+
+test:
+	$(FC) -c  testtest.f90 $(NLIB) $(ILIB)
+	$(FC)  -o test test.o $(NLIB) $(ILIB)
+
+clean:
+	rm -f test.o test

@@ -1,0 +1,48 @@
+
+/*$dx: \Delta x$*/
+/*$dt: \Delta t$*/
+/*$TP: T_{P}$*/
+/*$TE: T_{E}$*/
+/*$TW: T_{W}$*/
+/*$TP0: T_{P}^{0}$*/
+/*$TE0: T_{E}^{0}$*/
+/*$TW0: T_{W}^{0}$*/
+/*$TA: T_{A}$*/
+/*$TB: T_{B}$*/
+/*$r: \rho$*/
+/*$dTdx_ave_w: \overline{T_x}(w)$*/
+/*$dTdx_ave_e: \overline{T_x}(e)$*/
+
+declare(c, constant, r, constant, k, constant);
+
+eq: r*c*(TP - TP0)*dx = k*(dTdx_ave_e - dTdx_ave_w)*dt;
+ave: [TP_ave = TP, TE_ave = TE, TW_ave = TW];
+[def_F: F=r*c*dx, def_D: D=k*dt/dx];
+
+"In implicit time scheme :math:`\\overline{T}(x)=T(x)`";
+"";
+
+
+"In internal volumes";
+dTdx: [dTdx_ave_e = (TE_ave - TP_ave)/dx, dTdx_ave_w = (TP_ave - TW_ave)/dx];
+dTdx: ev(dTdx, ave);
+tex(dTdx);
+eq_in: ev(eq, dTdx, solve(def_F,r), solve(def_D,k));
+solu: ratsimp(expand( solve(eq_in, TP) ));
+tex(solu);
+
+"In western boundary";
+dTdx: [dTdx_ave_e = (TE_ave - TP_ave)/dx, dTdx_ave_w = 0];
+dTdx: ev(dTdx, ave);
+tex(dTdx);
+eq_in: ev(eq, dTdx, solve(def_F,r), solve(def_D,k));
+solu: ratsimp(expand( solve(eq_in, TP) ));
+tex(solu);
+
+"In eastern boundary";
+dTdx: [dTdx_ave_e = (TB-TP_ave)/(dx/2), dTdx_ave_w = (TP_ave - TW_ave)/dx];
+dTdx: ev(dTdx, ave);
+tex(dTdx);
+eq_in: ev(eq, dTdx, solve(def_F,r), solve(def_D,k));
+solu: ratsimp(expand( solve(eq_in, TP) ));
+tex(solu);

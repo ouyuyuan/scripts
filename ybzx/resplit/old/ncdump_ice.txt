@@ -1,0 +1,75 @@
+netcdf ORCAR12_00000720_restart_ice_0100 {
+dimensions:
+	x = 290 ;
+	y = 81 ;
+	z = 75 ;
+	t = UNLIMITED ; // (1 currently)
+variables:
+	float nav_lon(y, x) ;
+	float nav_lat(y, x) ;
+	float nav_lev(z) ;
+	double time_counter(t) ;
+	double kt_ice ;
+	double hicif(t, y, x) ;
+	double hsnif(t, y, x) ;
+	double frld(t, y, x) ;
+	double sist(t, y, x) ;
+	double tbif1(t, y, x) ;
+	double tbif2(t, y, x) ;
+	double tbif3(t, y, x) ;
+	double u_ice(t, y, x) ;
+	double v_ice(t, y, x) ;
+	double qstoif(t, y, x) ;
+	double fsbbq(t, y, x) ;
+	double stress1_i(t, y, x) ;
+	double stress2_i(t, y, x) ;
+	double stress12_i(t, y, x) ;
+	double sxice(t, y, x) ;
+	double syice(t, y, x) ;
+	double sxxice(t, y, x) ;
+	double syyice(t, y, x) ;
+	double sxyice(t, y, x) ;
+	double sxsn(t, y, x) ;
+	double sysn(t, y, x) ;
+	double sxxsn(t, y, x) ;
+	double syysn(t, y, x) ;
+	double sxysn(t, y, x) ;
+	double sxa(t, y, x) ;
+	double sya(t, y, x) ;
+	double sxxa(t, y, x) ;
+	double syya(t, y, x) ;
+	double sxya(t, y, x) ;
+	double sxc0(t, y, x) ;
+	double syc0(t, y, x) ;
+	double sxxc0(t, y, x) ;
+	double syyc0(t, y, x) ;
+	double sxyc0(t, y, x) ;
+	double sxc1(t, y, x) ;
+	double syc1(t, y, x) ;
+	double sxxc1(t, y, x) ;
+	double syyc1(t, y, x) ;
+	double sxyc1(t, y, x) ;
+	double sxc2(t, y, x) ;
+	double syc2(t, y, x) ;
+	double sxxc2(t, y, x) ;
+	double syyc2(t, y, x) ;
+	double sxyc2(t, y, x) ;
+	double sxst(t, y, x) ;
+	double syst(t, y, x) ;
+	double sxxst(t, y, x) ;
+	double syyst(t, y, x) ;
+	double sxyst(t, y, x) ;
+
+// global attributes:
+		:DOMAIN_number_total = 480 ;
+		:DOMAIN_number = 100 ;
+		:DOMAIN_dimensions_ids = 1, 2 ;
+		:DOMAIN_size_global = 4322, 3059 ;
+		:DOMAIN_size_local = 290, 81 ;
+		:DOMAIN_position_first = 1441, 633 ;
+		:DOMAIN_position_last = 1730, 713 ;
+		:DOMAIN_halo_size_start = 1, 1 ;
+		:DOMAIN_halo_size_end = 1, 1 ;
+		:DOMAIN_type = "BOX" ;
+data:
+}

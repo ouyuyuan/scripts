@@ -1,0 +1,20 @@
+
+go moc soda Global
+go moc licom Global
+go moc pcom_n Global
+go moc pcom_r Global
+
+go moc soda Atlantic
+go moc licom Atlantic
+go moc pcom_n Atlantic
+go moc pcom_r Atlantic
+
+go moc soda Pacific
+go moc licom Pacific
+go moc pcom_n Pacific
+go moc pcom_r Pacific
+
+go moc soda Indian
+go moc licom Indian
+go moc pcom_n Indian
+go moc pcom_r Indian

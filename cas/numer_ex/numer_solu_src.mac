@@ -1,0 +1,20 @@
+
+/*$dx: \triangle x$*/
+/*$TE: T_{i+1}$*/
+/*$TW: T_{i-1}$*/
+/*$TP: T_{i}$*/
+/*$TA: T_{A}$*/
+/*$TB: T_{B}$*/
+
+                                        outfile: "maxima.out"$
+/*dTdx_e: (TE-TP)/dx$*/
+dTdx_w: (TP-TW)/dx$
+
+dTdx_e: (TB-TP)/(dx/2)$
+/*dTdx_w: (TP-TA)/(dx/2)$*/
+
+eq: k*dTdx_e - k*dTdx_w + q*dx = 0$     with_stdout(outfile, tex(%))$
+                                        file_output_append: true$
+expand( solve(eq, TP) )$
+
+with_stdout(outfile,tex(%))$

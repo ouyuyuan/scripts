@@ -1,0 +1,20 @@
+
+set data "`infile`"
+
+let `varprefix`_700 = rho*cp*pt[z=0:700@din]
+set var/title="0-700m"/units="J" `varprefix`_700
+save/append/file="`outfile`" `varprefix`_700
+
+let `varprefix`_2000 = rho*cp*pt[z=0:2000@din]
+set var/title="0-2000m"/units="J" `varprefix`_2000
+save/append/file="`outfile`" `varprefix`_2000
+
+!let `varprefix`_30_700 = rho*cp*pt[z=30:700@din]
+!set var/title="30-700m"/units="J" `varprefix`_30_700
+!save/append/file="`outfile`" `varprefix`_30_700
+
+!let `varprefix`_30_2000 = rho*cp*pt[z=30:2000@din]
+!set var/title="30-2000m"/units="J" `varprefix`_30_2000
+!save/append/file="`outfile`" `varprefix`_30_2000
+
+cancel data "`infile`"

@@ -1,0 +1,12 @@
+
+let outfile = "$1"
+cancel mode upcase_output
+set memory/size = 200
+
+set data "/home/ou/archive/data/pcom/input/pcom_bcf_mn_re.nc"
+let px = 0.1*bcp[x=@DDF] ! 0.1: change dyne/cm^2 to N/m^2
+let py = 0.1*bcp[y=@DDF]
+set var/title="pressure gradient in east direction"/units="N/m^3" px
+set var/title="pressure gradient in north direction"/units="N/m^3" py
+save/clobber/file="`outfile`" px
+save/append/file="`outfile`" py

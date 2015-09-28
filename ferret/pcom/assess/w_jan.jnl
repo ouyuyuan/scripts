@@ -1,0 +1,34 @@
+
+! Description: vertical velocity
+!
+!      Author: OU Yuyuan <ouyuyuan@lasg.iap.ac.cn>
+!     Created: 2013-09-10 19:21:00 CST
+! Last Change: 2013-09-12 19:18:41 CST
+
+cancel mode logo
+
+set graphics unmapped
+set mode metafile:"/home/ou/archive/drawing/pcom/assess/png/w_jan.png"
+
+let data_dir = "/media/scidata"
+set region/x=98E:78W/y=20S:65.8N
+let bar = "(-5.E-07,2.E-07,0.5E-07)"
+
+set data "`data_dir`/soda/SODA_2.2.4_200801.cdf"
+set viewport ul
+shade/k=1 w
+
+set data "`data_dir`/hycom/surface/ww-0053-01-01.nc"
+set viewport ur
+!shade/levels=`bar` ww
+shade ww
+
+set data "`data_dir`/licom/unmodified/MMEAN0001-01.nc"
+set viewport ll
+!shade/k=30/levels=`bar` ws
+shade/k=30 ws
+
+set data "`data_dir`/pcom/unmodified/N00000001.nc"
+set viewport lr
+!shade/m=1/levels=`bar` w
+shade/m=1 w

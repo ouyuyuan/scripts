@@ -1,0 +1,65 @@
+
+% Description: Make reference for the slides 
+%
+%     CAUTION: This file is needed by other scripts, DON'T delete it.
+%
+%      Author: OU Yuyuan <ouyuyuan@gmail.com>
+%     Created: 2012-11-12 09:25:21 CST
+% Last Change: 2013-12-27 09:35:14 BJT
+
+\documentclass{article}
+
+\usepackage{color}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{CJKutf8}
+
+% bibliography settings (http://space.uibe.edu.cn/u1/ryang/latex-bib.html)
+\usepackage[sort&compress,longnamesfirst,square]{natbib}
+\bibpunct[, ]{(}{)}{;}{a}{}{,}
+\addtolength{\bibsep}{-0.6 em} % shorten vertical distance
+\setlength{\bibhang}{2em}
+\renewcommand\bibnumfmt[1]{1}  % remove order number
+
+\usepackage[
+  %papersize={32cm,24cm}, % from myslide.asy
+  papersize={38cm,24cm}, % from myslide.asy
+  top=3cm, bottom=3cm,
+  headsep=0.6cm,
+  headheight=0.6cm, 
+  footnotesep=0.8cm,
+  footskip=1.4cm,
+  hmargin=3cm
+]{geometry}
+
+\bibliographystyle{plainnat}
+\pagestyle{empty} % don't show page number
+
+\definecolor{LightSteelBlue2}{rgb}{0.7372549,0.8235294,0.9333333}
+\definecolor{red2}{rgb}{0.93333,0.0,0.0} % red2 ee0000
+\definecolor{blue2}{rgb}{0.0,0.0,0.93333} % blue2 0000ee
+\definecolor{green4}{rgb}{0.0,0.545098,0.0} % red2 008b00
+\definecolor{cyan4}{rgb}{0.0,0.545,0.545} % cyan4 008b8b
+
+%\pagecolor{LightSteelBlue2}
+% only show refs
+% this can be also achive by: pdftk A=xx.pdf cat A2-end output b.pdf
+%\includeonly{bibs} 
+
+\hypersetup{
+    colorlinks,
+    citecolor=cyan4,
+    filecolor=blue2,
+    linkcolor=red2,
+    urlcolor=green4
+}
+
+\begin{document}
+\begin{CJK*}{UTF8}{gbsn}
+\Large
+\include{cites}
+
+\newpage
+\bibliography{paps}
+\end{CJK*}
+\end{document}

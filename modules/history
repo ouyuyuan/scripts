@@ -1,0 +1,11 @@
+a=12cm;
+real a = 12cm;
+string b = str(a);
+string c = 'ab'+'cd';
+c;
+string d =string(a);
+d;
+a/cm;
+string(a/cm);
+? label;
+label;

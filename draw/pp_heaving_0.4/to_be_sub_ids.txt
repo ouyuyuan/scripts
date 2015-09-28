@@ -1,0 +1,4 @@
+
+expDirP1: expDir1
+expDirP2: expDir2
+expDirP3: expDir3

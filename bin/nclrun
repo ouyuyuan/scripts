@@ -1,0 +1,41 @@
+#!/bin/bash
+
+# Description: Universal wrapper script for ncl. 
+#              Pass arguments from the command line to environment variables
+#              Ref: https://wiki.c2sm.ethz.ch/Wiki/VisNCLBasicExamples
+#
+#       Usage: ./run_ncl.sh script.ncl arg1 arg2 ...
+#              in ncl script, arg1 = getenv("NCL_ARG_1")
+#
+#      Author: OU Yuyuan <ouyuyuan@lasg.iap.ac.cn>
+#     Created: 2014-03-29 10:17:11 BJT
+# Last Change: 2014-04-11 18:22:06 BJT
+
+E_BADARGS=65
+
+if [ ! -n "$1" ]; then
+   echo "Usage: `basename $0` script.ncl argument1 argument2 ..."
+   exit $E_BADARGS
+fi  
+ncl_script=$1
+
+nclbase=`basename $ncl_script`
+#nclbase="${nclbase%.*}"
+export NCL_ARG_0=$nclbase
+export NCL_ARG_0_base="${nclbase%.*}"
+
+# save number of arguments to environment variable NCL_N_ARG
+export NCL_N_ARGS=`expr $# - 1`
+#echo $NCL_N_ARGS
+
+echo "About to run \"ncl $ncl_script\" with: "
+for (( i=2; i<=$#; i++ ))
+do
+   j=`expr $i - 1`
+   # save command line arguments to environment variable NCL_ARG_#
+   eval "export NCL_ARG_$j=\$$i"
+   eval "echo NCL_ARG_$j = \$NCL_ARG_\$$i"
+done
+
+# run ncl
+ncl $1

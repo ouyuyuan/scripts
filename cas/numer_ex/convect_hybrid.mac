@@ -1,0 +1,30 @@
+
+/*$dx: d_x$*/
+/*$fE: \varphi_{E}$*/
+/*$fW: \varphi_{W}$*/
+/*$fP: \varphi_{P}$*/
+/*$fA: \varphi_{A}$*/
+/*$fB: \varphi_{B}$*/
+/*$g: \Gamma$*/
+/*$r: \rho$*/
+
+                                        outfile: "maxima.out" $
+fe: fP $
+
+/*dfdx_e: 0 $*/
+dfdx_e: (fB-fP)/(dx/2) $
+
+fw: fW $
+/*fw: fA $*/
+
+dfdx_w: 0 $
+/*dfdx_w: (fP-fA)/(dx/2) $*/
+
+eq: r*u*fe - r*u*fw = g*dfdx_e - g*dfdx_w $
+                                        with_stdout(outfile, tex(%)) $
+                                        file_output_append: true $
+solu: expand( solve(eq, fP) )$
+[def1: F=r*u, def2: D=g/dx] $
+
+ratsimp( ev(solu[1], solve(def1,r), solve(def2, g))) $
+                                        with_stdout(outfile, tex(%)) $

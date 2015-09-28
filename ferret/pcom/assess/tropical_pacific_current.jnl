@@ -1,0 +1,63 @@
+
+! Description: currents of the tropical Pacific
+!
+!      Author: OU Yuyuan <ouyuyuan@lasg.iap.ac.cn>
+!     Created: 2013-10-06 15:30:15 CST
+! Last Change: 2013-10-07 11:04:38 CST
+
+cancel mode logo
+
+set graphics unmapped
+set mode metafile:"/home/ou/archive/drawing/pcom/assess/png/unmodified/tropical_currents.png"
+!set mode metafile:"/home/ou/archive/drawing/pcom/assess/eps/unmodified/uv.pdf"
+!set mode metafile:"/home/ou/archive/drawing/pcom/assess/eps/unmodified/uv.eps"
+!set mode metafile:"/home/ou/archive/drawing/pcom/assess/png/ts_restored/uv.png"
+!set mode metafile:"/home/ou/archive/drawing/pcom/assess/png/t_restored/uv.png"
+
+set window/aspect=0.5
+set window/size=2.5
+
+!let data_dir = "/media/scidata"
+let data_dir = "/home/ou/archive/data/climate"
+
+let soda = "`data_dir`/soda/climate_1981-2000.nc"
+let hycom_u = "`data_dir`/hycom/PACa0.08/uvel_1981-2000.nc"
+let hycom_v = "`data_dir`/hycom/PACa0.08/vvel_1981-2000.nc"
+let licom = "`data_dir`/licom/unmodified/climate_081-100.nc"
+let pcom = "`data_dir`/pcom/unmodified/climate_081-100.nc"
+!let pcom = "`data_dir`/pcom/ts_restored/climate/climate_33months.nc"
+!let pcom = "`data_dir`/pcom/t_restored/climate/climate_021-040.nc"
+
+!set region/x=98E:78W/y=20S:65.8N
+set region/x=98E:78W/y=25S:25N
+
+use "`soda`"
+set viewport ul
+!vector/k=1 u,v
+!vector/aspect/k=1 u,v
+!vector/aspect/pen=green/k=1 u,v
+vector/aspect/color=green/k=1 u,v
+go fland
+
+let len = "0.278"
+
+!use "`hycom_u`"
+!use "`hycom_v`"
+!set viewport ur
+!vector/k=1/len=`len` u[D=`hycom_u`],v
+!go fland
+
+use "`licom`"
+set viewport ll
+!vector/k=30/len=`len` us,vs
+!vector/aspect/k=30/len=`len` us,vs
+vector/aspect/k=30/length us,vs
+go fland
+
+!go basemap x=98E:78W y=25S:25N 5
+use "`pcom`"
+set viewport lr
+!vector/k=1/len=`len` u,v
+!vector/aspect/k=1/len=`len` u,v
+vector/aspect/noaxis/k=1/length u,v
+go fland

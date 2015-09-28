@@ -1,0 +1,25 @@
+
+/*$fA: \varphi_{0}$*/
+/*$fB: \varphi_{L}$*/
+/*$g: \Gamma$*/
+/*$r: \rho$*/
+/*$f: \varphi$*/
+
+                                            outfile: "maxima.out" $
+declare(r, constant, u, constant, g, constant) $
+declare(fA, constant, fB, constant, L, constant) $
+eq: r*u*'diff(f,x) = g*'diff(f, x, 2) $                  
+                                            with_stdout(outfile, tex(%)) $
+                                            file_output_append: true $
+assume(notequal(r*u,0));
+gen_solu: ratsimp(expand(ode2(eq, f, x))) $                  
+                                            with_stdout(outfile, tex(gen_solu)) $
+
+spe_solu: ratsimp(expand(bc2(gen_solu, x=0, f=fA, x=L, f=fB))) $
+                                            with_stdout(outfile, tex(spe_solu)) $
+def1: left = (f-fA)/(fB-fA) $
+solve([spe_solu, def1], [f, left]) $
+rhs(def1) = rhs( %[1][2] ) $
+                                            with_stdout(outfile, tex(%)) $
+subst([fA=1, fB=0, L=1, r=1, g=1/10], spe_solu) $
+                                            with_stdout(outfile, tex(%)) $

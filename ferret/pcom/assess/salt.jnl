@@ -1,0 +1,36 @@
+
+! Description: salinity
+!
+!      Author: OU Yuyuan <ouyuyuan@lasg.iap.ac.cn>
+!     Created: 2013-09-10 10:22:34 CST
+! Last Change: 2013-10-04 09:54:18 CST
+
+cancel mode logo
+
+set graphics unmapped
+!set mode metafile:"/home/ou/archive/drawing/pcom/assess/png/unmodified/salt.png"
+!set mode metafile:"/home/ou/archive/drawing/pcom/assess/png/ts_restored/salt.png"
+set mode metafile:"/home/ou/archive/drawing/pcom/assess/png/t_restored/salt.png"
+
+let data_dir = "/media/scidata"
+set region/x=98E:78W/y=20S:65.8N
+
+set data "`data_dir`/soda/climate/climate_1981-2000.nc"
+set viewport ul
+shade/k=1 salt
+
+let levels = "(25.5,37.5,0.5)"
+
+set data "`data_dir`/hycom/PACa0.08/climate/salt_1981-2000.nc"
+set viewport ur
+shade/k=1/levels=`levels`  salinity
+
+set data "`data_dir`/licom/unmodified/climate/climate_081-100.nc"
+set viewport ll
+shade/k=30/levels=`levels` ss
+
+!set data "`data_dir`/pcom/unmodified/climate/climate_081-100.nc"
+!set data "`data_dir`/pcom/ts_restored/climate/climate_33months.nc"
+set data "`data_dir`/pcom/t_restored/climate/climate_021-040.nc"
+set viewport lr
+shade/k=1/levels=`levels` sa

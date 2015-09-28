@@ -1,0 +1,85 @@
+#!/usr/bin/perl -w
+
+# Description: select hosts for computation 
+#
+#       Usage: ./xxx cpu_number
+#              e.g. ./xxx.pl  96
+#
+#      Author: OU Yuyuan <ouyuyuan@lasg.iap.ac.cn>
+#     Created: 2013-01-22 21:00:35 CST
+# Last Change: 2013-11-27 15:33:18 CST
+
+use 5.010;
+use strict;
+
+my $ncpu = $ARGV[0];
+my $total = 48;
+my $unit = 32;
+#my $unit = 24;
+my $max_process = $total - $unit;
+my $nhost = int($ncpu/$unit);
+my $remain = $ncpu - $unit*$nhost;
+$nhost += 1 if $remain>0;
+
+my $host_file = "mpd.hosts";
+my %unavails;
+#-----------------------------------------------------------------------
+# Skip bad nodes
+#$unavails{"c0205"} = 1;
+$unavails{"c0120"} = 1;
+$unavails{"c0119"} = 1;
+$unavails{"c0105"} = 1;
+#$unavails{"c0124"} = 1;
+#-----------------------------------------------------------------------
+my %olds;
+
+my $cmd_out = `qhost`;
+
+my @lines = split /\n/, $cmd_out;
+
+shift @lines;
+shift @lines;
+
+# mark hosts used last time
+if (-e $host_file) {
+   open FIN, "<$host_file";
+   for my $line (<FIN>) {
+      $olds{$line} = 1;
+   }
+   close(FIN);
+}
+
+open OUT, ">$host_file";
+for my $line (@lines) {
+	last if $nhost<=0;
+    my @items = split(/\s+/, $line);
+    my $host = $items[0];
+    my $load = $items[3];
+    my $avai = $items[7];
+    $load = 0 if $olds{$host};  # load of old hosts may be incorrect by qhost
+    # select cxxxx, not cxxxxx, so length($host) == 5
+    if( ($load =~ /\d+\.\d+/) && ($load < $max_process) && (length($host) == 5) ) {
+		next if $avai =~ /\-/;
+		next if $unavails{$host};
+
+      chomp(my $stat = `ssh $host 'exit' 2>&1`);
+      next unless $stat =~ /^\s*$/;
+
+		my $cmd = "ssh $host 'top -b -i -n 1 | grep \" R \" | wc -l; exit'"; 
+		chomp(my $ntask = `$cmd`);
+		next if $ntask>=15;
+
+		say OUT $host;
+		$nhost -= 1;
+		last if $nhost <= 0;
+    }
+}
+
+close(OUT);
+
+if ($nhost==0) {
+	say "done";
+} else {
+	say "failed";
+}
+

@@ -1,0 +1,37 @@
+cancel var/all
+cancel data/all
+set window/clear
+cancel mode logo
+
+let dir_ws = "/home/ou/archive/data/plot/pcom/ws_exp"
+let dir_in = "/home/ou/archive/data/pcom/input"
+
+set data "`dir_in`/pcom_bcf_mn_re_cycle_an_ao.nc"
+set data "`dir_ws`/ao_slp_eof.nc"
+
+set data "`dir_in`/pcom_bcf_mn_re_cycle.nc"
+set data "`dir_in`/pcom_bcf_mn_re.nc"
+
+!let it = 506 ! Feb 1990
+!let it = 541 ! Jan 1993
+!let it = 744  ! Dec 2009
+!let it = 752
+let it = 82
+set viewport ul
+shade bcu[d=4,l=`it`]
+go land
+
+set viewport ur
+shade bcu[d=4,l=`it`] - bcu[d=3,l=`it`]
+go land
+!plot ts_sd
+
+set viewport ll
+!shade bcu[d=1,l=`it`] - bcu[d=3,l=`it`]
+let diff = bcu[d=1] - bcu[d=3]
+shade diff[t=@AVE]
+go land
+
+set viewport lr
+shade eof_regres[d=2,l=`it`,gxy=bcu[d=1]]*ts_sd[l=`it`,d=2]
+go land

@@ -1,0 +1,33 @@
+
+/*west side*/
+/*$fa: \varphi_{WW}$*/
+/*$fb: \varphi_{W}$*/
+/*$fc: \varphi_{P}$*/
+
+/*east side*/
+/*$fa: \varphi_{W}$*/
+/*$fb: \varphi_{P}$*/
+/*$fc: \varphi_{E}$*/
+
+/*$fw: \varphi_{w}$*/
+/*$fe: \varphi_{e}$*/
+/*$f: \varphi$*/
+/*$dx: d_x$*/
+
+
+                                            outfile: "maxima.out" $
+f(x) := a*x^2 + b*x + c $
+eq1: f(-dx) = fa $
+eq2: f(0) = fb $
+eq3: f(dx) = fc $
+
+cofs: solve([eq1, eq2, eq3], [a, b, c]) $
+/*fw = expand( ev(f(dx/2), cofs) ) $*/
+fe = expand( ev(f(dx/2), cofs) ) $
+                                            with_stdout(outfile, tex(%)) $
+                                            file_output_append: true $
+at( subst(cofs, diff(f(x),x)), x=dx/2 ) $
+/*at ('diff(f,x), x=w) = ratsimp(expand(%)) $*/
+at ('diff(f,x), x=e) = ratsimp(expand(%)) $
+                                            with_stdout(outfile, tex(%)) $
+

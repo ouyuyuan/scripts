@@ -1,0 +1,10 @@
+
+let dir = "/home/ou/archive/data/pcom/exp08_fkh1"
+let infile = "`dir`/year_501-550.nc"
+let outfile = "`dir`/20deg_iso_depth.nc"
+cancel mode upcase_output
+
+set data "`infile`"
+let z_20deg = pt[z=@LOC:20]
+set var/title="depth of 20 degC isothermal line"/units="m" z_20deg
+save/append/file="`outfile`" z_20deg

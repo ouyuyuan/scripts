@@ -1,0 +1,14 @@
+
+/*$ A: a^{ij} $*/
+A: matrix([2,0,1],[-1,2,0],[0,2,-1])$
+'A = A$
+tex(%);
+
+/*$ B: g_{jk} $*/
+B: matrix([2,1,1],[1,2,1],[1,1,2])$
+'B = B$
+tex(%);
+
+/*$ AB: \left(a^{ij}\right)\left(g_{jk}\right) $*/
+'AB = A.B$
+tex(%);

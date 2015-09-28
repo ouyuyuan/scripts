@@ -1,0 +1,13 @@
+ Copyright (C) 1995-2013 - All Rights Reserved
+ University Corporation for Atmospheric Research
+ NCAR Command Language Version 6.1.2
+ The use of this software is governed by a License Agreement.
+ See http://www.ncl.ucar.edu/ for more details.
+(0)	Calculate /snfs01/lyh/ou/data/pcom/exp_spinup/yearly/year_0001.nc
+fatal:Mul: Dimension size, for dimension number 0, of operands does not match, can't continue
+
+fatal:["Execute.c":8128]:Execute: Error occurred at or near line 46 in file test.ncl
+
+fatal:["Execute.c":8128]:Execute: Error occurred at or near line 90 in file test.ncl
+
+

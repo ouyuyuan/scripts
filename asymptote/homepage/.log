@@ -1,0 +1,26 @@
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=latex 2012.6.10)  26 APR 2013 07:04
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**\scrollmode\input \nonstopmode\input banner_.tex
+(/usr/local/texlive/2011/texmf-dist/tex/latex/tools/.tex File ignored)
+! I can't find file `banner_.tex'.
+<*> ...llmode\input \nonstopmode\input banner_.tex
+                                                  
+(Press Enter to retry, or Control-D to exit)
+Please type another input file name
+! Emergency stop.
+<*> ...llmode\input \nonstopmode\input banner_.tex
+                                                  
+*** (job aborted, file error in nonstop mode)
+
+ 
+Here is how much of TeX's memory you used:
+ 6 strings out of 493634
+ 256 string characters out of 3143421
+ 49245 words of memory out of 3000000
+ 3405 multiletter control sequences out of 15000+200000
+ 3640 words of font info for 14 fonts, out of 3000000 for 9000
+ 831 hyphenation exceptions out of 8191
+ 4i,0n,3p,128b,8s stack positions out of 5000i,500n,10000p,200000b,50000s
+No pages of output.

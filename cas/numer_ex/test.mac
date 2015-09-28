@@ -1,0 +1,32 @@
+
+/*$dx: d_x$*/
+/*$fE: \varphi_{E}$*/
+/*$fW: \varphi_{W}$*/
+/*$fWW: \varphi_{WW}$*/
+/*$fP: \varphi_{P}$*/
+/*$fA: \varphi_{A}$*/
+/*$fB: \varphi_{B}$*/
+/*$g: \Gamma$*/
+/*$r: \rho$*/
+/*$f: \varphi$*/
+/*c0: c_0*/
+/*c1: c_1*/
+
+/*boundary: "west";*/
+/*boundary: "east";*/
+
+                                        outfile: "maxima.out" $
+L: 0.02;
+k: 10;
+rc: 10^7;
+T(x,t) := 200*4/%pi * sum((-1)^(n+1)*%e^(-a*l_n^2*t)*cos(l_n*x)/(2*n-1), n, 1,
+inf), simpsum;
+ev(T(x,t), a=k/(rc), simpsum);
+                                            with_stdout(outfile, tex(%)) $
+                                            file_output_append: true $
+T(0.05,40), ln = (2*n-1)*%pi/(2*L), a = k/(rc);
+                                            with_stdout(outfile, tex(%)) $
+ev(%, numer);
+                                            with_stdout(outfile, tex(%)) $
+float(%);
+                                            with_stdout(outfile, tex(%)) $

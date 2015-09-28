@@ -1,0 +1,34 @@
+
+let outfile = "$1"
+cancel mode upcase_output
+
+set data "/home/ou/archive/data/pcom/input/pcom_ini.nc"
+let ini = ct[y=0.5S:0.5N@AVE,z=@DDF]
+set var/title="initial field"/units="degC/m" ini 
+save/clobber/file="`outfile`" ini 
+
+set data "/home/ou/archive/data/pcom/climate/zy_ex_3g/climate_y51-y60.nc"
+let zy = pt[y=0.5S:0.5N@AVE,z=@DDF]
+set var/title="data from ZY"/units="degC/m" zy
+save/append/file="`outfile`" zy
+
+set data "/home/ou/archive/data/pcom/climate/moc_re_s/climate_y491-y500.nc"
+let spinup = pt[y=0.5S:0.5N@AVE,z=@DDF]
+set var/title="spinup filed"/units="degC/m" spinup
+save/append/file="`outfile`" spinup
+
+set data "/home/ou/archive/data/pcom/exp07_fkh0/climate_y541-y550.nc"
+let fkh0 = pt[y=0.5S:0.5N@AVE,z=@DDF]
+set var/title="constant vertical mixing coef."/units="degC/m" fkh0
+save/append/file="`outfile`" fkh0
+
+set data "/home/ou/archive/data/pcom/exp08_fkh1/climate_y541-y550.nc"
+let fkh1 = pt[y=0.5S:0.5N@AVE,z=@DDF]
+set var/title="datasets of Zhang(2014)"/units="degC/m" fkh1
+save/append/file="`outfile`" fkh1
+
+set data "/home/ou/archive/data/pcom/exp09_fkh2/climate_y541-y550.nc"
+let fkh2 = pt[y=0.5S:0.5N@AVE,z=@DDF]
+set var/title="profile vertical mixing coef."/units="degC/m" fkh2
+save/append/file="`outfile`" fkh2
+

@@ -1,0 +1,10 @@
+
+let infile = "$1"
+let outfile = "$2"
+let varName = "$3"
+cancel mode upcase_output
+
+set data "/home/ou/archive/data/pcom/grid_info.nc"
+
+set data "`infile`"
+save/append/file="`outfile`" `varName`[g=dv[d=1]]

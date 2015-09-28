@@ -1,0 +1,25 @@
+
+// Description: fv in dynamic core
+//
+//       Usage: dotrun xxx.dot
+//
+//      Author: OU Yuyuan <ouyuyuan@lasg.iap.ac.cn>
+//     Created: 2014-04-16 16:30:46 BJT
+// Last Change: 2014-04-16 21:54:45 BJT
+
+digraph g {
+
+    node [style=filled,color=paleturquoise,fontsize=40];
+    "离散方法"->"有限差分";
+//    "离散方法"->"谱展开";
+//    "离散方法"->"有限元";
+
+//    node [style=filled,color=bisque];
+//    node [style=filled,color=greenyellow];
+    node [style=filled,color=palegreen];
+    "离散方法"->"有限体积";
+
+    node [style=filled,color=paleturquoise];
+//    "离散方法"->"谱元";
+    "离散方法"->"   ...   ";
+}

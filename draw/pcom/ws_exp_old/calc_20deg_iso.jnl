@@ -1,0 +1,91 @@
+
+let outfile = "$1"
+cancel mode upcase_output
+
+set data "/home/ou/archive/data/pcom/input/pcom_ini.nc"
+let ini = ct[z=@LOC:20]
+set var/title="initial field"/units="m" ini 
+save/clobber/file="`outfile`" ini 
+
+set data "/home/ou/archive/data/pcom/zy_ex_3g/climate_y51-y60.nc"
+let zy = pt[z=@LOC:20]
+set var/title="data from ZY"/units="m" zy
+save/append/file="`outfile`" zy
+
+set data "/home/ou/archive/data/pcom/climate/moc_re_s/climate_y491-y500.nc"
+let spinup = pt[z=@LOC:20]
+set var/title="spinup filed"/units="m" spinup
+save/append/file="`outfile`" spinup
+
+set data "/home/ou/archive/data/pcom/exp07_fkh0/climate_y541-y550.nc"
+let fkh0 = pt[z=@LOC:20]
+set var/title="constant vertical mixing coef."/units="m" fkh0
+save/append/file="`outfile`" fkh0
+
+set data "/home/ou/archive/data/pcom/exp08_fkh1/climate_y541-y550.nc"
+let fkh1 = pt[z=@LOC:20]
+let control = fkh1
+set var/title="datasets of Zhang(2014)"/units="m" fkh1
+set var/title="control run"/units="m" control
+save/append/file="`outfile`" fkh1
+save/append/file="`outfile`" control
+
+set data "/home/ou/archive/data/pcom/exp09_fkh2/climate_y541-y550.nc"
+let fkh2 = pt[z=@LOC:20]
+set var/title="profile vertical mixing coef."/units="m" fkh2
+save/append/file="`outfile`" fkh2
+
+set data "/home/ou/archive/data/pcom/exp10_ws_sh/climate_y541-y550.nc"
+let exp_sh = pt[z=@LOC:20]
+set var/title="exp_sh"/units="m" exp_sh 
+save/append/file="`outfile`" exp_sh
+
+set data "/home/ou/archive/data/pcom/exp11_ws_nh/climate_y541-y550.nc"
+let exp_nh = pt[z=@LOC:20]
+set var/title="exp_nh"/units="m" exp_nh 
+save/append/file="`outfile`" exp_nh
+
+set data "/home/ou/archive/data/pcom/exp12_ws_sm/climate_y541-y550.nc"
+let exp_sm = pt[z=@LOC:20]
+set var/title="exp_sm"/units="m" exp_sm 
+save/append/file="`outfile`" exp_sm
+
+set data "/home/ou/archive/data/pcom/exp13_ws_nm/climate_y541-y550.nc"
+let exp_nm = pt[z=@LOC:20]
+set var/title="exp_nm"/units="m" exp_nm 
+save/append/file="`outfile`" exp_nm
+
+set data "/home/ou/archive/data/pcom/exp14_ws_eq/climate_y541-y550.nc"
+let exp_eq = pt[z=@LOC:20]
+set var/title="exp_eq"/units="m" exp_eq 
+save/append/file="`outfile`" exp_eq
+
+let dir = "/home/ou/archive/data/pcom"
+let clm = "climate_y541-y550.nc"
+set data "`dir`/exp16_ws_15S-15N/`clm`"
+let ex_15S15N = pt[z=@LOC:20]
+set var/title="exp_15S-15N"/units="m" ex_15S15N
+save/append/file="`outfile`" ex_15S15N
+
+set data "`dir`/exp15_ws_60S-60N/`clm`"
+let ex_60S60N = pt[z=@LOC:20]
+set var/title="exp_60S-60N"/units="m" ex_60S60N
+save/append/file="`outfile`" ex_60S60N
+
+let clm = "climate_y55-y64.nc"
+
+set data "`dir`/exp17_ws_control_cycle_re/`clm`"
+let ctr64 = pt[z=@LOC:20]
+set var/title="control run, cycle 64 years forcing"/units="m" ctr64
+save/append/file="`outfile`" ctr64
+
+set data "`dir`/exp17_ws_control_cycle_re/climate_y41-y50.nc"
+let ctr64_4150 = pt[z=@LOC:20]
+set var/title="control run, cycle 64 years forcing"/units="m" ctr64_4150
+save/append/file="`outfile`" ctr64_4150
+
+set data "`dir`/exp18_ws_an_ao/`clm`"
+let an_ao = pt[z=@LOC:20]
+set var/title="exp_an_ao, north of 20N"/units="m" an_ao
+save/append/file="`outfile`" an_ao
+

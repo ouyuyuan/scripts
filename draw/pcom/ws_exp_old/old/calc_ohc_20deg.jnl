@@ -1,0 +1,39 @@
+let outfile = "$1"
+cancel mode upcase_output
+let rho = 1029 ! kg/m^3, mean density of seawater
+let cp = 3901 ! c_p, heat capability, J/kg/K
+
+let indir = "/home/ou/archive/data/pcom/"
+let clm = "year_501-550.nc"
+
+let infile = "`indir`/basin/basin.nc"
+set data "`infile`"
+let mask = basin[d=1]
+
+let infile = "`indir`/exp08_fkh1/`clm`"
+set data "`infile`"
+let temp = if pt ge 20 then pt else 0
+
+let control_g= rho*cp*temp[x=@din, y=@din, z=@din]
+set var/title="global, control run "/units="J" control_g
+save/clobber/file="`outfile`" control_g
+
+! southern ocean
+let varmask = if mask eq 1 then 1 else 0 
+let title = "Southern Ocean"
+go func_ohc_save control_s 
+
+! Indian ocean
+let varmask = if mask eq 3 then 1 else 0 
+let title = "Indian Ocean"
+go func_ohc_save control_i 
+
+! Pacific ocean
+let varmask = if mask eq 2 then 1 else 0 
+let title = "Pacific Ocean"
+go func_ohc_save control_p 
+
+! Atlantic ocean
+let varmask = if mask eq 6 then 1 else 0 
+let title = "Atlantic Ocean"
+go func_ohc_save control_a 

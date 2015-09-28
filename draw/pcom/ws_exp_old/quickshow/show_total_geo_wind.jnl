@@ -1,0 +1,32 @@
+cancel var/all
+cancel data/all
+set window/clear
+cancel mode logo
+
+let dir = "/home/ou/archive/data/pcom/input"
+
+set data "`dir`/pcom_bcf_mn_re_cycle.nc"
+set data "`dir`/pcom_bcf_mn_re.nc"
+
+let it = 506
+set viewport ul
+shade bcu[d=2,l=`it`] - bcu[d=1,l=`it`]
+!shade bcu[d=2,l=`it`]
+go land
+
+set viewport ur
+shade bcv[d=2,l=`it`] - bcv[d=1,l=`it`]
+!shade bcu[d=1,l=`it`]
+go land
+!plot ts_sd
+
+let it = 744
+set viewport ll
+!shade bcu[d=2,l=`it`]
+shade bcu[d=2,l=`it`] - bcu[d=1,l=`it`]
+go land
+
+set viewport lr
+shade bcv[d=2,l=`it`] - bcv[d=1,l=`it`]
+!shade bcu[d=2,l=`it`]
+go land

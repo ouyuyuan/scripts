@@ -1,0 +1,22 @@
+
+set data "/home/ou/archive/data/licom/climate/unmodified/climate_081-100_positive_level.nc"
+
+cancel var/all
+set window/clear
+cancel mode logo
+
+set region/x=228E
+let levels_pt="(-2,30,2)"
+let levels_dtdz="(-0.22,0.12,0.02)"
+let vlimts="1500:0:100"
+
+set viewport ll
+fill/vlimts=`vlimts`/levels=`levels_pt` ts
+set viewport lr
+fill/vlimts=`vlimts`/levels=`levels_dtdz` ts[z=@DDF]
+
+set data "/home/ou/archive/data/soda/climate/climate_1981-2000.nc"
+set viewport ul
+fill/vlimts=`vlimts`/levels=`levels_pt` temp
+set viewport ur
+fill/vlimts=`vlimts`/levels=`levels_dtdz` temp[z=@DDF]

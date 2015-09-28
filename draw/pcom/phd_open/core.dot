@@ -1,0 +1,18 @@
+
+// Description:
+//
+//       Usage: dotrun xxx.dot
+//
+//      Author: OU Yuyuan <ouyuyuan@lasg.iap.ac.cn>
+//     Created: 2014-04-16 16:30:46 BJT
+// Last Change: 2014-04-18 07:05:57 BJT
+
+digraph g {
+
+    node [style=filled,color=papayawhip,fontsize=30];
+    "新动力框架";
+
+    node [style=filled,color=paleturquoise,fontsize=30];
+    "新动力框架"->"离散方法（有限体积）";
+    "新动力框架"->"网格系统（传统经纬网格）";
+}

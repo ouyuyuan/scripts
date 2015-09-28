@@ -1,0 +1,17 @@
+
+let infile  = "$1"
+let outfile = "$2"
+
+cancel mode upcase_output
+
+set data "/snfs01/lyh/ou/data/pcom/grid_info.nc"
+set memory/size=200
+
+set data "`infile`"
+save/clobber/file="`outfile`" t_an[l=1,g=dv[d=1]]
+save/append/file="`outfile`" t_mn[l=1,g=dv[d=1]]
+save/append/file="`outfile`" t_dd[l=1,g=dv[d=1]]
+save/append/file="`outfile`" t_ma[l=1,g=dv[d=1]]
+save/append/file="`outfile`" t_sd[l=1,g=dv[d=1]]
+save/append/file="`outfile`" t_se[l=1,g=dv[d=1]]
+save/append/file="`outfile`" t_gp[l=1,g=dv[d=1]]

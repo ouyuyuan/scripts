@@ -1,0 +1,565 @@
+
+! Description: basic NetCDF input/output interface
+!
+!      Author: OU Yuyuan <ouyuyuan@lasg.iap.ac.cn>
+!     Created: 2015-03-06 10:38:13 BJT
+! Last Change: 2015-05-21 15:09:17 BJT
+
+module mod_io !{{{1 
+!-------------------------------------------------------{{{1
+!---external variables----------------------------------{{{2
+  use netcdf
+  use mod_param, only: ncpu, sp, missing_int, &
+    nx_glo, ny_glo, nx, ny, nz
+  use mod_type, only: struct_nc, ncvar_int1d, &
+    dict_str, dict_int, dict_int2
+
+  implicit none
+  private
+
+!---public subroutines----------------------------------{{{2
+
+  public &
+    io_get_nc_info,   &
+    io_print_nc_info, &
+    io_is_similar,    &
+    io_output,        &
+    io_output_cpus,   &
+    io_output_domain, &
+    io_read
+
+!---internal variables----------------------------------{{{2
+
+  integer :: ncid, varid
+
+!---interfaces------------------------------------------{{{2
+!-----------------------------------------------------------
+! the reason for create multiple files is because
+!   file transfer from Tianhe to local is slow, and we 
+!   want to kept the output file as small as possible
+! And, we define a time dimension in each file, which sometimes
+!   although seem unnecessary, but needed for keep file small
+!   if we do not actually write data into it.
+!-----------------------------------------------------------
+  interface io_output
+    module procedure output_int2d
+    module procedure output_int1d
+    module procedure output_float2d
+  end interface
+
+  interface io_read
+    module procedure read_float_2d
+  end interface
+
+  interface get_att_val
+    module procedure get_att_val_str
+    module procedure get_att_val_int
+    module procedure get_att_val_int2
+  end interface
+
+  interface print_att
+    module procedure print_att_str
+    module procedure print_att_int
+    module procedure print_att_int2
+  end interface
+
+  interface operator(==)
+    module procedure dict_equal_str
+    module procedure dict_equal_int
+    module procedure dict_equal_int2
+  end interface
+
+contains !{{{1
+!-------------------------------------------------------{{{1
+
+subroutine output_int2d(ncname, varname, longname, var) !{{{2
+
+  character (len = *), intent(in) :: ncname, varname
+  character (len = *), intent(in), optional :: longname
+  integer, intent(in) :: var(:,:)
+  integer :: dimid1, dimid2
+
+  call check( nf90_create(ncname, NF90_CLOBBER, ncid)  )
+
+  ! def dim.
+  call check( nf90_def_dim(ncid, "x", size(var, 1), dimid1) )
+  call check( nf90_def_dim(ncid, "y", size(var, 2), dimid2) )
+
+  ! def vars
+  call check( nf90_def_var(ncid, varname, nf90_int, &
+    (/dimid1, dimid2/), varid) )
+  if (present(longname)) &
+    call check( nf90_put_att(ncid, varid, "long_name", longname) )
+  call check( nf90_put_att(ncid, varid, "_FillValue", &
+    missing_int) )
+  call check( nf90_enddef(ncid) )
+
+  ! output var
+  call check( nf90_put_var(ncid, varid, var) )
+
+  call check( nf90_close(ncid) )
+
+  write(*,*) "*** SUCCESS output "//varname//" to file: "//ncname
+
+end subroutine output_int2d
+
+subroutine output_float2d(ncname, varname, var) !{{{2
+
+  character (len = *), intent(in) :: ncname, varname
+  real (kind=sp), intent(in) :: var(:,:)
+  integer :: dimid1, dimid2
+
+  call check( nf90_create(ncname, NF90_CLOBBER, ncid)  )
+
+  ! def dim.
+  call check( nf90_def_dim(ncid, "x", size(var, 1), dimid1) )
+  call check( nf90_def_dim(ncid, "y", size(var, 2), dimid2) )
+
+  ! def vars
+  call check( nf90_def_var(ncid, varname, nf90_float, &
+    (/dimid1, dimid2/), varid) )
+  call check( nf90_enddef(ncid) )
+
+  ! output var
+  call check( nf90_put_var(ncid, varid, var) )
+
+  call check( nf90_close(ncid) )
+
+  write(*,*) "*** SUCCESS output "//varname//" to file: "//ncname
+
+end subroutine output_float2d
+
+subroutine output_int1d(ncname, varname, var) !{{{2
+
+  character (len = *), intent(in) :: ncname, varname
+  integer, intent(in) :: var(:)
+  integer :: i
+
+  call check( nf90_open(ncname, NF90_WRITE, ncid) )
+
+  call check( nf90_inq_varid(ncid, varname, varid) )
+
+  call check( nf90_put_var(ncid, varid, var) )
+
+  call check( nf90_close(ncid) )
+
+end subroutine output_int1d
+
+subroutine io_output_domain( ncname, vars ) !{{{2
+
+  character (len = *), intent(in) :: ncname
+  type (ncvar_int1d), intent(in) :: vars(:)
+
+  integer :: cpudim(0:ncpu-1)
+  integer :: dimid, cpuid, i
+
+  call check( nf90_create(ncname, NF90_CLOBBER, ncid)  )
+
+  ! def dim. {{{3
+  call check( nf90_def_dim(ncid, "cpu", ncpu, dimid) )
+
+  ! def global attr. !{{{3
+  call check( nf90_put_att(ncid, NF90_GLOBAL, & 
+    "DOMAIN_number_total", ncpu) )
+
+  call check( nf90_put_att(ncid, NF90_GLOBAL, & 
+    "DOMAIN_dimensions_ids", (/1,2/)) )
+
+  call check( nf90_put_att(ncid, NF90_GLOBAL, & 
+    "DOMAIN_size_global", (/nx_glo, ny_glo/)) )
+
+  call check( nf90_put_att(ncid, NF90_GLOBAL, & 
+    "DOMAIN_size_local", (/nx, ny/)) )
+
+  call check( nf90_put_att(ncid, NF90_GLOBAL, & 
+    "DOMAIN_type", "BOX") )
+
+  ! def vars !{{{3
+  call check( nf90_def_var(ncid, "cpu", nf90_int, dimid, cpuid) )
+  call check( nf90_put_att(ncid, cpuid, "long_name", &
+    "MPI CPU index") )
+
+  do i = 1, size(vars)
+    call check( nf90_def_var(ncid, trim(vars(i)%varname), &
+      nf90_int, dimid, varid) )
+    call check( nf90_put_att(ncid, varid, "long_name", &
+      trim(vars(i)%longname)) )
+  end do
+
+  call check( nf90_enddef(ncid) )
+
+  ! write data !{{{3
+  forall ( i=0:ncpu-1 )
+    cpudim(i) = i
+  end forall
+  call check( nf90_put_var(ncid, cpuid, cpudim) )
+
+  do i = 1, size(vars)
+    call check( nf90_inq_varid(ncid, trim(vars(i)%varname), &
+      varid) )
+    call check( nf90_put_var(ncid, varid, vars(i) % p) )
+  end do
+
+  ! close file !{{{3
+  call check( nf90_close(ncid) )
+
+  write(*,*) "*** SUCCESS output MPI domain infos to file: "&
+    //ncname
+
+end subroutine io_output_domain
+
+subroutine io_output_cpus( ncname, cpus, ic, jc ) !{{{2
+
+  character (len = *), intent(in) :: ncname
+  integer, intent(in) :: cpus(:,:), ic(:), jc(:)
+
+  integer :: dimids(3), cpudim(0:ncpu-1), stt(3), cnt(3)
+  integer :: ndim1, ndim2, nrec, i, &
+             dimid1, dimid2, dimid3, cpuid, time_dimid, &
+             cpusid, icid, jcid
+
+  ndim1 = size(cpus, 1)
+  ndim2 = size(cpus, 2)
+
+  nrec = 1
+  stt  = (/1, 1, nrec/)
+  cnt  = (/ndim1, ndim2, 1/)
+
+  call check( nf90_create(ncname, NF90_CLOBBER, ncid)  )
+
+  ! def dim. {{{3
+  call check( nf90_def_dim(ncid, "x", ndim1, dimid1) )
+  call check( nf90_def_dim(ncid, "y", ndim2, dimid2) )
+  call check( nf90_def_dim(ncid, "cpu", ncpu, dimid3) )
+  call check( nf90_def_dim(ncid, "time", NF90_UNLIMITED, &
+    time_dimid) )
+
+  ! def global attr. !{{{3
+  call check( nf90_put_att(ncid, NF90_GLOBAL, & 
+    "DOMAIN_number_total", ncpu) )
+  call check( nf90_put_att(ncid, NF90_GLOBAL, & 
+    "DOMAIN_size_global", (/ndim1, ndim2/)) )
+
+  ! def vars !{{{3
+  dimids =  (/ dimid1, dimid2, time_dimid /)
+  call check( nf90_def_var(ncid, "cpu", nf90_int, dimid3, cpuid) )
+
+  call check( nf90_def_var(ncid, "cpus", nf90_int, dimids, &
+    cpusid) )
+  call check( nf90_put_att(ncid, cpusid, "long_name", &
+    "cpu index per grid") )
+  call check( nf90_put_att(ncid, cpusid, "_FillValue", &
+    missing_int) )
+
+  call check( nf90_def_var(ncid, "ic", nf90_int, dimid3, icid) )
+  call check( nf90_put_att(ncid, icid, "long_name", &
+    "center i index per cpu") )
+
+  call check( nf90_def_var(ncid, "jc", nf90_int, dimid3, jcid) )
+  call check( nf90_put_att(ncid, jcid, "long_name", &
+    "center j index per cpu") )
+
+  call check( nf90_enddef(ncid) )
+
+  ! write data !{{{3
+  forall ( i=0:ncpu-1 )
+    cpudim(i) = i
+  end forall
+  call check( nf90_put_var(ncid, cpuid, cpudim) )
+
+  call check( nf90_put_var(ncid, icid, ic) )
+  call check( nf90_put_var(ncid, jcid, jc) )
+
+  call check( nf90_put_var(ncid, cpusid, cpus, &
+    start = stt, count = cnt) )
+
+  ! close file !{{{3
+  call check( nf90_close(ncid) )
+
+  write(*,*) "*** SUCCESS output CPU-infos to file: "//ncname
+
+end subroutine io_output_cpus
+
+subroutine read_float_2d(ncname, varname, var) !{{{2
+!-----------------------------------------------------------
+! read variable and return, float 2d, (y,x)
+!-----------------------------------------------------------
+  character (len=*), intent(in) :: ncname, varname
+  real (kind=sp) :: var(:,:)
+
+  call check( nf90_open(ncname, NF90_NOWRITE, ncid) )
+
+  call check( nf90_inq_varid(ncid, varname, varid) )
+
+  call check( nf90_get_var(ncid, varid, var) )
+
+  call check( nf90_close(ncid) )
+end subroutine read_float_2d 
+
+subroutine io_print_nc_info(nc) !{{{2
+!-----------------------------------------------------------
+! print the information of an nc file
+!-----------------------------------------------------------
+  type (struct_nc), intent(in) :: nc
+
+  write(*,*) "information of  "//trim(nc % fname)//": "
+
+  call print_dims(nc)
+
+  print *, ""
+
+  call print_att(nc % cpus)
+  call print_att(nc % cpu)
+  call print_att(nc % dim_ids)
+  call print_att(nc % size_glo)
+  call print_att(nc % size_loc)
+  call print_att(nc % pos_fst)
+  call print_att(nc % pos_lst)
+  call print_att(nc % ha_sta)
+  call print_att(nc % ha_end)
+  call print_att(nc % dm_type)
+end subroutine io_print_nc_info 
+
+logical function io_is_similar(nc1, nc2) !{{{2
+!-----------------------------------------------------------
+! check whether two files is similar (have the same dimensions and some 
+!   global attributes
+!-----------------------------------------------------------
+  type (struct_nc), intent(in) :: nc1, nc2
+
+  if ( nc1 % fname == nc2 % fname ) then
+    write(*,*) "WARNING: the two files have the same ncname."
+  end if
+
+  io_is_similar = .true.
+  if ( .not. (nc1 % nx == nc2 % nx .and. &
+              nc1 % ny == nc2 % ny .and. &
+              nc1 % nz == nc2 % nz .and. &
+              nc1 % nt == nc2 % nt) ) then
+    write(*,*) "WARNING: the dimensions of this two files are not the same:"
+    io_is_similar = .false.
+  else if ( .not. nc1 % cpus == nc2 % cpus ) then
+    write(*,*) "WARNING: "//trim(nc1 % cpus % key)//" of this two files are not the same:"
+    io_is_similar = .false.
+  else if ( .not. nc1 % dim_ids == nc2 % dim_ids ) then
+    write(*,*) "WARNING: "//trim(nc1 % dim_ids % key)//" of this two files are not the same:"
+    io_is_similar = .false.
+  else if ( .not. nc1 % size_glo == nc2 % size_glo ) then
+    write(*,*) "WARNING: "//trim(nc1 % size_glo % key)//" of this two files are not the same:"
+    io_is_similar = .false.
+  else if ( .not. nc1 % size_loc == nc2 % size_loc ) then
+    write(*,*) "WARNING: "//trim(nc1 % size_loc % key)//" of this two files are not the same:"
+    io_is_similar = .false.
+  else if ( .not. nc1 % dm_type == nc2 % dm_type ) then
+    write(*,*) "WARNING: "//trim(nc1 % dm_type % key)//" of this two files are not the same:"
+    io_is_similar = .false.
+  end if
+
+  if (.not. io_is_similar) then
+    write(*,*) nc1 % fname
+    write(*,*) nc2 % fname
+  end if
+
+  return
+end function io_is_similar
+
+logical function dict_equal_str(d1, d2) !{{{2
+!-----------------------------------------------------------
+! equal operator for global attribute of type string
+!-----------------------------------------------------------
+  type (dict_str), intent(in) :: d1, d2
+
+  if ((d1 % key == d2 % key) .and. (d1 % val == d2 % val)) then
+    dict_equal_str = .true.
+  else
+    dict_equal_str = .false.
+  end if
+
+  return
+end function dict_equal_str
+
+logical function dict_equal_int(d1, d2) !{{{2
+!-----------------------------------------------------------
+! equal operator for global attribute of type integer
+!-----------------------------------------------------------
+  type (dict_int), intent(in) :: d1, d2
+
+  if ((d1 % key == d2 % key) .and. (d1 % val == d2 % val)) then
+    dict_equal_int = .true.
+  else
+    dict_equal_int = .false.
+  end if
+
+  return
+end function dict_equal_int
+
+logical function dict_equal_int2(d1, d2) !{{{2
+!-----------------------------------------------------------
+! equal operator for global attribute of type integer, 2 elements array
+!-----------------------------------------------------------
+  type (dict_int2), intent(in) :: d1, d2
+
+  if ( (d1 % key == d2 % key) .and. (d1 % val(1) == d2 % val(1)) &
+       .and. (d1 % val(2) == d2 % val(2)) ) then
+    dict_equal_int2 = .true.
+  else
+    dict_equal_int2 = .false.
+  end if
+
+  return
+end function dict_equal_int2
+
+subroutine print_dims(nc) !{{{2
+!-----------------------------------------------------------
+! print the dimension infomation of a file
+!-----------------------------------------------------------
+
+  type (struct_nc), intent(in) :: nc
+
+  write(*,"(A, A, I4, A, I4, A, I4, A, I4)") "Dimensions: ", "nx = ", nc % nx, &
+        ",  ny = ", nc % ny, ",  nz = ", nc % nz, ",  nt = ", nc % nt
+
+end subroutine print_dims
+
+subroutine print_att_str(dict) !{{{2
+!-----------------------------------------------------------
+! print the global attribute of string type
+!-----------------------------------------------------------
+
+  type (dict_str), intent(in) :: dict
+
+  write(*,"(5A)") ":", trim(dict % key), " = """, trim(dict % val), """"
+
+end subroutine print_att_str
+
+subroutine print_att_int(dict) !{{{2
+!-----------------------------------------------------------
+! print the global attribute of integer type
+!-----------------------------------------------------------
+
+  type (dict_int), intent(in) :: dict
+
+  write(*,"(3A,I4)") ":", trim(dict % key), " = ", dict % val
+
+end subroutine print_att_int
+
+subroutine print_att_int2(dict) !{{{2
+!-----------------------------------------------------------
+! print the global attribute of integer type, 2 elements array
+!-----------------------------------------------------------
+  
+  type (dict_int2), intent(in) :: dict
+
+  write(*,"(3A,I4,A,I4)") ":", trim(dict % key), " = ", dict % val(1), ", ", dict % val(2)
+  
+end subroutine print_att_int2
+
+function io_get_nc_info(ncname) !{{{2
+!-----------------------------------------------------------
+! get the information of the .nc files
+!-----------------------------------------------------------
+  character (len = *), intent(in) :: ncname
+  type (struct_nc) :: nc, io_get_nc_info
+
+  nc % cpus     % key = "DOMAIN_number_total"
+  nc % cpu      % key = "DOMAIN_number"
+  nc % dim_ids  % key = "DOMAIN_dimensions_ids"
+  nc % size_glo % key = "DOMAIN_size_global"
+  nc % size_loc % key = "DOMAIN_size_local"
+  nc % pos_fst  % key = "DOMAIN_position_first"
+  nc % pos_lst  % key = "DOMAIN_position_last"
+  nc % ha_sta   % key = "DOMAIN_halo_size_start"
+  nc % ha_end   % key = "DOMAIN_halo_size_end"
+  nc % dm_type  % key = "DOMAIN_type"
+
+  nc % fname = ncname
+
+  call check( nf90_open(ncname, nf90_nowrite, ncid) )
+
+  nc % nx = get_dim_len(ncid, "x")
+  nc % ny = get_dim_len(ncid, "y")
+  nc % nz = get_dim_len(ncid, "z")
+  nc % nt = get_dim_len(ncid, "t")
+
+  call get_att_val(ncid, nc % dm_type)
+  call get_att_val(ncid, nc % cpus)
+  call get_att_val(ncid, nc % cpu)
+  call get_att_val(ncid, nc % dim_ids)
+  call get_att_val(ncid, nc % size_glo)
+  call get_att_val(ncid, nc % size_loc)
+  call get_att_val(ncid, nc % pos_fst)
+  call get_att_val(ncid, nc % pos_lst)
+  call get_att_val(ncid, nc % ha_sta)
+  call get_att_val(ncid, nc % ha_end)
+
+  call check( nf90_close(ncid) )
+
+  io_get_nc_info = nc
+end function io_get_nc_info
+
+subroutine get_att_val_str(ncid, dict) !{{{2
+!-----------------------------------------------------------
+! get the value of a global attribute (string type) by name
+!-----------------------------------------------------------
+  integer, intent(in) :: ncid
+  type(dict_str) :: dict
+
+  call check( nf90_get_att(ncid, nf90_global, dict % key, dict % val) )
+end subroutine get_att_val_str
+
+subroutine get_att_val_int(ncid, dict) !{{{2
+!-----------------------------------------------------------
+! get the value of a global attribute (integer type) by name
+!-----------------------------------------------------------
+  integer, intent(in) :: ncid
+  type(dict_int) :: dict
+
+  call check( nf90_get_att(ncid, nf90_global, dict % key, dict % val) )
+end subroutine get_att_val_int
+
+subroutine get_att_val_int2(ncid, dict) !{{{2
+!-----------------------------------------------------------
+! get the value of a global attribute (integer type, 1d array, 2 elements) by name
+!-----------------------------------------------------------
+  integer, intent(in) :: ncid
+  type(dict_int2) :: dict
+
+  call check( nf90_get_att(ncid, nf90_global, dict % key, dict % val) )
+end subroutine get_att_val_int2
+
+function get_dim_len(ncid, dimname) !{{{2
+!-----------------------------------------------------------
+! get length of a specific dimension
+! get the length of a dimension with "dimname" from a NetCDF file with
+! "ncname"
+!-----------------------------------------------------------
+  integer, intent(in) :: ncid
+  character (len = *), intent(in) :: dimname
+  integer :: get_dim_len
+  integer :: dimid, nlen
+
+  call check( nf90_inq_dimid(ncid, dimname, dimid) )
+
+  call check( nf90_inquire_dimension(ncid, dimid, len = nlen) )
+
+  get_dim_len = nlen
+  
+  return
+end function get_dim_len
+
+subroutine check(status) !{{{2
+!-----------------------------------------------------------
+! check netcdf call
+!-----------------------------------------------------------
+  integer, intent (in) :: status
+
+  if(status /= nf90_noerr) then 
+    print *, trim(nf90_strerror(status))
+    stop
+  end if
+end subroutine check  
+
+end module mod_io !{{{1
+!-------------------------------------------------------{{{1
+! vim:fdm=marker:fdl=0:
+! vim:foldtext=getline(v\:foldstart).'...'.(v\:foldend-v\:foldstart):

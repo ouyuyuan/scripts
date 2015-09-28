@@ -1,0 +1,73 @@
+netcdf frc_bulk {
+
+dimensions:
+	xi_rho = 146 ;
+	eta_rho = 82 ;
+	time = UNLIMITED ; // (0 currently)
+
+variables:
+	double time(time) ;
+		time:long_name = "atmospheric forcing time" ;
+        time:units = "days since 01-Jan-2006" ;
+		time:field = "time, scalar, series" ;
+		time:end_date = "08-Jun-2006 00:00:00" ;
+	double Uwind(time, eta_rho, xi_rho) ;
+		Uwind:long_name = "surface u-wind component" ;
+		Uwind:units = "meter second-1" ;
+        Uwind:wrf_unit = "m s-1" ;
+        Uwind:wrf_desc = "U at 10 M" ;
+        Uwind:field = "Uwind scalar, series" ;
+		Uwind:time = "time" ;
+	double Vwind(time, eta_rho, xi_rho) ;
+		Vwind:long_name = "Surface v-wind component" ;
+		Vwind:units = "meter second-1" ;
+		Vwind:wrf_unit = "m s-1" ;
+		Vwind:wrf_desc = "V at 10 M" ;
+		Vwind:field = "Vwind scalar, series" ;
+		Vwind:time = "time" ;
+	double Pair(time, eta_rho, xi_rho) ;
+		Pair:long_name = "Surface air pressure" ;
+		Pair:units = "millibars" ;
+		Pair:wrf_unit = "Pa" ;
+		Pair:wrf_desc = "SFC PRESSURE" ;
+		Pair:field = "Pair scalar, series" ;
+		Pair:time = "time" ;
+	double Tair(time, eta_rho, xi_rho) ;
+		Tair:long_name = "Surface air temperature" ;
+		Tair:units = "Celcius" ;
+		Tair:wrf_unit = "K" ;
+		Tair:wrf_desc = "TEMP at 2 M" ;
+		Tair:field = "Tair scalar, series" ;
+		Tair:time = "time" ;
+	double Qair(time, eta_rho, xi_rho) ;
+		Qair:long_name = "Relative humidity" ;
+		Qair:units = "percentage" ;
+		Qair:wrf_unit = "kg kg-1" ;
+		Qair:wrf_desc = "QV at 2 M" ;
+		Qair:field = "Qair scalar, series" ;
+		Qair:time = "time" ;
+	double Swrf(time, eta_rho, xi_rho) ;
+		Swrf:long_name = "Short wave flux net" ;
+		Swrf:units = "watts meters-2" ;
+		Swrf:positive_value = "downward flux, heating" ;
+		Swrf:negative_value = "upward flux, cooling" ;
+		Swrf:wrf_unit = "W m-2" ;
+		Swrf:wrf_desc = "DOWNWARD SHORT WAVE FLUX AT GROUND SURFACE" ;
+		Swrf:field = "Swrf scalar, series" ;
+		Swrf:time = "time" ;
+	double Lwrf(time, eta_rho, xi_rho) ;
+		Lwrf:long_name = "Long wave flux down" ;
+		Lwrf:units = "watts meters-2" ;
+		Lwrf:positive_value = "downward flux, heating" ;
+		Lwrf:negative_value = "upward flux, cooling" ;
+		Lwrf:wrf_unit = "W m-2" ;
+		Lwrf:wrf_desc = "DOWNWARD LONG WAVE FLUX AT GROUND SURFACE" ;
+		Lwrf:field = "Lwrf scalar, series" ;
+		Lwrf:time = "time" ;
+
+// global attributes:
+		:type = "ROMS forcing file" ;
+        :title = "Hudson River of New Jersey, Atmospheric Fields" ;
+        :source = "copy from latte example input data" ;
+
+}

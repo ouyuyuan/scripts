@@ -1,0 +1,31 @@
+netcdf frc_bulk {
+
+dimensions:
+	xi_rho = 146 ;
+	eta_rho = 82 ;
+	time = UNLIMITED ; // (0 currently)
+
+variables:
+	double time(time) ;
+		time:long_name = "atmospheric forcing time" ;
+        time:units = "days since 2006-01-01 00:00:00" ;
+		time:field = "time, scalar, series" ;
+        time:calendar = "gregorian" ;
+		time:begin_date = "2006-01-01 00:00:00" ;
+		time:end_date = "2006-06-08 23:00:00" ;
+	double Lwrf(time, eta_rho, xi_rho) ;
+		Lwrf:long_name = "Long wave flux down" ;
+		Lwrf:units = "watts meters-2" ;
+		Lwrf:positive_value = "downward flux, heating" ;
+		Lwrf:negative_value = "upward flux, cooling" ;
+		Lwrf:wrf_unit = "W m-2" ;
+		Lwrf:wrf_desc = "DOWNWARD LONG WAVE FLUX AT GROUND SURFACE" ;
+		Lwrf:field = "Lwrf scalar, series" ;
+		Lwrf:time = "time" ;
+
+// global attributes:
+		:type = "ROMS forcing file" ;
+        :title = "Hudson River of New Jersey, Atmospheric Fields" ;
+        :source = "NCEP_CFSR dataset" ;
+
+}

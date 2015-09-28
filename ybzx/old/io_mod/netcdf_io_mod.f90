@@ -1,0 +1,203 @@
+
+! Description: NetCDF input/output module
+!
+!      Author: OU Yuyuan <ouyuyuan@lasg.iap.ac.cn>
+!     Created: 2013-04-12 07:20:46 CST
+! Last Change: 2013-05-11 14:52:08 CST
+
+module netcdf_io_mod 
+
+    use netcdf
+    use types_mod, only: netcdf_model, netcdf_var 
+
+    implicit none
+    private
+
+    public create_netcdf, output_netcdf, input_netcdf
+
+    ! define var <<<1
+
+    integer, parameter :: NDIM = 3
+    integer, dimension(NDIM) :: dimids, start, count
+    integer :: ncid, varid
+
+    interface input_netcdf
+        module procedure input_netcdf_2d
+        module procedure input_netcdf_3d
+    end interface
+
+contains
+
+    ! create nc variables <<<1
+
+    subroutine create_netcdf(filename, model, vars)
+
+        character (len = *), intent(in) :: filename
+        type(netcdf_model),  intent(in) :: model
+        type(netcdf_var),    intent(in) :: vars(:)
+
+        real, allocatable :: lats(:), lons(:)
+        integer :: lat_dimid, lon_dimid, time_dimid, latid, lonid
+        integer :: dim1, dim2, i
+
+        call check( nf90_create(filename, NF90_CLOBBER, ncid)  )
+
+        ! def dim. <<<2
+
+        call check( nf90_def_dim(ncid, "lat", model%nlats, lat_dimid) )
+        call check( nf90_def_dim(ncid, "lon", model%nlons, lon_dimid) )
+        call check( nf90_def_dim(ncid, "time", NF90_UNLIMITED, time_dimid) )
+
+        call check( nf90_def_var(ncid, "lat", NF90_REAL, lat_dimid, latid) )
+        call check( nf90_put_att(ncid, latid, "long_name", "Latitude") ) 
+        call check( nf90_put_att(ncid, latid, "units", "degrees_north") ) 
+
+        call check( nf90_def_var(ncid, "lon", NF90_REAL, lon_dimid, lonid) )
+        call check( nf90_put_att(ncid, lonid, "long_name", "Longitude") ) 
+        call check( nf90_put_att(ncid, lonid, "units", "degrees_east") ) 
+
+        ! def global attr. <<<2
+
+        if ( associated(model%pattrs) ) then
+            do i = 1, size(model%pattrs)
+                call check( nf90_put_att(ncid, NF90_GLOBAL, & 
+                    trim(model%pattrs(i)%key), trim(model%pattrs(i)%value)) )
+            end do
+        end if
+
+        ! def vars <<<2
+
+        do i = 1, size(vars)
+
+            dim1 = size(vars(i)%p,1)
+            dim2 = size(vars(i)%p,2)
+
+            if (dim1 == dim2) then
+                if (dim1 /= 1) stop "Unable to determine dimension order"
+
+                ! 'scalar' variable
+                call check( nf90_def_var(ncid, trim(vars(i)%name), NF90_REAL, time_dimid, varid) )
+                call check( nf90_put_att(ncid, varid, "long_name", trim(vars(i)%long_name)) ) 
+                call check( nf90_put_att(ncid, varid, "units", trim(vars(i)%units)) ) 
+
+            else
+                if ( (dim1 == model%nlats) .and. (dim2 == model%nlons) ) then
+                    dimids =  (/ lat_dimid, lon_dimid, time_dimid /)
+
+                    ! prepare for output var
+                    count = (/model%nlats, model%nlons, 1/)
+
+                else if ( (dim1 == model%nlons) .and. (dim2 == model%nlats) ) then
+                    dimids =  (/ lon_dimid, lat_dimid, time_dimid /)
+                    count = (/model%nlons, model%nlats, 1/)
+
+                else
+                    stop "Wrong dimension size in output variables."
+                end if
+
+                call check( nf90_def_var(ncid, trim(vars(i)%name), NF90_REAL, dimids, varid) )
+                call check( nf90_put_att(ncid, varid, "long_name", trim(vars(i)%long_name)) ) 
+                call check( nf90_put_att(ncid, varid, "units", trim(vars(i)%units)) ) 
+            end if
+        end do
+
+        call check( nf90_enddef(ncid) )
+
+        ! write dim info <<<2
+
+        allocate(lats(model%nlats))
+        allocate(lons(model%nlons))
+
+        forall ( i=1:model%nlats )
+            lats(i) = model%lat_min + (i-1)*model%dlat
+        end forall
+
+        forall ( i=1:model%nlons )
+            lons(i) = model%lon_min + (i-1)*model%dlon
+        end forall
+
+        call check( nf90_put_var(ncid, latid, lats) )
+        call check( nf90_put_var(ncid, lonid, lons) )
+
+        call check( nf90_close(ncid) )
+
+        write(*,*) "*** SUCCESS created file: ", filename
+
+    end subroutine create_netcdf
+
+    ! output variabls <<<1
+
+    subroutine output_netcdf(filename, vars)
+
+        character (len = *), intent(in) :: filename
+        type(netcdf_var),    intent(in) :: vars(:)
+        integer, save :: nrec = 0
+        integer :: i
+
+        call check( nf90_open(filename, NF90_WRITE, ncid) )
+
+        nrec = nrec + 1
+        start = (/1, 1, nrec/)
+
+        do i = 1, size(vars)
+            call check( nf90_inq_varid(ncid, trim(vars(i)%name), varid) )
+
+            if(size(vars(i)%p) == 1) then
+                call check( nf90_put_var(ncid, varid, vars(i)%p(1,1), & 
+                    start = (/nrec/)) )
+            else
+                call check( nf90_put_var(ncid, varid, vars(i)%p, & 
+                    start = start, count = count) )
+            endif
+        end do
+
+        call check( nf90_close(ncid) )
+
+    end subroutine output_netcdf
+
+    ! input data <<<1
+
+    subroutine input_netcdf_2d(filename, name, var)
+
+        character (len = *), intent(in) :: filename, name
+        real :: var(:,:)
+
+        call check( nf90_open(filename, NF90_NOWRITE, ncid) )
+
+        call check( nf90_inq_varid(ncid, name, varid) )
+
+        call check( nf90_get_var(ncid, varid, var) )
+
+        call check( nf90_close(ncid) )
+
+    end subroutine input_netcdf_2d
+
+    subroutine input_netcdf_3d(filename, name, var)
+
+        character (len = *), intent(in) :: filename, name
+        real :: var(:,:,:)
+
+        call check( nf90_open(filename, NF90_NOWRITE, ncid) )
+
+        call check( nf90_inq_varid(ncid, name, varid) )
+
+        call check( nf90_get_var(ncid, varid, var) )
+
+        call check( nf90_close(ncid) )
+
+    end subroutine input_netcdf_3d
+
+    ! check netcdf call <<<1
+
+    subroutine check(status)
+
+        integer, intent (in) :: status
+
+        if(status /= nf90_noerr) then 
+            print *, trim(nf90_strerror(status))
+            stop
+        end if
+
+    end subroutine check  
+
+end module netcdf_io_mod 

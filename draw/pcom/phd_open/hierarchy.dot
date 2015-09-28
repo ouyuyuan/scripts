@@ -1,0 +1,43 @@
+
+// Description: fv in dynamic core
+//
+//       Usage: dotrun xxx.dot
+//
+//      Author: OU Yuyuan <ouyuyuan@lasg.iap.ac.cn>
+//     Created: 2014-04-16 16:30:46 BJT
+// Last Change: 2014-04-20 20:25:49 BJT
+
+digraph g {
+
+//    node [style=filled,color=seashell,fontsize=40];
+    node [style=filled,color=seashell];
+    "大洋环流模式(OGCM)";
+
+//    node [style=filled,color=lightblue];
+    node [style=filled,color=paleturquoise];
+    "大洋环流模式(OGCM)"->"动力框架";
+    "大洋环流模式(OGCM)"->"物理过程";
+
+    node [style=filled,color=seashell];
+    "动力框架"->"网格（坐标）系统";
+    "动力框架"->"离散方法";
+
+    node [style=filled,color=papayawhip];
+    "物理过程"->"摩擦";
+    "物理过程"->"混合扩散";
+    "物理过程"->"...";
+
+    node [style=filled,color=paleturquoise];
+    "离散方法"->"有限差分";
+//    "离散方法"->"谱展开";
+//    "离散方法"->"有限元";
+
+//    node [style=filled,color=bisque];
+//    node [style=filled,color=greenyellow];
+    node [style=filled,color=palegreen];
+    "离散方法"->"有限体积";
+
+    node [style=filled,color=paleturquoise];
+//    "离散方法"->"谱元";
+    "离散方法"->"  ...   ";
+}

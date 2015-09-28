@@ -1,0 +1,64 @@
+
+! Description: meridional overturning circulation
+!
+!       Usage: ferret moc.jnl soda/licom/pcom_n/pcom_r
+!              or ferret moc_all.jnl
+!      Author: OU Yuyuan <ouyuyuan@lasg.iap.ac.cn>
+!     Created: 2014-04-08 10:31:54 BJT
+! Last Change: 2014-04-08 18:56:39 BJT
+
+let model = "$1"
+let basin = "$2"
+let data_dir = "/home/ou/archive/data"
+
+if `model eq "soda"` then
+   let in_dir = "`data_dir`/soda/climate"
+   let infile = "`in_dir`/climate_1981-2000.nc"
+elif `model eq "licom"` then
+   let in_dir = "`data_dir`/licom/climate/unmodified"
+!   let infile = "`in_dir`/climate_081-100.nc"
+   let infile = "`in_dir`/climate_081-100_positive_level.nc"
+elif `model eq "pcom_n"` then
+   let in_dir = "`data_dir`/pcom/climate/fix_fkh"
+   let infile = "`in_dir`/year_mean_081-100.nc"
+elif `model eq "pcom_r"` then
+   let in_dir = "`data_dir`/pcom/climate/res_s"
+   let infile = "`in_dir`/year_mean_081-100.nc"
+else
+   say Unkown model
+   exit
+endif
+let outfile = "`in_dir`/calculated/moc_`basin`_ferret.nc"
+
+set data "`infile`"
+
+!Atlantic: 75W -- 20E
+!Indian: 30E -- 115E
+!Pacific: 120E -- 70W
+
+let lon_sta = 0
+let lon_end = 360
+if `basin eq "Atlantic"` then
+   let lon_sta = "75W"
+   let lon_end = "20E"
+elif `basin eq "Indian"` then
+   let lon_sta = "30E"
+   let lon_end = "115E"
+elif `basin eq "Pacific"` then
+   let lon_sta = "120E"
+   let lon_end = "70W"
+endif
+
+if `model eq "licom"` then
+   let v_zon = vs[x=`lon_sta`:`lon_end`@din] 
+else 
+   let v_zon = v[x=`lon_sta`:`lon_end`@din]
+endif
+
+let vv = missing(v_zon, 0)
+
+let moc = vv[z=@iin]*10^(-6) + (v_zon - v_zon)
+
+set var/title="`basin` meridional overturning circulation"/units="Sv" moc
+cancel mode upcase_output
+save/clobber/file="`outfile`" moc

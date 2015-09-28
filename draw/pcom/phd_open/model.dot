@@ -1,0 +1,18 @@
+
+// Description:
+//
+//       Usage: dotrun xxx.dot
+//
+//      Author: OU Yuyuan <ouyuyuan@lasg.iap.ac.cn>
+//     Created: 2014-04-16 16:30:46 BJT
+// Last Change: 2014-04-18 07:02:10 BJT
+
+digraph g {
+
+    node [style=filled,color=paleturquoise,fontsize=30];
+    "新OGCM";
+
+    node [style=filled,color=papayawhip];
+    "新OGCM"->"动力框架（新构建）";
+    "新OGCM"->"物理过程（PCOM原有）";
+}

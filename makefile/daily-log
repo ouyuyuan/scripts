@@ -1,0 +1,25 @@
+PERLDIR = /home/ou/archive/coded/perl
+FILEDIR = tmp_files
+
+.PHONY: outline prepare references adjust compile join schedule clean
+
+outline:
+	$(PERLDIR)/slides/slides-extract-outline.pl
+	mkdir -p $(FILEDIR)
+
+adjust:
+	$(PERLDIR)/slides/slides-adjust-source.pl
+
+compile:
+	$(PERLDIR)/daily_log/logs-analyser.pl
+	$(PERLDIR)/slides/slides-compile-all.pl
+
+join:
+	$(PERLDIR)/slides/slides-join.pl
+
+schedule:
+	$(PERLDIR)/daily_log/schedule.pl
+	$(PERLDIR)/slides-compile-one.pl 3
+
+clean:
+	rm -rf $(FILEDIR)/

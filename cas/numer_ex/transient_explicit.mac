@@ -1,0 +1,58 @@
+
+/*$dx: \Delta x$*/
+/*$dt: \Delta t$*/
+/*$TP: T_{P}$*/
+/*$TE: T_{E}$*/
+/*$TW: T_{W}$*/
+/*$TP0: T_{P}^{0}$*/
+/*$TE0: T_{E}^{0}$*/
+/*$TW0: T_{W}^{0}$*/
+/*$TA: T_{A}$*/
+/*$TB: T_{B}$*/
+/*$r: \rho$*/
+/*$dTdx_ave_w: \overline{T_x}(w)$*/
+/*$dTdx_ave_e: \overline{T_x}(e)$*/
+
+declare(c, constant, r, constant, k, constant);
+
+"Discrete equation for each volume";
+eq: r*c*(TP - TP0)*dx = k*(dTdx_ave_e - dTdx_ave_w)*dt;
+tex(eq);
+
+solu: expand( solve(eq, TP) );
+tex(solu);
+
+"Define";
+[def_F: F=r*c*dx, def_D: D=k*dt/dx];
+tex(def_F);
+tex(def_D);
+
+"Get";
+expr_TP: expand( ev(solu[1], solve(def_F,r), solve(def_D, k)) );
+tex(expr_TP);
+
+"In explicit time scheme :math:`\\overline{T}(x)=T^{0}(x)`";
+"";
+
+ave: [TP_ave = TP0, TE_ave = TE0, TW_ave = TW0];
+
+"So, in internal volumes";
+dTdx: [dTdx_ave_e = (TE_ave - TP_ave)/dx, dTdx_ave_w = (TP_ave - TW_ave)/dx];
+dTdx: ev(dTdx, ave);
+tex(%);
+ratsimp(expand( ev(expr_TP, ave, dTdx) ));
+tex(%);
+
+"The western boundary is adiabatic, so";
+dTdx: [dTdx_ave_e = (TE_ave - TP_ave)/dx, dTdx_ave_w = 0];
+dTdx: ev(dTdx, ave);
+tex(%);
+ratsimp(expand( ev(expr_TP, ave, dTdx) ));
+tex(%);
+
+"The eastern boundary has fixed temperature";
+dTdx: [dTdx_ave_e = (TB-TP_ave)/(dx/2), dTdx_ave_w = (TP_ave - TW_ave)/dx];
+dTdx: ev(dTdx, ave);
+tex(%);
+ratsimp(expand( ev(expr_TP, ave, dTdx) ));
+tex(%);

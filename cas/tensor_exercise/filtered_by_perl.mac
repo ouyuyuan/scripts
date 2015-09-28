@@ -1,0 +1,14 @@
+outfile: "maxima.out"; with_stdout(outfile); file_output_append: true;
+
+/*$ A: a^{ij} $*/
+A: matrix([2,0,1],[-1,2,0],[0,2,-1])$
+'A = A$
+with_stdout(outfile,tex(%));
+
+/*$ G: g_{jk} $*/
+G: matrix([2,1,1],[1,2,1],[1,1,2])$
+'G = G$
+with_stdout(outfile,tex(%));
+
+(G.A).G$
+with_stdout(outfile,tex(%));

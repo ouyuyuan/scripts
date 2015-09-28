@@ -1,0 +1,62 @@
+
+/*$dx: d_x$*/
+/*$fE: \varphi_{E}$*/
+/*$fW: \varphi_{W}$*/
+/*$fWW: \varphi_{WW}$*/
+/*$fP: \varphi_{P}$*/
+/*$fA: \varphi_{A}$*/
+/*$fB: \varphi_{B}$*/
+/*$g: \Gamma$*/
+/*$r: \rho$*/
+/*$f: \varphi$*/
+/*c0: c_0*/
+/*c1: c_1*/
+
+/*boundary: "west";*/
+boundary: "east";
+
+                                        outfile: "maxima.out" $
+z(t) := (1-t)^3*z0 + 3*t*(1-t)^2*c0 + 3*t^2*(1-t)*c1 + t^3*z1 ;
+x(t) := ev(z(t), z0=0, c0=dx/3, c1=2*dx/3, z1=dx) ;
+x(t);
+x(1/2);
+
+eq1: z0 = fW;
+eq2: c0 = fW;
+eq3: c1 = fP;
+eq4: z1 = fP;
+
+f(t) := ev(z(t), solve(eq1,z0), solve(eq2,c0), solve(eq3,c1), solve(eq4,z1)) ;
+f(t);
+
+fw: f(1/2);
+dfdx_w: ratsimp(expand(at( diff(f(t),t)/diff(x(t),t), t=1/2 ))) ;
+
+fe: sublis([fW=fP, fP=fE], fw) ; 
+dfdx_e: sublis([fW=fP, fP=fE], dfdx_w) ; 
+
+block(
+if boundary = "west" then
+    (
+    fw(t) := ev(z(t), z0=fA, c0=fA, c1=fP, z1=fP),
+    xw(t) := ev(z(t), z0=0, c0=dx/6, c1=dx/6, z1=dx/2),
+    fw: fA,
+    dfdx_w: ratsimp(expand(at( diff(fw(t),t)/diff(xw(t),t), t=0 )))
+    )
+
+elseif boundary = "east" then
+    (
+    fe(t) := ev(z(t), z0=fP, c0=fP, c1=fB, z1=fB),
+    xe(t) := ev(z(t), z0=0, c0=dx/3, c1=dx/3, z1=dx/2),
+    fe: fB,
+    dfdx_e: ratsimp(expand(at( diff(fe(t),t)/diff(xe(t),t), t=1 )))
+    )
+);
+
+eq: r*u*fe - r*u*fw = g*dfdx_e - g*dfdx_w ;
+                                        with_stdout(outfile, tex(%)) $
+                                        file_output_append: true $
+solu: expand( solve(eq, fP) ) ;
+[def1: F=r*u, def2: D=g/dx] ;
+ratsimp(expand( ev(solu[1], solve(def1,r), solve(def2, g)) )) ;
+                                        with_stdout(outfile, tex(%)) $

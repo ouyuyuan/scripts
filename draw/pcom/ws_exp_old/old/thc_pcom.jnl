@@ -1,0 +1,27 @@
+
+!set data "/home/ou/archive/data/pcom_1.0/exp06_vmix_ou/climate_y501-y510.nc"
+!set data "/home/ou/archive/data/pcom/climate/zy_ex_3g/year_mean_051-060.nc"
+!set data "/home/ou/archive/data/pcom_1.0/exp01_vmix/climate_y531-y540.nc"
+!set data "/home/ou/archive/data/pcom_1.0/exp03_vmix_layer/climate_y511-y520.nc"
+set data "/home/ou/archive/data/pcom/exp09_fkh2/climate_y541-y550.nc"
+
+cancel var/all
+set window/clear
+cancel mode logo
+
+set region/x=228E
+let levels_pt="(-2,30,2)"
+let levels_dtdz="(-0.22,0.12,0.02)"
+let vlimts="1500:0:100"
+
+set viewport ll
+fill/vlimts=`vlimts`/levels=`levels_pt` pt
+set viewport lr
+fill/vlimts=`vlimts`/levels=`levels_dtdz` pt[z=@DDF]
+!fill/vlimts=`vlimts` pt[z=@DDF]
+
+set data "/home/ou/archive/data/soda/climate/climate_1981-2000.nc"
+set viewport ul
+fill/vlimts=`vlimts`/levels=`levels_pt` temp
+set viewport ur
+fill/vlimts=`vlimts`/levels=`levels_dtdz` temp[z=@DDF]

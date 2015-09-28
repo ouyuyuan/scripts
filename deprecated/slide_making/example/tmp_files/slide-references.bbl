@@ -1,0 +1,24 @@
+\begin{thebibliography}{4}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[manual(2004)]{Asymptote2004}
+Asymptote manual.
+\newblock Asymptote: the vector graphics language, 2004.
+
+\bibitem[Zhang(2010)]{Zhang2010asy}
+F.~A. Zhang.
+\newblock Notes on asy, 2010.
+
+\bibitem[刘海洋(2009)]{Liu2009asy}
+刘海洋.
+\newblock Asymptote 范例教程, 2009.
+
+\bibitem[莫图(2007)]{Motu2007asy}
+莫图.
+\newblock Asymptote 作图指南, 2007.
+
+\end{thebibliography}

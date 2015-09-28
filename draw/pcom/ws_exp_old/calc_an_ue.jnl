@@ -1,0 +1,56 @@
+
+! Description: calculate anomaly wind stress Ekman pumping velocity
+!
+!      Author: OU Yuyuan <ouyuyuan@lasg.iap.ac.cn>
+!     Created: 2014-10-29 18:41:41 BJT
+! Last Change: 2014-10-29 21:06:40 BJT
+
+cancel data/all
+cancel var/all
+cancel mode upcase_output
+
+let outfile = "$1"
+
+let rho = 1.3 ! kg/m^3, air density
+let pi  = 3.141592653589793
+let torad = pi/180.0
+let omega  = pi/43082.0 ! angular velocity of the earth
+let r = 6371000 ! radius of the earth
+
+set data "/home/ou/archive/data/plot/pcom/ws_exp/stress_zonal_profile.nc"
+let lat = y[gy=an_70S30S,d=1]
+let f = 2*omega*sin(lat*torad)
+let tt = (0 - an_70S30S/(rho*f))
+let ue_ferret_70S30S = tt[y=@DDF]
+set var/title="an_70S-30S"/units="m/s" ue_ferret_70S30S
+save/clobber/file="`outfile`" ue_ferret_70S30S
+
+let tt = (0 - an_40S10S/(rho*f))
+let ue_ferret_40S10S = tt[y=@DDF]
+set var/title="an_70S-30S"/units="m/s" ue_ferret_40S10S
+save/append/file="`outfile`" ue_ferret_40S10S
+
+let tt = (0 - an_10S20N/(rho*f))
+let ue_ferret_10S20N = tt[y=@DDF]
+set var/title="an_70S-30S"/units="m/s" ue_ferret_10S20N
+save/append/file="`outfile`" ue_ferret_10S20N
+
+let tt = (0 - an_EQ30N/(rho*f))
+let ue_ferret_EQ30N = tt[y=@DDF]
+set var/title="an_70S-30S"/units="m/s" ue_ferret_EQ30N
+save/append/file="`outfile`" ue_ferret_EQ30N
+
+let tt = (0 - an_30N60N/(rho*f))
+let ue_ferret_30N60N = tt[y=@DDF]
+set var/title="an_70S-30S"/units="m/s" ue_ferret_30N60N
+save/append/file="`outfile`" ue_ferret_30N60N
+
+let tt = (0 - an_15S15N/(rho*f))
+let ue_ferret_15S15N = tt[y=@DDF]
+set var/title="an_70S-30S"/units="m/s" ue_ferret_15S15N
+save/append/file="`outfile`" ue_ferret_15S15N
+
+let tt = (0 - an_60S60N/(rho*f))
+let ue_ferret_60S60N = tt[y=@DDF]
+set var/title="an_70S-30S"/units="m/s" ue_ferret_60S60N
+save/append/file="`outfile`" ue_ferret_60S60N

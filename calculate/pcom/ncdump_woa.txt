@@ -1,0 +1,202 @@
+netcdf salinity_annual_1deg {
+dimensions:
+	lon = 360 ;
+	lat = 180 ;
+	depth = 33 ;
+	time = 1 ;
+	nv = 2 ;
+variables:
+	float lon(lon) ;
+		lon:long_name = "longitude" ;
+		lon:standard_name = "longitude" ;
+		lon:units = "degrees_east" ;
+		lon:axis = "X" ;
+		lon:bounds = "lon_bnds" ;
+		lon:description = "Longitude Range: 0 to 360 degrees with 0 at Greenwich Meridian and increasing along the east." ;
+	float lat(lat) ;
+		lat:long_name = "latitude" ;
+		lat:standard_name = "latitude" ;
+		lat:units = "degrees_north" ;
+		lat:axis = "Y" ;
+		lat:bounds = "lat_bnds" ;
+		lat:description = "Latitude Range: -90 to 90 degrees with 0 at the Equator and increasing along the north." ;
+	float depth(depth) ;
+		depth:long_name = "depth" ;
+		depth:standard_name = "depth" ;
+		depth:units = "m" ;
+		depth:positive = "down" ;
+		depth:axis = "Z" ;
+		depth:description = "Standard Depth Levels" ;
+	float time(time) ;
+		time:climatology = "climatology_bnds" ;
+		time:long_name = "time" ;
+		time:standard_name = "time" ;
+		time:units = "days since 0000-1-1" ;
+		time:axis = "T" ;
+		time:description = "Annual Climatology" ;
+	float lat_bnds(lat, nv) ;
+		lat_bnds:description = "Latitude Bounds" ;
+	float lon_bnds(lon, nv) ;
+		lon_bnds:description = "Longitude Bounds" ;
+	float climatology_bnds(time, nv) ;
+		climatology_bnds:description = "Climatology Bounds" ;
+	float s_an(time, depth, lat, lon) ;
+		s_an:long_name = "Objectively Analyzed Climatology" ;
+		s_an:standard_name = "sea_water_salinity" ;
+		s_an:cell_methods = "time:mean within years time:mean over years" ;
+		s_an:salinity_scale = "Practical Salinity Scale(PSS-78)" ;
+		s_an:units = "1" ;
+		s_an:grid_mapping = "crs" ;
+		s_an:_FillValue = 9.96921e+36f ;
+		s_an:description = "The objectively interpolated mean field for Sea Water Salinity for annual time period at each one-degree square at each standard depth." ;
+	float s_mn(time, depth, lat, lon) ;
+		s_mn:long_name = "Statistical Mean" ;
+		s_mn:salinity_scale = "Practical Salinity Scale(PSS-78)" ;
+		s_mn:units = "1" ;
+		s_mn:grid_mapping = "crs" ;
+		s_mn:_FillValue = 9.96921e+36f ;
+		s_mn:description = "The average of all unflagged interpolated values at each standard depth level in each one-degree square which contains at least one measurement of Sea Water Salinity" ;
+	int s_dd(time, depth, lat, lon) ;
+		s_dd:long_name = "Number of Observations" ;
+		s_dd:units = "1" ;
+		s_dd:grid_mapping = "crs" ;
+		s_dd:_FillValue = -2147483647 ;
+		s_dd:description = "The number of observations of Sea Water Salinity in each one-degree square of the World Ocean at each standard depth level" ;
+	float s_ma(time, depth, lat, lon) ;
+		s_ma:long_name = "Seasonal or Monthly Climatology minus Annual Climatology" ;
+		s_ma:salinity_scale = "Practical Salinity Scale(PSS-78)" ;
+		s_ma:units = "1" ;
+		s_ma:grid_mapping = "crs" ;
+		s_ma:_FillValue = 9.96921e+36f ;
+		s_ma:description = "The seasonal or monthly climatology minus the annual climatology at each one-degree square at each standard depth" ;
+	float s_sd(time, depth, lat, lon) ;
+		s_sd:long_name = "Standard Deviation from Statistical Mean" ;
+		s_sd:salinity_scale = "Practical Salinity Scale(PSS-78)" ;
+		s_sd:units = "1" ;
+		s_sd:grid_mapping = "crs" ;
+		s_sd:_FillValue = 9.96921e+36f ;
+		s_sd:description = "The standard deviation about the statistical mean in each one-degree square at each standard depth level" ;
+	float s_se(time, depth, lat, lon) ;
+		s_se:long_name = "Standard Error of the Statistical Mean" ;
+		s_se:salinity_scale = "Practical Salinity Scale(PSS-78)" ;
+		s_se:units = "1" ;
+		s_se:grid_mapping = "crs" ;
+		s_se:_FillValue = 9.96921e+36f ;
+		s_se:description = "The standard error of the mean in each one-degree square at each standard depth level" ;
+	int s_gp(time, depth, lat, lon) ;
+		s_gp:long_name = "Number of Mean Values within Radius of Influence" ;
+		s_gp:units = "1" ;
+		s_gp:grid_mapping = "crs" ;
+		s_gp:_FillValue = -2147483647 ;
+		s_gp:description = "The number of one-degree squares within the smallest radius of influence around each one-degree square which contain a statistical mean." ;
+	int crs ;
+		crs:grid_mapping_name = "latitude_longitude" ;
+		crs:longitude_of_prime_meridian = 0. ;
+		crs:semi_major_axis = 6378137. ;
+		crs:inverse_flattening = 298.257223563 ;
+
+// global attributes:
+		:CVS_ID = "1.0" ;
+		:Conventions = "CF-1.4" ;
+		:id = "2149706b-b5fe-4e41-806a-ef78e52803be" ;
+		:naming_authority = "gov.noaa.nodc" ;
+		:Metadata_Convention = "Unidata Dataset Discovery v1.0" ;
+		:title = "World Ocean Atlas 09:  Sea Water Salinity - annual" ;
+		:summary = "World Ocean Atlas 2009 (WOA09) is a set of objectively analyzed (1 degree grid) climatological fields of in situ temperature, salinity, dissolved oxygen, Apparent Oxygen Utilization (AOU), percent oxygen saturation, phosphate, silicate, and nitrate at standard depth levels for annual, seasonal, and monthly compositing periods for the World Ocean. It also includes associated statistical fields of observed oceanographic profile data interpolated to standard depth levels on both 1 degree and 5 degree grids. For more details, please see http://www.nodc.noaa.gov/OC5/WOA09/pr_woa09.html" ;
+		:references = "Antonov, J. I., D. Seidov, T. P. Boyer, R. A. Locarnini, A. V. Mishonov, and H. E. Garcia, 2010. World Ocean Atlas 2009, Volume 2: Salinity. S. Levitus, Ed. NOAA Atlas NESDIS 69, U.S. Government Printing Office, Washington, D.C., 184 pp. URL:ftp://ftp.nodc.noaa.gov/pub/WOA09/DOC/woa09_vol2_text.pdf" ;
+		:keywords = "OCEANS > SALINITY/DENSITY > SALINITY" ;
+		:keywords_vocabulary = "Global Change Master Directory" ;
+		:standard_name_vocabulary = "CF" ;
+		:source = "Please see the acknowledgment and References" ;
+		:creator_name = "NODC" ;
+		:date_created = "2011-1-11T17:53:32Z" ;
+		:date_modified = "2011-1-11T17:53:32Z" ;
+		:date_issued = "2011-1-11T17:53:32Z" ;
+		:creator_email = "NODC.Services@noaa.gov" ;
+		:creator_url = "http://www.nodc.noaa.gov" ;
+		:contributor_name = "Ocean Climate Laboratory" ;
+		:publisher_name = "National Oceanographic Data Center(NODC)" ;
+		:publisher_email = "NODC.Services@noaa.gov" ;
+		:publisher_url = "http://www.nodc.noaa.gov" ;
+		:institution = "National Oceanographic Data Center(NODC), NOAA" ;
+		:project = "World Ocean Atlas - 2009" ;
+		:acknowledgment = "This work was made possible by a grant from the NOAA Climate and Global Change Program which enabled the establishment of a research group at the National Oceanographic Data Center. The purpose of this group is to prepare research quality oceanographic databases, as well as to compute objective analyses of, and diagnostic studies based on, these databases. Support is now from base funds and from the NOAA Climate Program Office.\n",
+			" The data on which this atlas is based are in World Ocean Database 2009 and are distributed online and on DVD by NODC/WDC. Many data were acquired as a result of the IOC/IODE Global Oceanographic Data Archaeology and Rescue (GODAR) project, and the IOC/IODE World Ocean Database project (WOD). At NODC/WDC, data archaeology and rescue projects were supported with funding from the NOAA Environmental Science Data and Information Management (ESDIM) Program and the NOAA Climate and Global Change Program which included support from NASA and DOE. Support for some of the regional IOC/GODAR meetings was provided by the Marine Science and Technology (MAST) program of the European Union. The European Community has also provided support for the Mediterranean Data Archeology and Rescue (MEDAR/MEDATLAS) project which has resulted in the inclusion of substantial amounts of ocean profile data from the Mediterranean Sea. Additional Black Sea data have been acquired as a result of a NATO sponsored project.\n",
+			" We acknowledge the scientists, technicians, and programmers who have collected and processed data, those individuals who have submitted data to national and regional data centers as well as the managers and staff at the various data centers. We thank our colleagues at the NODC. Their efforts have made this and similar works possible." ;
+		:geospatial_lat_min = -90.f ;
+		:geospatial_lat_max = 90.f ;
+		:geospatial_lat_resolution = 1.f ;
+		:geospatial_lat_units = "degrees_east" ;
+		:geospatial_lon_min = 0.f ;
+		:geospatial_lon_max = 360.f ;
+		:geospatial_lon_resolution = 1.f ;
+		:geospatial_lon_units = "degrees_north" ;
+		:time_coverage_start = "1890-06-27" ;
+		:time_coverage_end = "2008-12-25" ;
+		:time_coverage_duration = "P1Y" ;
+		:time_coverage_resolution = "P1Y" ;
+		:processing_level = "synthesized product" ;
+		:license = "This data is free for anyone to use, reuse and redistribute without any restriction. NOAA and NODC make no warranty, expressed or implied, nor does the fact of distribution constitute such a warranty. NOAA and NODC cannot assume liability for any damages caused by any errors or omissions in the data." ;
+		:cdm_data_type = "Grid" ;
+data:
+
+ lon = 0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 8.5, 9.5, 10.5, 11.5, 12.5, 
+    13.5, 14.5, 15.5, 16.5, 17.5, 18.5, 19.5, 20.5, 21.5, 22.5, 23.5, 24.5, 
+    25.5, 26.5, 27.5, 28.5, 29.5, 30.5, 31.5, 32.5, 33.5, 34.5, 35.5, 36.5, 
+    37.5, 38.5, 39.5, 40.5, 41.5, 42.5, 43.5, 44.5, 45.5, 46.5, 47.5, 48.5, 
+    49.5, 50.5, 51.5, 52.5, 53.5, 54.5, 55.5, 56.5, 57.5, 58.5, 59.5, 60.5, 
+    61.5, 62.5, 63.5, 64.5, 65.5, 66.5, 67.5, 68.5, 69.5, 70.5, 71.5, 72.5, 
+    73.5, 74.5, 75.5, 76.5, 77.5, 78.5, 79.5, 80.5, 81.5, 82.5, 83.5, 84.5, 
+    85.5, 86.5, 87.5, 88.5, 89.5, 90.5, 91.5, 92.5, 93.5, 94.5, 95.5, 96.5, 
+    97.5, 98.5, 99.5, 100.5, 101.5, 102.5, 103.5, 104.5, 105.5, 106.5, 107.5, 
+    108.5, 109.5, 110.5, 111.5, 112.5, 113.5, 114.5, 115.5, 116.5, 117.5, 
+    118.5, 119.5, 120.5, 121.5, 122.5, 123.5, 124.5, 125.5, 126.5, 127.5, 
+    128.5, 129.5, 130.5, 131.5, 132.5, 133.5, 134.5, 135.5, 136.5, 137.5, 
+    138.5, 139.5, 140.5, 141.5, 142.5, 143.5, 144.5, 145.5, 146.5, 147.5, 
+    148.5, 149.5, 150.5, 151.5, 152.5, 153.5, 154.5, 155.5, 156.5, 157.5, 
+    158.5, 159.5, 160.5, 161.5, 162.5, 163.5, 164.5, 165.5, 166.5, 167.5, 
+    168.5, 169.5, 170.5, 171.5, 172.5, 173.5, 174.5, 175.5, 176.5, 177.5, 
+    178.5, 179.5, 180.5, 181.5, 182.5, 183.5, 184.5, 185.5, 186.5, 187.5, 
+    188.5, 189.5, 190.5, 191.5, 192.5, 193.5, 194.5, 195.5, 196.5, 197.5, 
+    198.5, 199.5, 200.5, 201.5, 202.5, 203.5, 204.5, 205.5, 206.5, 207.5, 
+    208.5, 209.5, 210.5, 211.5, 212.5, 213.5, 214.5, 215.5, 216.5, 217.5, 
+    218.5, 219.5, 220.5, 221.5, 222.5, 223.5, 224.5, 225.5, 226.5, 227.5, 
+    228.5, 229.5, 230.5, 231.5, 232.5, 233.5, 234.5, 235.5, 236.5, 237.5, 
+    238.5, 239.5, 240.5, 241.5, 242.5, 243.5, 244.5, 245.5, 246.5, 247.5, 
+    248.5, 249.5, 250.5, 251.5, 252.5, 253.5, 254.5, 255.5, 256.5, 257.5, 
+    258.5, 259.5, 260.5, 261.5, 262.5, 263.5, 264.5, 265.5, 266.5, 267.5, 
+    268.5, 269.5, 270.5, 271.5, 272.5, 273.5, 274.5, 275.5, 276.5, 277.5, 
+    278.5, 279.5, 280.5, 281.5, 282.5, 283.5, 284.5, 285.5, 286.5, 287.5, 
+    288.5, 289.5, 290.5, 291.5, 292.5, 293.5, 294.5, 295.5, 296.5, 297.5, 
+    298.5, 299.5, 300.5, 301.5, 302.5, 303.5, 304.5, 305.5, 306.5, 307.5, 
+    308.5, 309.5, 310.5, 311.5, 312.5, 313.5, 314.5, 315.5, 316.5, 317.5, 
+    318.5, 319.5, 320.5, 321.5, 322.5, 323.5, 324.5, 325.5, 326.5, 327.5, 
+    328.5, 329.5, 330.5, 331.5, 332.5, 333.5, 334.5, 335.5, 336.5, 337.5, 
+    338.5, 339.5, 340.5, 341.5, 342.5, 343.5, 344.5, 345.5, 346.5, 347.5, 
+    348.5, 349.5, 350.5, 351.5, 352.5, 353.5, 354.5, 355.5, 356.5, 357.5, 
+    358.5, 359.5 ;
+
+ lat = -89.5, -88.5, -87.5, -86.5, -85.5, -84.5, -83.5, -82.5, -81.5, -80.5, 
+    -79.5, -78.5, -77.5, -76.5, -75.5, -74.5, -73.5, -72.5, -71.5, -70.5, 
+    -69.5, -68.5, -67.5, -66.5, -65.5, -64.5, -63.5, -62.5, -61.5, -60.5, 
+    -59.5, -58.5, -57.5, -56.5, -55.5, -54.5, -53.5, -52.5, -51.5, -50.5, 
+    -49.5, -48.5, -47.5, -46.5, -45.5, -44.5, -43.5, -42.5, -41.5, -40.5, 
+    -39.5, -38.5, -37.5, -36.5, -35.5, -34.5, -33.5, -32.5, -31.5, -30.5, 
+    -29.5, -28.5, -27.5, -26.5, -25.5, -24.5, -23.5, -22.5, -21.5, -20.5, 
+    -19.5, -18.5, -17.5, -16.5, -15.5, -14.5, -13.5, -12.5, -11.5, -10.5, 
+    -9.5, -8.5, -7.5, -6.5, -5.5, -4.5, -3.5, -2.5, -1.5, -0.5, 0.5, 1.5, 
+    2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 8.5, 9.5, 10.5, 11.5, 12.5, 13.5, 14.5, 
+    15.5, 16.5, 17.5, 18.5, 19.5, 20.5, 21.5, 22.5, 23.5, 24.5, 25.5, 26.5, 
+    27.5, 28.5, 29.5, 30.5, 31.5, 32.5, 33.5, 34.5, 35.5, 36.5, 37.5, 38.5, 
+    39.5, 40.5, 41.5, 42.5, 43.5, 44.5, 45.5, 46.5, 47.5, 48.5, 49.5, 50.5, 
+    51.5, 52.5, 53.5, 54.5, 55.5, 56.5, 57.5, 58.5, 59.5, 60.5, 61.5, 62.5, 
+    63.5, 64.5, 65.5, 66.5, 67.5, 68.5, 69.5, 70.5, 71.5, 72.5, 73.5, 74.5, 
+    75.5, 76.5, 77.5, 78.5, 79.5, 80.5, 81.5, 82.5, 83.5, 84.5, 85.5, 86.5, 
+    87.5, 88.5, 89.5 ;
+
+ depth = 0, 10, 20, 30, 50, 75, 100, 125, 150, 200, 250, 300, 400, 500, 600, 
+    700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1750, 2000, 2500, 
+    3000, 3500, 4000, 4500, 5000, 5500 ;
+
+ time = 182 ;
+}

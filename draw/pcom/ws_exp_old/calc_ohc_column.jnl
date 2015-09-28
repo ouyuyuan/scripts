@@ -1,0 +1,58 @@
+let outfile = "$1"
+cancel mode upcase_output
+let rho = 1029 ! kg/m^3, mean density of seawater
+let cp = 3901 ! c_p, heat capability, J/kg/K
+
+let indir = "/home/ou/archive/data/pcom"
+let clm = "climate_y541-y550.nc"
+
+! control run
+!======================================
+let infile = "`indir`/exp08_fkh1/`clm`"
+set data "`infile`"
+
+let ctr_700 = rho*cp*pt[z=0:700@din]
+set var/title="0-700m"/units="J" ctr_700
+save/clobber/file="`outfile`" ctr_700
+
+let ctr_2000 = rho*cp*pt[z=0:2000@din]
+set var/title="0-2000m"/units="J" ctr_2000
+save/append/file="`outfile`" ctr_2000
+
+!let ctr_30_700 = rho*cp*pt[z=30:700@din]
+!set var/title="30-700m"/units="J" ctr_30_700
+!save/append/file="`outfile`" ctr_30_700
+
+!let ctr_30_2000 = rho*cp*pt[z=30:2000@din]
+!set var/title="30-2000m"/units="J" ctr_30_2000
+!save/append/file="`outfile`" ctr_30_2000
+
+cancel data "`infile`"
+
+! exp 15S-15N
+!==============================
+let infile = "`indir`/exp16_ws_15S-15N/`clm`"
+let varprefix = "an_15S15N"
+go func_ohc_column
+
+! exp 60S-60N
+!==============================
+let infile = "`indir`/exp15_ws_60S-60N/`clm`"
+let varprefix = "an_60S60N"
+go func_ohc_column
+
+
+! control run, cycle re
+!==============================
+let clm = "climate_y55-y64.nc"
+
+let infile = "`indir`/exp17_ws_control_cycle_re/`clm`"
+let varprefix = "ctr64"
+go func_ohc_column
+
+! exp_an_AO
+!==============================
+let infile = "`indir`/exp18_ws_an_ao/`clm`"
+let varprefix = "an_ao"
+go func_ohc_column
+

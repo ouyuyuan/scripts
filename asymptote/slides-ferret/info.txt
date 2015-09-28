@@ -1,0 +1,7 @@
+title: {\tt Ferret} Exercises
+draws: slide-*.asy
+outline file: outline.txt
+final product: ferret-exercises.pdf
+reference-slide: slide-references.pdf
+image directory: /home/ou/archive/drawing/eps
+temporal directory: tmp_files

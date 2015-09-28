@@ -1,0 +1,36 @@
+
+! Description: temperature
+!
+!      Author: OU Yuyuan <ouyuyuan@lasg.iap.ac.cn>
+!     Created: 2013-09-10 10:00:28 CST
+! Last Change: 2013-10-04 09:59:29 CST
+
+cancel mode logo
+
+set graphics unmapped
+set mode metafile:"/home/ou/archive/drawing/pcom/assess/png/unmodified/temp.png"
+!set mode metafile:"/home/ou/archive/drawing/pcom/assess/png/ts_restored/temp.png"
+!set mode metafile:"/home/ou/archive/drawing/pcom/assess/png/t_restored/temp.png"
+
+let data_dir = "/media/scidata"
+set region/x=98E:78W/y=20S:65.8N
+
+set data "`data_dir`/soda/climate/climate_1981-2000.nc"
+set viewport ul
+shade/k=1 temp
+
+let levels="(0,30,1)"
+
+set data "`data_dir`/hycom/PACa0.08/climate/temp_1981-2000.nc"
+set viewport ur
+shade/k=1/levels=`levels` temperature
+
+set data "`data_dir`/licom/unmodified/climate/climate_081-100.nc"
+set viewport ll
+shade/k=30/levels=`levels` ts
+
+set data "`data_dir`/pcom/unmodified/climate/climate_081-100.nc"
+!set data "`data_dir`/pcom/ts_restored/climate/climate_33months.nc"
+!set data "`data_dir`/pcom/t_restored/climate/climate_021-040.nc"
+set viewport lr
+shade/k=1/levels=`levels` pt 

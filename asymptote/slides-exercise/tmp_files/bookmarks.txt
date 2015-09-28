@@ -1,0 +1,40 @@
+Simple Examples/3,FitPage
+Creative Examples/4,FitPage
+	Geometry/4,FitPage
+	Pavage/5,FitPage
+	Stars/6,FitPage
+	Automata/7,FitPage
+Graph Module/8,FitPage
+	a/8,FitPage
+	Marker/9,FitPage
+	d/10,FitPage
+	c/11,FitPage
+	e/12,FitPage
+Source Code/-1
+	Slide 3/-1,Launch,slide-simple.asy
+	Slide 4/-1,Launch,slide-creative-a.asy
+		note-triangle.asy/-1,Launch,note-triangle.asy
+	Slide 5/-1,Launch,slide-creative-b.asy
+	Slide 6/-1,Launch,slide-creative-c.asy
+	Slide 7/-1,Launch,slide-creative-d.asy
+	Slide 8/-1,Launch,slide-graph-a.asy
+		scientific-style-func.asy/-1,Launch,scientific-style-func.asy
+	Slide 9/-1,Launch,slide-graph-b.asy
+		marker-errorbar.asy/-1,Launch,marker-errorbar.asy
+		custom-marker.asy/-1,Launch,custom-marker.asy
+	Slide 10/-1,Launch,slide-graph-d.asy
+		log-a.asy/-1,Launch,log-a.asy
+		log-b.asy/-1,Launch,log-b.asy
+		log-c.asy/-1,Launch,log-c.asy
+	Slide 11/-1,Launch,slide-graph-c.asy
+		multi-entry-legend.asy/-1,Launch,multi-entry-legend.asy
+		custom-tick.asy/-1,Launch,custom-tick.asy
+		column-file-data.asy/-1,Launch,column-file-data.asy
+	Slide 12/-1,Launch,slide-graph-e.asy
+		log-d.asy/-1,Launch,log-d.asy
+		log-e.asy/-1,Launch,log-e.asy
+References/-1
+	Asymptote2004/-1,Launch,paps/Asymptote2004.pdf
+	Liu2009asy/-1,Launch,paps/Liu2009asy.pdf
+	Motu2007asy/-1,Launch,paps/Motu2007asy.pdf
+	Zhang2010asy/-1,Launch,paps/Zhang2010asy.pdf

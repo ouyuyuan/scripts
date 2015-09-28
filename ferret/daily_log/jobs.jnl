@@ -1,0 +1,15 @@
+\cancel mode verify
+
+! Description: all kinds of jobs
+!
+!      Author: OU Yuyuan <ouyuyuan@lasg.iap.ac.cn>
+!     Created: 2013-03-27 16:47:31 CST
+! Last Change: 2013-03-30 18:57:24 CST
+
+set mode / last verify
+
+set graphics unmapped
+set mode metafile:"/home/ou/archive/drawing/daily_log/jobs.png"
+set data "/home/ou/archive/data/daily_log/daily_log.nc"
+
+shade/transpose job

@@ -1,0 +1,9 @@
+\cancel mode verify
+
+set mode / last verify
+
+set graphics unmapped
+set mode metafile:"/home/ou/archive/drawing/pcom/png/temp.png"
+set data "/home/ou/archive/data/pcom/out_100yr_unmodified/N00000001.nc"
+
+shade/m=1 pt 

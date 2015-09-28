@@ -1,0 +1,23 @@
+PERLDIR = /home/ou/archive/coded/perl/slides
+FILEDIR = tmp_files
+
+.PHONY: outline prepare references adjust compile join clean
+
+outline:
+	$(PERLDIR)/slides-extract-outline.pl
+	mkdir -p $(FILEDIR)
+
+references:
+	$(PERLDIR)/slides-create-references.pl
+
+adjust:
+	$(PERLDIR)/slides-adjust-source.pl
+
+compile:
+	$(PERLDIR)/slides-compile-all.pl
+
+join:
+	$(PERLDIR)/slides-join.pl
+
+clean:
+	rm -rf $(FILEDIR)/

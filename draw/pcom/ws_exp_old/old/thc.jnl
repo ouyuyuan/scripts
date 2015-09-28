@@ -1,0 +1,27 @@
+
+! Description: the depth of thermalcline
+!
+!      Author: OU Yuyuan <ouyuyuan@lasg.iap.ac.cn>
+!     Created: 2014-10-12 08:38:24 BJT
+! Last Change: 2014-10-12 09:45:11 BJT
+
+let infile = "$1"
+let outfile = "$2"
+
+set data "`infile`"
+
+let thc = pt[z=0:1500@LOC:20]
+let slopex = thc[x=@DDB]
+let slopey = thc[y=@DDB]
+let slope = (slopex^2 + slopey^2)^0.5
+
+set var/title="depth of thermalcline"/units="m" thc
+set var/title="slope of thc in zonal direction"/units="" slopex
+set var/title="slope of thc in meridional direction"/units="" slopey
+set var/title="modulus of the slope of thc "/units="" slope
+
+cancel mode upcase_output
+save/clobber/file="`outfile`" thc
+save/append/file="`outfile`" slopex
+save/append/file="`outfile`" slopey
+save/append/file="`outfile`" slope

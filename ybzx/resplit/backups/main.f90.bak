@@ -1,0 +1,273 @@
+
+! Description: main program for re-spliting of restart files of NEMO
+!
+!      Author: OU Yuyuan <ouyuyuan@lasg.iap.ac.cn>
+!     Created: 2015-02-22 13:51:55 BJT
+! Last Change: 2015-05-21 16:14:08 BJT
+
+program main
+
+  use mod_param, only: sp, missing_int, &
+    rst_dir, out_dir, rst_style, ncpu, &
+    nx_glo, ny_glo, nx, ny, nz
+  use mod_type, only: struct_nc, ncvar_int1d
+  use mod_io,   only: io_get_nc_info, io_read, &
+    io_output, io_output_cpus, io_output_domain
+
+  implicit none
+
+  type (struct_nc), dimension(:), allocatable :: rsts
+  character (len = 200) :: ncname, outfname
+  integer :: istat
+
+  call init()
+
+!  call check_files( rsts )
+
+!  call print_domain_info( rsts )
+
+!  call output_cpu_distribution( out_dir )
+!  call output_global( trim(out_dir)//"lon.nc", "nav_lon" )
+
+  write(outfname, "(A,I0.4,A)") trim(out_dir)//"domain_info_", &
+    ncpu, ".nc"
+  call output_domain_info( outfname )
+
+contains !{{{1
+!-------------------------------------------------------{{{1
+
+subroutine init() !{{{2
+
+  namelist /param/ rst_dir, out_dir, rst_style, ncpu 
+
+  open(10, file="namelist")
+  read(10, param)
+  close(10)
+
+  allocate( rsts(0:ncpu-1), stat = istat )
+  call stat_check( istat )
+
+  call get_files_info( rsts )
+
+  nx_glo = rsts(0) % size_glo % val(1)
+  ny_glo = rsts(0) % size_glo % val(2)
+  nx = rsts(0) % nx
+  ny = rsts(0) % ny
+  nz = rsts(0) % nz
+
+end subroutine init
+
+subroutine output_domain_info( outfname ) !{{{2
+!-----------------------------------------------------------
+!   output subdomains of MPI to a netcdf file
+!-----------------------------------------------------------
+
+  character (len=*), intent(in) :: outfname
+  type (ncvar_int1d) :: vars(14)
+  type (struct_nc) :: rst
+  integer, dimension(0:ncpu-1), target :: &
+    ia  , ja  , ib  , jb  , &
+    iai , jai , ibi , jbi , &
+    iah , jah , ibh , jbh , &
+    ic  , jc
+  integer :: n
+
+!---define output variables-----------------------------{{{2
+  vars = (/& 
+    ncvar_int1d("ia", "starting i-index of subdomains", ia), &
+    ncvar_int1d("ja", "starting j-index of subdomains", ja), &
+    ncvar_int1d("ib", "ending i-index of subdomains",   ib), &
+    ncvar_int1d("jb", "ending j-index of subdomains",   jb), &
+    ncvar_int1d("iai", "starting i-index of inner area", iai), &
+    ncvar_int1d("jai", "starting j-index of inner area", jai), &
+    ncvar_int1d("ibi", "ending i-index of inner area",   ibi), &
+    ncvar_int1d("jbi", "ending j-index of inner area",   jbi), &
+    ncvar_int1d("iah", "starting halo rows in i-direction", iah), &
+    ncvar_int1d("jah", "starting halo rows in j-direction", jah), &
+    ncvar_int1d("ibh", "ending halo rows in i-direction",   ibh), &
+    ncvar_int1d("jbh", "ending halo rows in j-direction",   jbh), &
+    ncvar_int1d("ic", "center i-index of subdomains", ic), &
+    ncvar_int1d("jc", "center j-index of subdomains", jc)  /)
+
+!---comput variables------------------------------------{{{1
+  do n = 0, ncpu - 1
+    rst    = rsts(n)
+
+    ia(n) = rst % pos_fst % val(1)
+    ja(n) = rst % pos_fst % val(2)
+    ib(n) = rst % pos_lst % val(1)
+    jb(n) = rst % pos_lst % val(2)
+
+    iah(n) = rst % ha_sta % val(1)
+    jah(n) = rst % ha_sta % val(2)
+    ibh(n) = rst % ha_end % val(1)
+    jbh(n) = rst % ha_end % val(2)
+
+    iai(n) = ia(n) + iah(n)
+    jai(n) = ja(n) + jah(n)
+    ibi(n) = ib(n) - ibh(n)
+    jbi(n) = jb(n) - jbh(n)
+
+    ic(n) = ( ia(n) + ib(n) ) / 2
+    jc(n) = ( ja(n) + jb(n) ) / 2
+  end do
+
+!---output variables------------------------------------{{{1
+  call io_output_domain( outfname, vars )
+
+end subroutine output_domain_info
+
+subroutine output_cpu_distribution( out_dir ) !{{{2
+!-----------------------------------------------------------
+! output the distribution of CPUs on the global grid
+!-----------------------------------------------------------
+
+  character (len=*), intent(in) :: out_dir
+  integer, dimension(nx_glo, ny_glo), target :: &
+    cpus, dbnd
+  integer, dimension(0:ncpu-1) :: ic, jc
+  integer, pointer :: p(:,:)
+  integer :: n, ia, ib, ja, jb
+
+!---compute variables-----------------------------------{{{3
+  cpus = missing_int
+  dbnd = missing_int
+
+  do n = 0, ncpu - 1
+    ia = rsts(n) % pos_fst % val(1)
+    ja = rsts(n) % pos_fst % val(2)
+    ib = rsts(n) % pos_lst % val(1)
+    jb = rsts(n) % pos_lst % val(2)
+
+    ic(n) = ( ia + ib ) / 2
+    jc(n) = ( ja + jb ) / 2
+
+    p=>cpus(ia:ib,ja:jb)
+    where(p == missing_int) p = 0
+    p = p + n  
+    p=>null()
+
+    p=>dbnd(ia:ib,ja:jb)
+    where(p == 0) p = 1
+    where(p == missing_int) p = 0
+    p=>null()
+  end do
+
+!---output variables------------------------------------{{{3
+! for transport problem, we create multiple files
+  call io_output_cpus( trim(out_dir)//"cpus.nc", cpus, ic, jc )
+
+  call io_output( trim(out_dir)//"dbnd.nc", "dbnd", &
+    "boudary of each subdomains", dbnd )
+
+end subroutine output_cpu_distribution 
+
+subroutine output_global( outfname, varname ) !{{{2
+!-----------------------------------------------------------
+! merge a subdomain variable to global domain 
+!   and output netcdf file
+!-----------------------------------------------------------
+
+  character (len=*), intent(in) :: outfname, varname
+  real (kind=sp), dimension(nx_glo, ny_glo), target :: var
+  real (kind=sp), pointer :: p(:,:)
+  type (struct_nc) :: rst
+  integer :: ia, ib, ja, jb, n
+
+  var = 0
+  do n = 0, ncpu - 1
+    rst    = rsts(n)
+    ncname = rst % fname
+    ia = rst % pos_fst % val(1) + rst % ha_sta % val(1)
+    ja = rst % pos_fst % val(2) + rst % ha_sta % val(2)
+    ib = rst % pos_lst % val(1) - rst % ha_end % val(1)
+    jb = rst % pos_lst % val(2) - rst % ha_end % val(2)
+
+    p=>var(ia:ib,ja:jb)
+    call io_read( ncname, varname, p )
+    p=>null()
+  end do
+  call io_output( outfname, varname, var )
+
+end subroutine output_global
+
+subroutine check_files( nc ) !{{{2
+!-----------------------------------------------------------
+! check whether all the restart files have the same dimensions and similar 
+!   global attributes
+!-----------------------------------------------------------
+  use mod_io, only: &
+    io_print_nc_info, &
+    io_is_similar
+
+  type (struct_nc), intent(in) :: nc(:)
+  integer :: i
+
+  call io_print_nc_info(nc(0))
+
+  if (nc(0)% cpus % val /= ncpu) then
+    write(*,*) "WARNING: number of cpus in "//trim(nc(0) % fname)// &
+      " is not equal to the value defined in the namelist."
+  end if
+
+  do i = 1, ncpu - 1
+    write(*,*) "checking: "//trim(nc(i) % fname)//" ~ ~ ~ "
+    if ( .not. io_is_similar(nc(i), nc(0)) ) then
+      write(*,*) trim(nc(i) % fname)//" is not the similar type of "//trim(nc(0) % fname)
+      stop
+    end if
+  end do
+  write(*,*) "All files are similar in size and global attributes."
+end subroutine check_files 
+
+subroutine get_files_info( nc ) !{{{2
+!-----------------------------------------------------------
+! get the dimensions and global attributes of every restart files
+!   to a struct array
+!-----------------------------------------------------------
+
+  type (struct_nc) :: nc(0:ncpu-1)
+  integer :: i
+
+  do i = 0, ncpu - 1
+    write(ncname, "(A,I0.4,A)") trim(rst_dir)//trim(rst_style)//"_restart_",i,".nc"
+    write(*,*) "reading: "//trim(ncname)//" ~ ~ ~ "
+
+    nc(i) = io_get_nc_info(ncname)
+  end do
+end subroutine get_files_info
+
+subroutine print_domain_info(nc) !{{{2
+!-----------------------------------------------------------
+! print the information of an nc file
+!-----------------------------------------------------------
+  type (struct_nc), intent(in) :: nc(:)
+  integer :: n, i
+
+  n = size(nc)
+  do i = 1, n
+    write(*,"(A, I4, A, 4(A,I4,A,I4,A))") "cpu: ", nc(i) % cpu % val, "; ", &
+    " pos_fst:(", nc(i) % pos_fst % val(1), ",", nc(i) % pos_fst % val(2), ");", &
+    " pos_lst:(", nc(i) % pos_lst % val(1), ",", nc(i) % pos_lst % val(2), ");", &
+     " ha_sta:(", nc(i) %  ha_sta % val(1), ",", nc(i) %  ha_sta % val(2), ");", &
+     " ha_end:(", nc(i) %  ha_end % val(1), ",", nc(i) %  ha_end % val(2), ");"
+  end do
+end subroutine print_domain_info 
+
+subroutine stat_check( istat ) !{{{2
+!-----------------------------------------------------------
+! check allocate success or not
+!-----------------------------------------------------------
+
+  integer, intent(in) :: istat
+
+  if ( istat /= 0 ) then
+    stop "Allocate array failed! Stop."
+  end if
+
+end subroutine stat_check
+
+end program main !{{{1
+!-------------------------------------------------------{{{1
+! vim:fdm=marker:fdl=0:
+! vim:foldtext=getline(v\:foldstart).'...'.(v\:foldend-v\:foldstart):

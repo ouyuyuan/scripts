@@ -1,0 +1,7 @@
+&param
+  rst_dir  = "/WORK/home/qhyc1/zhangyu/ouniansen/EXP_600/",
+  out_dir  = "/WORK/home/qhyc1/zhangyu/ouniansen/output/EXP_600_to_480/",
+rst_prefix = "ORCAR12_00000720_restart_",
+     ncpu  = 600,
+ new_ncpu  = 480,
+/

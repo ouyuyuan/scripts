@@ -1,0 +1,45 @@
+
+! Description: barotropic stream function
+!
+!      Author: OU Yuyuan <ouyuyuan@lasg.iap.ac.cn>
+!     Created: 2014-01-13 08:09:55 BJT
+! Last Change: 2014-03-25 17:09:35 BJT
+
+cancel mode logo
+
+!let data_dir = "/home/ou/archive/data/pcom/climate/exp_05"
+!let infile = "`data_dir`/year_mean_351-380.nc"
+!let data_dir = "/home/ou/archive/data/pcom/climate/fix_fkh"
+let data_dir = "/home/ou/archive/data/pcom/climate/res_s"
+let infile = "`data_dir`/year_mean_081-100.nc"
+let outfile = "`data_dir`/calculated/bsf.nc"
+
+!set graphics unmapped
+!set mode metafile:"/home/ou/archive/drawing/pcom/png/topography.png"
+
+set data "`infile`"
+
+! Psi = Int(U dx) - Int(V dy)
+let u_ver = u[z=@din]
+let v_ver = v[z=@din]
+let uu = missing(u_ver, 0)
+let vv = missing(v_ver, 0)
+! u_ver - u_ver will be a mask that contain missing value
+! missing value of bsf should be the same as u_ver and v_ver
+let bsf = (UU[y=@iin] - VV[x=@iin])*10^(-6) + (u_ver - u_ver) + (v_ver - v_ver)
+set variable/title="Barotropic Stream Function"/units="Sv" bsf
+
+!set window/clear
+!set viewport ul
+!shade/levels=(-500,1000,50) u_ver
+!set viewport ur
+!shade/levels=(-500,1000,50) bsf[y=@ddc]*(-1)*10^6
+!set viewport ll
+!shade/levels=(-100,100,10) v_ver
+!set viewport lr
+!shade/levels=(-100,100,10) bsf[x=@ddc]*10^6
+!shade bsf
+!go land
+
+cancel mode upcase_output
+save/clobber/file="`outfile`" bsf

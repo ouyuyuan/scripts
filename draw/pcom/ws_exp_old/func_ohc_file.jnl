@@ -1,0 +1,41 @@
+
+! ohc by depth
+!=============
+let `var_prefix`_all = rho*cp*pt[x=@din, y=@din, z=@din]
+set var/title="global, all depth"/units="J" `var_prefix`_all
+save/append/file="`outfile`" `var_prefix`_all
+
+let `var_prefix`_2000 = rho*cp*pt[x=@din, y=@din, z=0:2000@din]
+set var/title="global, 0-2000m"/units="J" `var_prefix`_2000
+save/append/file="`outfile`" `var_prefix`_2000
+
+let `var_prefix`_700 = rho*cp*pt[x=@din, y=@din, z=0:700@din]
+set var/title="global, 0-700m"/units="J" `var_prefix`_700
+save/append/file="`outfile`" `var_prefix`_700
+
+! ohc above 20 degC
+!===================
+let temp = if pt ge 20 then pt else 0
+
+! global
+let varmask = 1
+let title = "global, above 20 degC"
+go func_ohc_save `var_prefix`_g
+
+! Indian ocean
+let varmask = if mask eq 3 then 1 else 0 
+let title = "Indian Ocean"
+go func_ohc_save `var_prefix`_i 
+
+! Pacific ocean
+let varmask = if mask eq 2 then 1 else 0 
+let title = "Pacific Ocean"
+go func_ohc_save `var_prefix`_p 
+
+! Atlantic ocean
+let varmask = if mask eq 6 then 1 else 0 
+let title = "Atlantic Ocean"
+go func_ohc_save `var_prefix`_a 
+
+cancel data "`infile`"
+

@@ -1,0 +1,32 @@
+
+L: 0.02;
+T(x,t) := ev( 200*%e^(-k*c1^2*t/(r*c))*cos(c1*x), k=10, r=10^7/c, c1=%pi/(2*0.02) );
+T(0.018,40), numer;
+
+output(t) := block(
+[t],
+outfile: "maxima.out",
+with_stdout(outfile),
+file_output_append: true,
+
+n: 10,
+dx: L/n,
+t: 40,
+
+with_stdout( outfile,print("netcdf exact {") ),
+with_stdout( outfile,print("dimensions:") ),
+with_stdout( outfile,print("    x = ",n,";") ),
+with_stdout( outfile,print("variables:") ),
+with_stdout( outfile,print("    float x(x):") ),
+with_stdout( outfile,print("      x:units =\"m\";") ),
+with_stdout( outfile,print("      x:long_name =\"distance\";") ),
+
+for i:0 thru n do 
+    (
+    ans: ev(T(x,t), x=i*dx, numer),
+    with_stdout(outfile,print(ans))
+    )
+);
+
+output(40);
+

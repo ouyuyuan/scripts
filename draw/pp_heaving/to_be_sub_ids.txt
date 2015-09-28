@@ -1,0 +1,16 @@
+expDir1: expDirP1
+expDir2: expDirP2
+expDir3: expDirP3
+
+expDir4: expDirA1
+expDir5: expDirA2
+expDir6: expDirA3
+
+cn1: cnP1
+cn2: cnP2
+cn3: cnP3
+
+cn4: cnA1
+cn5: cnA2
+cn6: cnA3
+

@@ -1,0 +1,24 @@
+FF   = -O2 -r8
+FC   = ifort
+EXE  = main
+OBJS = modu.o main.o
+
+.PHONY: all compile run clean
+
+.SUFFIXES:
+
+.SUFFIXES: .f90 .o
+
+all: compile run
+
+compile: $(OBJS)
+	$(FC) $(OBJS) -o $(EXE)
+
+.f90.o:
+	$(FC) $(FF) -c $<
+
+run:
+	./$(EXE)
+
+clean:
+	rm -f *.mod *.o *.out $(EXE)

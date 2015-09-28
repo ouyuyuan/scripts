@@ -1,0 +1,7 @@
+&param
+  old_dir  = "/WORK/home/qhyc1/zhangyu/ouniansen/EXP_960/",
+  new_dir  = "/WORK/home/qhyc1/zhangyu/ouniansen/test/EXP_960_to_600/",
+ old_ncpu  = 960,
+ new_ncpu  = 600,
+rst_prefix = "ORCAR12_00000720_restart_",
+/

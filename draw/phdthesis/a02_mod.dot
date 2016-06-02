@@ -1,0 +1,84 @@
+
+// Description: dynamic core
+//
+//      Author: OU Yuyuan <ouyuyuan@gmail.com>
+//     Created: 2013-01-14 21:35:30 CST
+// Last Change: 2016-05-13 08:57:54 BJT
+
+digraph g {
+    node [fontsize=24];
+
+    "main";
+
+    node [style=filled,color="#ff6363"];
+    "main"->"mod_int";
+
+    node [color="#fdbe85"];
+    "main"->"mod_op";
+
+    node [color="#63b8ff"];
+    "main"->"mod_den";
+    "main"->"mod_mympi";
+
+    node [color="#90ee90"];
+    "main"->"mod_arrays";
+    "main"->"mod_io";
+
+    node [color=pink];
+    "main"->"mod_con";
+    "main"->"mod_param";
+    "main"->"mod_type";
+
+    node [color="#d2b48c"];
+    "main"->"mod_kind";
+
+    edge [penwidth=3, color="#ee0000"];
+    "mod_int"->"mod_arrays";
+    "mod_int"->"mod_con";
+    "mod_int"->"mod_den";
+    "mod_int"->"mod_kind";
+    "mod_int"->"mod_mympi";
+    "mod_int"->"mod_op";
+    "mod_int"->"mod_param";
+    "mod_int"->"mod_type";
+
+    edge [penwidth=4, style=bold, color="#fdbe85"];
+    "mod_op"->"mod_arrays";
+    "mod_op"->"mod_con";
+    "mod_op"->"mod_kind";
+    "mod_op"->"mod_mympi";
+    "mod_op"->"mod_param";
+    "mod_op"->"mod_type";
+
+    edge [penwidth=4, style=bold,  color="#63b8ff"];
+    "mod_mympi"->"mod_io";
+    "mod_mympi"->"mod_kind";
+    "mod_mympi"->"mod_param";
+    "mod_mympi"->"mod_type";
+
+    "mod_den"->"mod_arrays";
+    "mod_den"->"mod_con";
+    "mod_den"->"mod_kind";
+    "mod_den"->"mod_param";
+    "mod_den"->"mod_type";
+
+    edge [penwidth=8, color="#90ee90"];
+    "mod_arrays"->"mod_con";
+    "mod_arrays"->"mod_kind";
+    "mod_arrays"->"mod_param";
+    "mod_arrays"->"mod_type";
+
+    "mod_io"->"mod_kind";
+    "mod_io"->"mod_param";
+    edge [penwidth=0, color=white];
+    "mod_io"->"mod_type";
+    "mod_io"->"mod_con";
+
+    edge [penwidth=8, color=pink];
+    "mod_param"->"mod_kind";
+
+    "mod_con"->"mod_kind";
+
+    "mod_type"->"mod_kind";
+
+}

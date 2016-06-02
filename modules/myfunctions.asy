@@ -3,7 +3,7 @@
 //
 //      Author: OU Yuyuan <ouyuyuan@gmail.com>
 //     Created: 2012-10-24 08:50:52 CST
-// Last Change: 2013-12-18 09:20:08 BJT
+// Last Change: 2015-10-21 13:47:21 BJT
 
 // def var <<<1
 
@@ -366,7 +366,7 @@ void myshipout( string fmt="pdf", string dir="" ) {
     } else if ( fmt == "eps" ) {
         settings.outformat = nativeformat();
         shipout(filename);
-
+        
     } else if ( fmt == "png" ) {
         settings.outformat="pdf";
         shipout(filename);

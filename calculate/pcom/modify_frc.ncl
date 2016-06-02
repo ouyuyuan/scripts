@@ -4,7 +4,7 @@
 ;
 ;      Author: OU Yuyuan <ouyuyuan@lasg.iap.ac.cn>
 ;     Created: 2015-09-18 08:40:16 BJT
-; Last Change: 2016-02-29 10:29:34 BJT
+; Last Change: 2015-11-11 08:54:37 BJT
 
 load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/gsn_code.ncl"
 load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/gsn_csm.ncl"
@@ -23,17 +23,16 @@ begin
   delete(var@missing_value)
 end
 
-;data_dir = "/media/wd/pcom/input/"
 data_dir = "/home/ou/archive/data/pcom/input/"
-infile = data_dir + "pcom_ini.nc"
-outfile  = data_dir+"pcom_ini_mod.nc"
+infile = data_dir + "pcom_bcf_mn.nc"
+outfile  = data_dir+"forcing.nc"
 
 system("rm -f "+outfile)
 
 fin = addfile(infile, "r")
 fout =addfile(outfile,"c")
 
-vars = (/"ct","sa","idx","itn","depth","t30","s30"/)
+vars = (/"bcu","bcv","bct","bcs","bcp","emp"/)
 do i = 0, dimsizes(vars)-1
   varName = vars(i)
   var = fin->$varName$
@@ -41,31 +40,30 @@ do i = 0, dimsizes(vars)-1
 
   newVar = var
 
-; reverse coordinate
-;  if (varName.eq."ct" .or. \
-;      varName.eq."sa" .or. \
-;      varName.eq."idx") then
-;    temp = var(:,{::-1},:)
-;    newVar = temp(z|:,lon|:,lat|:)
-;    delete(temp)
-;  else if (varName.eq."depth" .or. varName.eq."itn") then
-;    temp = var({::-1},:)
-;    newVar = temp(lon|:,lat|:)
-;    delete(temp)
-;  else
-;    newVar = var
-;  end if
-;  end if
-
-  if (varName.eq."ct") then
+  if (varName.eq."bcu") then
+    newVar@units = "N/m^2"
+    newVar = newVar * 0.1
+    fout->taux = newVar
+  else if (varName.eq."bcv") then
+    newVar@units = "N/m^2"
+    newVar = newVar * 0.1
+    fout->tauy = newVar
+  else if (varName.eq."bcp") then
+    newVar@units = "N/m^2"
+    newVar = newVar * 0.1
+    fout->pa = newVar
+  else if (varName.eq."emp") then
+    newVar@units = "m/s"
+    newVar = newVar * 0.01
+    fout->fw = newVar
+  else if (varName.eq."bct") then
     newVar@units = "degrees Celcius"
-    fout->pt = newVar
-  else if (varName.eq."t30") then
-    fout->tmn = newVar
-  else if (varName.eq."s30") then
-    fout->smn = newVar
-  else
-    fout->$varName$ = newVar
+    fout->bct = newVar
+  else if (varName.eq."bcs") then
+    fout->bcs = newVar
+  end if
+  end if
+  end if
   end if
   end if
   end if

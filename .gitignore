@@ -1,0 +1,10 @@
+# ncl break down file
+core
+
+# data file
+*.nc
+
+# images
+*.eps
+*.png
+*.ps

@@ -1,0 +1,7 @@
+cancel mode logo
+
+set graphics unmapped
+set mode metafile:"/home/ou/archive/drawing/phdthesis/topography.png"
+set data "/home/ou/archive/data/pcom/input/pcom_ini.nc"
+
+shade depth

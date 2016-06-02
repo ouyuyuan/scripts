@@ -1,0 +1,24 @@
+
+// Description: dynamic core
+//       Usage: dot -Txxx source.dot -o out.xxx
+//              xxx is the disire image format
+//
+//      Author: OU Yuyuan <ouyuyuan@gmail.com>
+//     Created: 2013-01-14 21:35:30 CST
+// Last Change: 2016-05-12 10:13:58 BJT
+
+digraph g {
+    "atmos_cubed_sphere/"->"tools/";
+
+    node [style=filled,color=pink];
+    "atmos_cubed_sphere/"->"model/";
+        "model/"->"*.F90";
+
+
+    node [style=filled,color=lightblue];
+    "atmos_cubed_sphere/"->"driver/";
+        "driver/"->"solo/";
+            "solo/"->"atmosphere.F90";
+            "solo/"->"fv_phys.F90";
+            "solo/"->"hswf.F90";
+}

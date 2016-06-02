@@ -3,7 +3,7 @@
 //
 //      Author: OU Yuyuan <ouyuyuan@gmail.com>
 //     Created: 2012-10-24 08:50:52 CST
-// Last Change: 2016-04-07 08:08:50 BJT
+// Last Change: 2013-12-02 10:37:08 CST
 
 // def var <<<1
 
@@ -353,7 +353,7 @@ real[] read_real(string datafile, int n) {
 
 void myshipout( string fmt="pdf", string dir="" ) {
 
-    string imgdir = "/home/ou/archive/drawing";
+    string imgdir = "/home/ou/archive/draw";
     if ( dir != "" ) {
         imgdir += "/" + dir;
     }

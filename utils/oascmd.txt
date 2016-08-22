@@ -1,0 +1,3 @@
+# usage oascmd.py xxx.txt
+
+oascmd.py config --host=cn-shenzhen.aliyuncs.com

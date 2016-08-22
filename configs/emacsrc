@@ -1,0 +1,80 @@
+
+;;;; Description: emacs配置文件
+;;;;
+;;;;      Author: OU Yuyuan <ouyuyuan@lasg.iap.ac.cn>
+;;;;     Created: 2013-01-25 08:46:02 CST
+;;;; Last Change: 2013-01-25 08:53:39 CST
+
+;;; 由GUI自动生成的配置
+
+(custom-set-variables
+  ;; custom-set-variables was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+ '(blink-cursor-mode nil)
+ '(column-number-mode t)
+ '(display-time-mode t)
+ '(rst-level-face-base-color "black")
+ '(show-paren-mode t))
+
+
+;;; 手动添加的配置
+;;;
+
+;;所有的备份文件都放置在~/bak目录下
+;;对于每个备份文件，保留最原始的两个版本和最新的五个版本。
+;;备份时，备份文件是复件
+;;不产生备份文件 (setq make-backup-files nil)
+(setq backup-directory-alist (quote (("." . "~/bak"))))
+(setq version-control t)
+(setq kept-old-versions 2)
+(setq kept-new-versions 5)
+(setq delete-old-versions t)
+(setq backup-directory-alist '(("." . "~/bak")))
+(setq backup-by-copying t)
+
+(require 'rst)
+(setq auto-mode-alist
+    (append '(("\\.txt$" . rst-mode)
+         ("\\.rst$" . rst-mode)
+                ("\\.rest$" . rst-mode)) auto-mode-alist))
+
+(setq system-time-locale "C")  ; using English timestamp
+
+(setq-default major-mode 'text-mode)
+(add-hook 'text-mode-hook 'turn-on-auto-fill) ; 在text-mode中启用自动折行
+
+(setq-default indent-tabs-mode nil) ; 在indent-region中不插入tab键
+
+(setq slime-net-coding-system 'utf-8-unix) ; 使slime环境支持中文
+
+(global-linum-mode t)     ; 显示行号
+(setq linum-format "%4d \u2502 ") ; seperate line number from content
+(column-number-mode t) ;在模式栏中显示行列号
+(show-paren-mode t) ;显示匹配括号
+
+(setq frame-title-format "%b@emacs") ;在标题栏显示buffer的名字
+
+;(mouse-avoidance-mode 'animate) ; 光标靠近鼠标指针时，鼠标自动让开
+(blink-cursor-mode -1) ;光标不闪
+
+(setq-default kill-whole-line t) ; 在行首 C-k 时，同时删除该行
+
+;;显示时间日期
+(setq display-time-day-and-date t)
+(display-time)
+
+(setq fill-column 78) ; 设置行宽
+
+;;; 键绑定
+(global-set-key "\C-x\C-b" 'buffer-menu) ;  打开buffer list时同时跳至该窗口
+
+;;; 定制函数
+(defun line-to-top-of-window ()
+  "Move the current line to the top of the window.
+Replace the threee keystrok sequence C-u 0 C-l"
+  (interactive)
+  (recenter 0))
+;
+(global-set-key [f6] 'line-to-top-of-window)

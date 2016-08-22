@@ -1,0 +1,77 @@
+
+# external script <<<1
+
+if [ -f /etc/bashrc ]; then
+    source /etc/bashrc
+fi
+
+#source ~/script/configs/linux_etc_bashrc
+
+source ~/script/configs/git_completion
+
+# modules <<<1
+
+#module use -a /snfs01/ou/modulefiles
+
+#module load ou/ifort
+#module load ou/script_path
+
+# environments <<<1
+
+# change prompt color and format in bash shell
+#export PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$'
+export PS1='\[\033[01;32m\]\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+
+# highlight folder and files, etc
+export CLICOLOR=1
+export LSCOLORS=ExFxCxDxBxegedabagacad 
+
+# alias <<<1
+
+alias ll="ls -lh"
+alias la="ls -a"
+alias grep="grep --color=always"
+alias df="df -h"
+alias du="du -h"
+alias q="qstat"
+alias cp='cp -i'
+alias mv='mv -i'
+alias rm='rm -i'
+#alias mympirun="mpirun -r ssh -n "
+alias cd2='cd ../../'
+alias cd3='cd ../../../'
+alias cd4='cd ../../../../'
+alias serou='ssh ou@172.16.3.237'
+alias serjump='ssh kongxh@159.226.113.50'
+alias serpcom='ssh root@47.88.17.36'
+#alias ferret='ferret -nojnl -script'
+
+# variables <<<1
+
+serpcom='root@47.88.17.36'
+ser77=lyh@172.16.0.77
+lyh101=lyh@172.16.0.101
+serzxx=zxx@172.16.0.101
+serou='ou@172.16.3.101'
+
+# dirs.
+scr="$HOME/scripts/pcom"
+wrk="$HOME/models/newpcom/work"
+src="$HOME/models/newpcom/src/pcom"
+exp="$HOME/models/pcom_1.0/exp/exp_debug/"
+dev="$HOME/models/pcom1.1/exp/dev/my_src/pcom/"
+devp="$HOME/models/pcom1.1/exp/dev/"
+db="$HOME/models/pcom1.0/exp/exp_debug/my_src/pcom/"
+dbp="$HOME/models/pcom1.0/exp/exp_debug/"
+mor="$HOME/models/roms_734/Apps/latte"
+coc="/snfs01/ou/models/coawst_868"
+con="/snfs01/ou/models/nemo/NEMOGCM/CONFIG/ORCA1/EXP00"
+cop="/snfs01/ou/models/pcom_1.2/exp/recon/my_src/pcom"
+
+pw="$HOME/models/pcom/work/moc_re_s"
+
+# other setting <<<1
+
+#ulimit -c unlimited
+#ulimit -m unlimited
+#ulimit -s unlimited

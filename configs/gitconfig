@@ -1,0 +1,9 @@
+[user]
+	name = ouyuyuan
+	email = ouyuyuan@gmail.com
+[merge]
+	tool = vimdiff
+[core]
+	editor = vim
+[color]
+	ui = auto

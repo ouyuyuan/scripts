@@ -1,0 +1,22 @@
+# .bash_profile
+
+# Get the aliases and functions
+if [ -f ~/.bashrc ]; then
+	. ~/.bashrc
+fi
+
+# User specific environment and startup programs
+
+PATH=/cm/shared/apps/gcc/4.7.0/bin:/usr/lib64/qt-3.3/bin:/opt/intel/Compiler/11.1/073/bin/intel64:/opt/intel/Compiler/11.1/073/bin/intel64:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/opt/bin:/sbin:/usr/sbin:/cm/shared/apps/sge/2011.11/bin/linux-x64:/snfs01/zhangyu/bin:.:/snfs01/zhangyu/MATLAB/R2012b/bin:/cm/shared/pgi/linux86-64/12.3/bin/:/snfs01/ou/opt/netcdf3_/bin:/snfs01/zhangyu/grads/bin:/snfs01/zhangyu/ncl/bin:/snfs01/zhangyu/openmpi/bin
+
+export PATH
+export PGI=/cm/shared/pgi
+export LM_LICENSE_FILE=/cm/shared/pgi/license.dat
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/cm/shared/pgi/linux86-64/12.3/libso:/snfs01/zhangyu/netcdf/lib:/snfs01/zhangyu/openmpi/lib
+export NETCDF_LIB=/snfs01/zhangyu/netcdf/lib
+export NETCDF_INC=/snfs01/zhangyu/netcdf/include
+export NETCDF=/snfs01/zhangyu/netcdf
+export GAUDFT=/snfs01/zhangyu/grads/gradslib
+export GADDIR=/snfs01/zhangyu/grads/gradslib
+export GASCRP=/snfs01/zhangyu/grads/gradslib
+export NCARG_ROOT=/snfs01/zhangyu/ncl

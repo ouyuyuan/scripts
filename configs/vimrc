@@ -1,0 +1,128 @@
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"        File: .vimrc                                                        "
+" Description: vim settings file                                             "
+"                                                                            "
+"      Author: OU Yuyuan (ouyuyuan AT lasg DOT iap DOT ac DOT cn)            "
+"     Created: Sun Mar 18 16:06:09 UT+8 2012                                 "
+" Last Change: 2015-09-13 17:12:09 BJT         
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" when started as "evim", evim.vim will already have done these settings.
+if v:progname =~? "evim" 
+  finish 
+endif
+
+set hlsearch
+set nocompatible               " not compatible with vi
+set mouse=a                    " enable mouse click
+set mouse=v                    " enable mouse select
+set clipboard=unnamed          " enable copy paste cross platform
+set backspace=2                " see :help backspace
+"set nonumber                    " donot show line number
+"set number                    " show line number
+set ruler                      " show cursor position
+set ignorecase smartcase       " ignorecase in search, see :help smartcase
+set helplang=en
+:syntax on                     " see :help syntax
+set backspace=indent,eol,start " backspacing over everything in insert mode
+filetype plugin indent on      " auto detect plugins, etc
+
+if has("vms")
+  set nobackup		" do not keep a backup file, use versions instead
+"else
+"  set backup		" keep a backup file
+endif
+
+set history=50   " keep 50 lines of command line history
+set showcmd      " display incomplete commands
+set expandtab    " use spaces to insert <TAB>
+set tabstop=2    " tab indent 4 spaces
+"set shiftwidth=4 " number of spaces in autoindent
+set shiftwidth=2
+
+set encoding=utf-8
+set fileencodings=ucs-bom,utf-8,cp936,gb18030,gb2312,big5,euc-jp,euc-kr,latin1
+"set ambiwidth=double
+set smarttab 
+set textwidth=60
+set formatoptions+=mB
+set smartindent
+set wildmenu
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" User define settings
+"set foldmethod=syntax
+set foldmethod=marker
+"set foldmarker=<<<,>>>
+colo ron
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"  key mappings
+nnoremap    O    O<Esc>
+" switch between split-windows                                                
+nmap <C-k> <C-w>k
+nmap <C-j> <C-w>j
+nmap <C-h> <C-w>h
+nmap <C-l> <C-w>l
+
+" Disable commands for creating and deleting folds.
+noremap zf <Nop>
+noremap zF <Nop>
+noremap zd <Nop>
+noremap zD <Nop>
+noremap zE <Nop>
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"  enhanced comments
+let mapleader=","
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"  tabular.vim
+if exists(":Tabularize")
+nmap a= :Tabularize /=
+vmap a= :Tabularize /=
+nmap a: :Tabularize /:\zs
+vmap a: :Tabularize /:\zs
+endif
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" for taglist plugin
+"let Tlist_Auto_Open=1         " auto open Tlist
+let Tlist_Show_One_File = 1   " show only one file's tags
+let Tlist_Exit_OnlyWindow = 1 " if taglist is the last-leave window, exit
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+" NCL plugin
+"
+"syntax highlighting
+au! BufRead,BufNewFile *.res set filetype=resource
+au! BufRead,BufNewFile *.ncl set filetype=ncl
+au! Syntax newlang source $VIM/ncl.vim
+"Show autocomplete menus.
+set complete-=k complete+=k " Add dictionary search (as per dictionary option)
+set wildmode=list:full
+set wildmenu
+au! BufRead,BufNewFile *.ncl set dictionary=~/.vim/dictionary/ncl.dic
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+" indent_guides.vim
+"
+let g:indent_guides_guide_size=1
+let g:indent_guides_auto_colors = 0 " 以下3行自定义对齐线颜色
+autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=red   ctermbg=3
+autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=green ctermbg=4
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"
+" voom
+"
+let g:voom_tree_width = 22

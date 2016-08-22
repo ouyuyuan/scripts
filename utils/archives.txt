@@ -1,0 +1,21 @@
+{
+    "VaultId": "60F2E6A0C3A65459D25EF4B86D2EB376",
+    "VaultRegion": "cn-shenzhen",
+    "InventoryDate": "Sun, 21 Aug 2016 18:00:02 GMT",
+    "ArchiveList": [
+        {
+            "ArchiveId": "498F489FEE5A9084F0E155705C548AEACE373FE00C19437BB7889093E70952B73A0A44FA9DB3BF4E4379FAC8655DCD57B4D743DEC5433BF0B91FD348BF2D3B27",
+            "ArchiveDescription": "Macbook Air backup",
+            "ArchiveTreeEtag": "00C4CA2199817125F6481F4A2F2D45B2",
+            "CreationDate": "Sat, 06 Aug 2016 16:37:28 GMT",
+            "Size": 2298284032
+        },
+        {
+            "ArchiveId": "3924388FDEA570879025E9B1DF2491DBF193309D378F4FC291CA048FE5797D5194410B3EF504D891790995FB27DADCF5FBA327F151427DC218076BC1FAEE8BED",
+            "ArchiveDescription": "Macbook Air backup, Downloads-2016-08-06.tar.gz",
+            "ArchiveTreeEtag": "79780C28A60F2D6A3F9DE1076F601F9E",
+            "CreationDate": "Sat, 06 Aug 2016 23:05:28 GMT",
+            "Size": 314256896
+        }
+    ]
+}

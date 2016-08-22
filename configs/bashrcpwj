@@ -1,0 +1,96 @@
+# .bashrc
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+	. /etc/bashrc
+fi
+
+# User specific aliases and functions
+module load gcc
+module load sge 
+
+#source /cm/shared/pgi/linux86-64/12.3/pgi.sh
+#source /cm/shared/pgi/linux86-64/12.3/mpi2.sh
+#export LM_LICENSE_FILE=/cm/shared/pgi/license.dat
+
+alias ll="ls -l"
+alias la="ls -a"
+alias grep="grep --color=always"
+alias df="df -h"
+alias du="du -h"
+alias rm="rm -i"
+alias cp="cp -i"
+alias vi="vim"
+alias q="qstat"
+alias qs="qsub"
+alias qd="qdel"
+alias clc="clear"
+
+export PS1='\[\e[34m\][\u@\h \w]\$ \e[m'
+
+#export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/cm/shared/pgi/linux86-64/12.3/lib
+#export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/cm/shared/pgi/linux86-64/12.3/libso
+#export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/cm/shared/pgi/linux86-64/12.3/mpi2/mpich/lib
+#export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/cm/shared/pgi/linux86-64/12.3/mpi2/mpich/libso
+
+ulimit -c unlimited
+ulimit -m unlimited
+ulimit -s unlimited
+
+export GRADS_ROOT=/snfs01/pwj/SOFT/grads-2.0.2
+export GADDIR=$GRADS_ROOT/data
+export GASCRP=$GRADS_ROOT/lib
+export PATH=$PATH:$GRADS_ROOT/bin
+
+export NCARG_ROOT=/snfs01/pwj/SOFT/ncl_ncarg-6.1.0
+export PATH=$PATH:$NCARG_ROOT/bin
+
+#export NETCDF_ROOT=/snfs01/pwj/SOFT.PGI/netcdf-4.1.2
+export NETCDF_ROOT=/snfs01/pwj/SOFT.IFC/netcdf-4.1.2
+export PATH=$PATH:$NETCDF_ROOT/bin
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$NETCDF_ROOT/lib
+
+#export GSL_ROOT=/snfs01/pwj/SOFT.PGI/gsl-1.9
+export GSL_ROOT=/snfs01/pwj/SOFT.IFC/gsl-1.9
+export PATH=$PATH:$GSL_ROOT/bin
+
+#export CURL_ROOT=/snfs01/pwj/SOFT.PGI/curl-7.19.7
+export CURL_ROOT=/snfs01/pwj/SOFT.IFC/curl-7.19.7
+export PATH=$PATH:$CURL_ROOT/bin
+
+#export UDUNITS_ROOT=/snfs01/pwj/SOFT.PGI/udunits-2.1.24
+export UDUNITS_ROOT=/snfs01/pwj/SOFT.IFC/udunits-2.1.24
+export PATH=$PATH:$UDUNITS_ROOT/bin
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$UDUNITS_ROOT/lib
+
+#export NCO_ROOT=/snfs01/pwj/SOFT.PGI/nco-4.1.0
+export NCO_ROOT=/snfs01/pwj/SOFT.IFC/nco-4.1.0
+export PATH=$PATH:$NCO_ROOT/bin
+
+#export IMAGEMAGICK_ROOT=/snfs01/pwj/SOFT.PGI/ImageMagick-6.7.9-10
+export IMAGEMAGICK_ROOT=/snfs01/pwj/SOFT.IFC/ImageMagick-6.7.9-10
+export PATH=$PATH:$IMAGEMAGICK_ROOT/bin
+
+#export PYTHON_ROOT=/snfs01/pwj/SOFT.PGI/Python-2.4.3
+export PYTHON_ROOT=/snfs01/pwj/SOFT.IFC/Python-2.4.3
+export PATH=$PYTHON_ROOT/bin:$PATH
+
+#export SZIP_ROOT=/snfs01/pwj/SOFT.PGI/szip-2.1
+export SZIP_ROOT=/snfs01/pwj/SOFT.IFC/szip-2.1
+export PATH=$SZIP_ROOT/bin:$PATH
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$SZIP_ROOT/lib
+
+#export UUID_ROOT=/snfs01/pwj/SOFT.PGI/uuid-1.6.2
+export UUID_ROOT=/snfs01/pwj/SOFT.IFC/uuid-1.6.2
+export PATH=$UUID_ROOT/bin:$PATH
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$UUID_ROOT/lib
+
+#source /snfs01/pwj/SOFT.IFC/intel/Compiler/11.1/073/bin/intel64/iccvars_intel64.sh
+#source /snfs01/pwj/SOFT.IFC/intel/Compiler/11.1/073/bin/intel64/ifortvars_intel64.sh     
+#source /snfs01/pwj/SOFT.IFC/intel/Compiler/11.1/073/bin/intel64/idbvars.sh
+#source /snfs01/pwj/SOFT.IFC/intel/impi/4.0.1.007/bin64/mpivars.sh
+
+source /snfs01/pwj/SOFT.IFC/intel/Compiler/11.0/069/bin/intel64/iccvars_intel64.sh
+source /snfs01/pwj/SOFT.IFC/intel/Compiler/11.0/069/bin/intel64/ifortvars_intel64.sh
+source /snfs01/pwj/SOFT.IFC/intel/Compiler/11.0/069/bin/intel64/idbvars.sh
+source /snfs01/pwj/SOFT.IFC/intel/impi/3.2.0.011/bin64/mpivars.sh

@@ -4,7 +4,7 @@
 "                                                                            "
 "      Author: OU Yuyuan (ouyuyuan AT lasg DOT iap DOT ac DOT cn)            "
 "     Created: Sun Mar 18 16:06:09 UT+8 2012                                 "
-" Last Change: 2015-09-13 17:12:09 BJT         
+" Last Change: 2016-09-04 17:15:29 BJT        
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " when started as "evim", evim.vim will already have done these settings.
@@ -57,6 +57,12 @@ set wildmenu
 set foldmethod=marker
 "set foldmarker=<<<,>>>
 colo ron
+
+" Return to last edit position when opening files (You want this!)
+autocmd BufReadPost *
+     \ if line("'\"") > 0 && line("'\"") <= line("$") |
+     \   exe "normal! g`\"" |
+     \ endif
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

@@ -17,10 +17,10 @@ bucket = oss2.Bucket(auth, endpoint, 'ou-image')
 #bucket.create_bucket(oss2.models.BUCKET_ACL_PRIVATE)
 
 # upload file
-#bucket.put_object_from_file('scan_gdou_baodaozheng.jpg','/Users/ou/Documents/gdou_registration/baodaozheng.jpg')
+#bucket.put_object_from_file('junior_school_donation.zip','/Users/ou/temp/junior_school_donation.zip')
 
 # delete file
-#bucket.delete_object('scan_diploma_ustc.jpg')
+#bucket.delete_object('scan_ustc_diploma.jpg')
 
 # list files in the bucket
 #for b in islice(oss2.ObjectIterator(bucket),10):

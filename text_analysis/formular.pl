@@ -13,14 +13,16 @@ use warnings;
 use strict;
 use Cwd 'abs_path';
 
-my $rest_dir = "/home/ou/archive/notes/math_display";
+my $rest_dir = "/root/docs/notes/math_display";
 my $rest_file = "$rest_dir/source/formula.rst";
 my $src_txt = abs_path($ARGV[0]);
-my $compile_rest = "mathjaxmake";
-my $src_dir = "/home/ou/archive";
-my $www_dir = "/attach";
+my $compile_rest = "make html";
+my $www_src = "/external/formular.txt";
+my $cp_src = "/var/www/html$www_src";
 
 my %symbols;
+
+system("cp $src_txt $cp_src");
 
 # substitute for sphinx
 open IN, "<$src_txt";
@@ -31,8 +33,7 @@ say OUT "==========";
 say OUT "";
 say OUT "[`formulae source`__]";
 say OUT "";
-$src_txt =~ s/$src_dir/$www_dir/;
-say OUT "__ $src_txt";
+say OUT "__ $www_src";
 say OUT "";
 my $math = 0;   # some math expression expand multiple lines
 while (<IN>) {

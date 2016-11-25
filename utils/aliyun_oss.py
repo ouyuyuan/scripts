@@ -13,22 +13,22 @@ service = oss2.Service(auth, endpoint, connect_timeout=60000)
 #print( [b.name for b in oss2.BucketIterator(service)] )
 
 # select bucket
-#bucket = oss2.Bucket(auth, endpoint, 'ou-ms-software')
+bucket = oss2.Bucket(auth, endpoint, 'ou-ms-software')
 #bucket = oss2.Bucket(auth, endpoint, 'ou-image')
-bucket = oss2.Bucket(auth, endpoint, 'pcom-data')
+#bucket = oss2.Bucket(auth, endpoint, 'pcom-data')
 
 # create bucket
 #bucket.create_bucket(oss2.models.BUCKET_ACL_PRIVATE)
 
 # upload file
-file_dir = '/Users/ou/temp/'
-(_, _, file_names) = walk(file_dir).next()
+#file_dir = '/Users/ou/temp/'
+#(_, _, file_names) = walk(file_dir).next()
 
 #bucket.put_object_from_file('scan_id.zip','/Users/ou/temp/scan_id.zip')
-for filename in file_names:
-  remote_name = filename
-  local_name  = file_dir + filename
-  bucket.put_object_from_file(remote_name, local_name)
+#for filename in file_names:
+#  remote_name = filename
+#  local_name  = file_dir + filename
+#  bucket.put_object_from_file(remote_name, local_name)
 #  print (file_dir+filename)
 
 # delete file
@@ -38,3 +38,6 @@ for filename in file_names:
 #for b in islice(oss2.ObjectIterator(bucket),10):
 for b in oss2.ObjectIterator(bucket):
   print(b.key)
+
+# dowload file
+bucket.get_object_to_file('Xshell.tar.gz','Xshell.tar.gz')

@@ -19,8 +19,8 @@ source ~/script/configs/git_completion
 # environments <<<1
 
 # change prompt color and format in bash shell
-#export PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$'
-export PS1='\[\033[01;32m\]\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+# export PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$'
+ export PS1='\[\033[01;32m\]\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 
 # highlight folder and files, etc
 export CLICOLOR=1
@@ -47,7 +47,7 @@ alias rm='rm -i'
 alias cd2='cd ../../'
 alias cd3='cd ../../../'
 alias cd4='cd ../../../../'
-alias serou='ssh ou@172.16.3.237'
+alias serocen='ssh ou@192.168.3.11'
 alias serjump='ssh kongxh@159.226.113.50'
 alias serpcom='ssh root@47.88.17.36'
 alias serth='ssh -i /Users/ou/Documents/gdou_jjxu_1.id gdou_jjxu_1@172.16.22.11' 

@@ -1,0 +1,43 @@
+" from http://apps.hi.baidu.com/share/detail/2338121
+
+
+" Editing related
+set backspace=indent,eol,start
+set whichwrap=b,s,h,l,~,<,>,[,]
+set mouse=a
+
+" Misc
+set wildmenu
+" 禁止光标闪烁
+set gcr=a:block-blinkon0 
+
+" Encoding related
+set encoding=UTF-8
+set langmenu=zh_CN.UTF-8
+language message zh_CN.UTF-8
+
+colo navajo-night
+
+"=============================================================================
+" Platform dependent settings
+"=============================================================================
+
+if (has("win32"))
+
+     "-------------------------------------------------------------------------
+     " Win32
+     "-------------------------------------------------------------------------
+
+    if (has("gui_running"))
+        set guifont=Bitstream_Vera_Sans_Mono:h9:cANSI
+        set guifontwide=NSimSun:h9:cGB2312
+    endif
+
+else
+
+    if (has("gui_running"))
+        set guifont=DejaVu\ Sans\ Mono\ 16
+        set gfw=文泉驿微米黑\ 16
+    endif
+
+endif

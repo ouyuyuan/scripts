@@ -1,0 +1,30 @@
+# link this as ~/.scriptrc
+# for quick note system
+NOTES_ROOT = ~/archive/docs/notes/quick
+NOTES_TOC_FILE_NAME = table_of_contents.ntx
+
+# for coding signature
+# CODES_SIGNATURE = OU Yuyuan <ouyuyuan@lasg.iap.ac.cn>, All Rights Reserved.
+CODES_SIGNATURE = OU Yuyuan <ouyuyuan@lasg.iap.ac.cn>
+CODES_AUTHOR_NAME = OU Yuyuan
+
+# for chosen of editor (gvim or vim)
+EDITOR = vim
+
+# for snippet database
+SNIPPET_ROOT = ~/archive/docs/files/snippet
+
+# latex 字典命令数据库
+TEX_SHELVE_PATH = ~/archive/data/latex_snippet.she
+
+# 备份数据库
+BACKUP_ROOT = ~/archive/backup  
+
+# latex 模板类文件目录
+TEX_CLS_ROOT = ~/archive/codes/texcls
+
+# vim 中的行宽，用于确定文本处理时的分界线
+TEXT_WIDTH = 78
+
+# latex 数据库目录
+TEX_DB_ROOT = ~/archive/coded/python/texdb

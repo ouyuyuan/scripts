@@ -1,0 +1,27 @@
+[global_config]
+  title_receive_bg_color = "#a9d5f4"
+  title_transmit_bg_color = "#125e07"
+  title_receive_fg_color = "#928686"
+  title_transmit_fg_color = "#aac0cd"
+[keybindings]
+  move_tab_right = <Primary><Shift>Page_Down
+  switch_to_tab_1 = <Primary>1
+  move_tab_left = <Primary><Shift>Page_Up
+  next_tab = <Primary>Left
+  prev_tab = <Primary>Right
+[profiles]
+  [[default]]
+    palette = "#000000:#cc0000:#4e9a06:#c4a000:#3465a4:#75507b:#06989a:#d3d7cf:#555753:#ef2929:#8ae234:#fce94f:#729fcf:#ad7fa8:#34e2e2:#eeeeec"
+    font = DejaVu Sans Mono 16
+    use_system_font = False
+    foreground_color = "#ffffff"
+[layouts]
+  [[default]]
+    [[[child1]]]
+      type = Terminal
+      parent = window0
+      profile = default
+    [[[window0]]]
+      type = Window
+      parent = ""
+[plugins]

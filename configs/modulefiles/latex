@@ -1,0 +1,14 @@
+#%Module1.0#####################################################################
+##
+## XeLaTeX environments
+##
+
+proc ModulesHelp { } {
+	puts stderr "\tXeLaTeX environments"
+}
+
+module-whatis	"XeLaTeX environments (manualy installed)"
+
+prepend-path PATH       /usr/local/texlive/2011/bin/i386-linux
+prepend-path PATH        /usr/local/texlive/2011/texmf/doc/man
+prepend-path INFOPATH    /usr/local/texlive/2011/texmf/doc/info

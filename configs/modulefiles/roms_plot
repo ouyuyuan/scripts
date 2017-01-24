@@ -1,0 +1,16 @@
+#%Module1.0#####################################################################
+##
+## ROMS plotting package
+##
+
+proc ModulesHelp { } {
+	puts stderr "\tROMS plotting package"
+}
+
+module-whatis	"ROMS plotting package"
+
+set root /home/ou/roms_plot
+set src /home/ou/archive/lib/softwares/roms_plot/src
+
+prepend-path PATH ${root}
+append-path  PATH ${src}/Bin

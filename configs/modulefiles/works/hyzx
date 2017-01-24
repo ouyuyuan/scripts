@@ -1,0 +1,18 @@
+#%Module1.0#####################################################################
+##
+## Hai Yang Zhuan Xiang preference
+##
+
+proc ModulesHelp { } {
+	puts stderr "\tSetup Hai Yang Zhuan Xiang environment"
+}
+
+module-whatis	"Setup Hai Yang Zhuan Xiang environment"
+
+set root /home/ou/archive
+
+setenv DAR ${root}/data/roms
+setenv FIR ${root}/drawing
+setenv CAR ${root}/scripts/calculate/roms/hyzx
+setenv DRR ${root}/scripts/draw/roms/hyzx
+setenv COR ${root}/models/roms/roms_734

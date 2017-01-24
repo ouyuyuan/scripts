@@ -1,0 +1,14 @@
+#%Module1.0#####################################################################
+##
+## ncview environment
+##
+
+proc ModulesHelp { } {
+	puts stderr "\tncview environment"
+}
+
+module-whatis	"ncview environment"
+
+set           root              /home/ou/opt/ifc/ncview-2.1.2
+
+prepend-path   PATH              ${root}/bin

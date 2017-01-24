@@ -1,0 +1,14 @@
+#%Module1.0#####################################################################
+##
+## NCL environments after installation
+##
+
+proc ModulesHelp { } {
+	puts stderr "\tNCL environments"
+}
+
+module-whatis	"NCL environments"
+
+set root /home/ou/ncl
+setenv NCARG_ROOT ${root}
+prepend-path PATH ${root}/bin

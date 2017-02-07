@@ -1,0 +1,14 @@
+#%Module1.0#####################################################################
+##
+## ncview environment
+##
+
+proc ModulesHelp { } {
+	puts stderr "\tparaview environment"
+}
+
+module-whatis	"paraview environment"
+
+set           root  /home/ou/archive/lib/softwares/paraview/ParaView-4.1.0-Linux-32bit
+
+prepend-path   PATH              ${root}/bin

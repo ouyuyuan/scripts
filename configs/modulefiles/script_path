@@ -1,0 +1,16 @@
+#%Module1.0#####################################################################
+##
+## preference setting on oubuntu
+##
+
+proc ModulesHelp { } {
+	puts stderr "\tSetup scripts environment"
+}
+
+module-whatis	"Setup scripts environment"
+
+set               root /home/ou/archive/scripts
+
+setenv            ASYMPTOTE_HOME          ${root}/modules
+prepend-path      PATH                    ${root}/bin
+prepend-path      PYTHONPATH              ${root}/modules

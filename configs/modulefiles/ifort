@@ -1,0 +1,18 @@
+#%Module1.0#####################################################################
+##
+## Intel Fortran compiler
+##
+
+proc ModulesHelp { } {
+	puts stderr "\tIntel Fortran compiler environments"
+}
+
+module-whatis	"Intel Fortran compiler environments"
+
+set             root            /opt/intel
+
+setenv          FC              ${root}/bin/ifort
+setenv          F77             ${root}/bin/ifort
+
+prepend-path     PATH            ${root}/bin
+prepend-path     LD_LIBRARY_PATH ${root}/lib/ia32

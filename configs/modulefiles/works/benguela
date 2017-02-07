@@ -1,0 +1,18 @@
+#%Module1.0#####################################################################
+##
+## Benguela test, Roms_tools
+##
+
+proc ModulesHelp { } {
+	puts stderr "\tSetup Benguela test environment"
+}
+
+module-whatis	"Setup Benguela test environment"
+
+set root /home/ou/archive
+
+setenv DAR ${root}/models/roms/Roms_tools/Run/ROMS_FILES
+setenv FIR ${root}/drawing/roms/benguela
+setenv CAR ${root}/scripts/calculate/roms/benguela
+setenv DRR ${root}/scripts/draw/roms/benguela
+setenv COR ${root}/models/roms/Roms_tools/Run

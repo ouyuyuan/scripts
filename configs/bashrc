@@ -1,94 +1,254 @@
+# ~/.bashrc: executed by bash(1) for non-login shells.
+# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
+# for examples
 
-# external script <<<1
+# system default <<<1
 
-if [ -f /etc/bashrc ]; then
-    source /etc/bashrc
+# If not running interactively, don't do anything
+[ -z "$PS1" ] && return
+
+# don't put duplicate lines or lines starting with space in the history.
+# See bash(1) for more options
+HISTCONTROL=ignoreboth
+
+# append to the history file, don't overwrite it
+shopt -s histappend
+
+# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
+HISTSIZE=1000
+HISTFILESIZE=2000
+
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
+
+# If set, the pattern "**" used in a pathname expansion context will
+# match all files and zero or more directories and subdirectories.
+#shopt -s globstar
+
+# make less more friendly for non-text input files, see lesspipe(1)
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+
+# set variable identifying the chroot you work in (used in the prompt below)
+if [ -z "$debian_chroot" ] && [ -r /etc/debian_chroot ]; then
+    debian_chroot=$(cat /etc/debian_chroot)
 fi
 
-#source ~/script/configs/linux_etc_bashrc
+# set a fancy prompt (non-color, unless we know we "want" color)
+case "$TERM" in
+    xterm-color) color_prompt=yes;;
+esac
 
-source ~/script/configs/git_completion
+# uncomment for a colored prompt, if the terminal has the capability; turned
+# off by default to not distract the user: the focus in a terminal window
+# should be on the output of commands, not on the prompt
+#force_color_prompt=yes
 
-# modules <<<1
+if [ -n "$force_color_prompt" ]; then
+    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
+	# We have color support; assume it's compliant with Ecma-48
+	# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
+	# a case would tend to support setf rather than setaf.)
+	color_prompt=yes
+    else
+	color_prompt=
+    fi
+fi
 
-#module use -a /snfs01/ou/modulefiles
+if [ "$color_prompt" = yes ]; then
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+else
+    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+fi
+unset color_prompt force_color_prompt
 
-#module load ou/ifort
-#module load ou/script_path
+# If this is an xterm set the title to user@host:dir
+case "$TERM" in
+xterm*|rxvt*)
+    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
+    ;;
+*)
+    ;;
+esac
+
+# enable color support of ls and also add handy aliases
+if [ -x /usr/bin/dircolors ]; then
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    alias ls='ls --color=auto'
+    #alias dir='dir --color=auto'
+    #alias vdir='vdir --color=auto'
+
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+fi
+
+# some more ls aliases
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+# Alias definitions.
+# You may want to put all your additions into a separate file like
+# ~/.bash_aliases, instead of adding them here directly.
+# See /usr/share/doc/bash-doc/examples in the bash-doc package.
+
+if [ -f ~/.bash_aliases ]; then
+    . ~/.bash_aliases
+fi
+
+# enable programmable completion features (you don't need to enable
+# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
+# sources /etc/bash.bashrc).
+if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
+    . /etc/bash_completion
+fi
+
+# modules  <<<1
+
+# Modules
+export MODULESHOME="$HOME/opt/Modules/3.2.10"
+source $MODULESHOME/init/bash
+
+module use -a $HOME/archive/modulefiles
+module load dot
+
+module load perl
+module load script_path
+module load latex
+module load ncl
+module load ifort
+module load netcdf
+module load ncview
+module load paraview
+module load asymptote
+module load roms_plot
+
+# works
+#module load works/hyzx
+#module load works/yellow_sea
+#module load works/scs
+module load works/benguela
+
+# dir. short cut <<<1
+
+arc="$HOME/archive"
+scr="$arc/scripts"
+da="$arc/data/pcom/phd"
+sda="/media/scidata"
+
+# data 
+dac="/media/CFSR_2/CFSR/6hourly/pgbhnl/3d/2006/04"
+
+# doc
+dcf="$arc/docs/seminar/fv_method"
+dop="$arc/pcom_src/v_1.0_protex"
+dce="$arc/docs/pcom/element"
+dcr="$arc/notes/roms/source"
+
+# figures
+fip="$arc/drawing/pcom/phd_open"
+
+# draw script
+dra="$arc/scripts/draw/pb_grl/"
+pdr="$arc/scripts/draw/pp_heaving_0.4/"
+pca="$arc/scripts/calculate/pcom_exp/"
+cap="$arc/scripts/calculate/pcom"
+
+nyt="$arc/docs/nyt"
+pap="$arc/docs/paper/pb_grl"
+
+wk="$arc/scripts/ybzc/scripts/modify_restart/src/"
 
 # environments <<<1
 
-# change prompt color and format in bash shell
-# export PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$'
- export PS1='\[\033[01;32m\]\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+#export LD_LIBRARY_PATH="/usr/lib:/usr/local/lib:$LD_LIBRARY_PATH"
+#export LD_LIBRARY_PATH="/usr/local/lib" # openmpi 编译所需
+#export LD_LIBRARY_PATH="$HOME/opt/ifort/netcdf/lib:$LD_LIBRARY_PATH"
 
-# highlight folder and files, etc
-export CLICOLOR=1
-export LSCOLORS=ExFxCxDxBxegedabagacad 
+export OSFONTDIR="/usr/share/fonts"
+export LANG=en_US.UTF-8 # to get English style output for 'date'
+#export DATADIR="$HOME/archive/data" # created data directory
 
-export OSFONTDIR="~/Library/Fonts"
+# external scripts <<<1
 
-# NCL
-export NCARG_ROOT=/usr/local/ncl
-export PATH=$NCARG_ROOT/bin:$PATH
+# PyFerret
+. /home/ou/PyFerret/ferret_paths    # pyferret setup environment
+export PYTHONPATH="$PYTHONPATH:$FER_DIR/lib/python2.7/site-packages"
 
-# alias <<<1
-
-alias ll="ls -lh"
-alias la="ls -a"
-alias grep="grep --color=always"
-alias df="df -h"
-alias du="du -h"
-alias q="qstat"
-alias cp='cp -i'
-alias mv='mv -i'
-alias rm='rm -i'
-#alias mympirun="mpirun -r ssh -n "
-alias cd2='cd ../../'
-alias cd3='cd ../../../'
-alias cd4='cd ../../../../'
-alias serocen='ssh ou@192.168.3.11'
-alias serjump='ssh kongxh@159.226.113.50'
-alias serpcom='ssh root@47.88.17.36'
-alias serth='ssh -i /Users/ou/Documents/gdou_jjxu_1.id gdou_jjxu_1@172.16.22.11' 
-#alias ferret='ferret -nojnl -script'
+# ifort, needed to used netcdf
+source /opt/intel/bin/ifortvars.sh ia32
 
 # variables <<<1
 
-serpcom='root@47.88.17.36'
 ser77=lyh@172.16.0.77
-lyh101=lyh@172.16.0.101
-serzxx=zxx@172.16.0.101
-serou='ou@172.16.3.101'
+serwl=wanglu@202.195.237.185
+ser101=ou@172.16.0.101
+serou=ou@172.16.4.243
+serzy=zhangyu@172.16.0.101
+serzxx=zhangyu@172.16.0.101
+serlyh=lyh@172.16.0.101
+th9=casrcm@TH-1A-LN9:/vol6/home/casrcm/ouns
+pp="/home/ou/archive/docs/paper/heaving/v0.4"
+db="/home/ou/archive/pcom_src/v1.0_debug/pcom/"
+dev="/home/ou/archive/pcom_src/v1.1/exp/dev/my_src/pcom/"
+phd="/home/ou/archive/docs/phdthesis/section"
+phds="/home/ou/archive/scripts/draw/phdthesis/"
+phdf="/home/ou/archive/drawing/phdthesis/"
 
-# dirs.
-ppt="/Users/ou/Documents/class/air-sea/slides02"
-scr="$HOME/scripts/pcom"
-wrk="$HOME/models/newpcom/work"
-src="$HOME/models/newpcom/src/pcom"
-exp="$HOME/models/pcom_1.0/exp/exp_debug/"
-dev="$HOME/models/pcom1.1/exp/dev/my_src/pcom/"
-devp="$HOME/models/pcom1.1/exp/dev/"
-db="$HOME/models/pcom1.0/exp/exp_debug/my_src/pcom/"
-dbp="$HOME/models/pcom1.0/exp/exp_debug/"
-mor="$HOME/models/roms_734/Apps/latte"
-coc="/snfs01/ou/models/coawst_868"
-con="/snfs01/ou/models/nemo/NEMOGCM/CONFIG/ORCA1/EXP00"
-cop="/snfs01/ou/models/pcom_1.2/exp/recon/my_src/pcom"
+# alias <<<1
 
-pw="$HOME/models/pcom/work/moc_re_s"
+alias cd2="cd ../.."
+alias cd3="cd ../../.."
+alias cd4="cd ../../../.."
+
+alias cp='cp -ip'
+alias gvim='gvim -f' # 解决 unity 下 Unable to create Ubuntu Menu Proxy 错误
+alias math='lyx ~/temp/temp.lyx &'
+alias mv='mv -i'
+alias rm='rm -i'
+alias sage='~/sage/sage'
+alias mympi='mpirun -n '
+
+alias serou='ssh ou@172.16.3.237'
+alias ser77='ssh lyh@172.16.0.77'
+alias ser101='ssh -X ou@172.16.0.101'
+alias serlyh='ssh -X lyh@172.16.0.101'
+alias serzxx='ssh zxx@172.16.0.101'
+alias serfweb='ssh fweb@172.16.1.244'
+alias serkong='ssh kongxh@172.16.2.189'
+alias serknew='ssh kongxh@172.16.1.200'
+alias serasus='ssh ou@192.168.1.105'
+alias serzy='ssh zhangyu@172.16.0.101'
+alias serth1='ssh casrcm@TH-1A-LN1'
+alias serth2='ssh casrcm@TH-1A-LN2'
+alias serth3='ssh casrcm@TH-1A-LN3'
+alias serth8='ssh casrcm@TH-1A-LN8'
+alias serth9='ssh casrcm@TH-1A-LN9'
+alias serwl='ssh wanglu@202.195.237.185'
+
+alias asybin='/usr/bin/asy -globalwrite -nosafe'
+# -globalwrite in 3D seems not work
+#alias asy3to2='/usr/bin/asy -noV -noprc -glOptions=-indirect -render=6 -f pdf'
+alias asy3to2='/usr/bin/asy -noV -noprc -glOptions=-indirect -render=5 -f pdf'
+alias asy3to2vector='/usr/bin/asy -noV -noprc -render=0 -f pdf'
+alias asyv='/usr/bin/asy -V'
+alias panoply="~/archive/lib/softwares/panoply/PanoplyJ/panoply.sh"
+alias matlab="/home/ou/MATLAB/R2011b/bin/matlab"
+
+alias ferret='pyferret -nojnl -script '
+alias pyferret='pyferret -nojnl'
+alias mount='sudo mount -t iso9660 -o loop,utf8 '
+alias st='/home/ou/archive/lib/softwares/sublime_text/sublime_text_2/sublime_text'
+
+alias dw='dwdiff -3 '
 
 # other setting <<<1
-
-#ulimit -c unlimited
-#ulimit -m unlimited
-#ulimit -s unlimited
-
-##
-# Your previous /Users/ou/.bash_profile file was backed up as /Users/ou/.bash_profile.macports-saved_2016-09-27_at_10:10:41
-##
-
-# MacPorts Installer addition on 2016-09-27_at_10:10:41: adding an appropriate PATH variable for use with MacPorts.
-export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
-# Finished adapting your PATH environment variable for use with MacPorts.
+ulimit -c unlimited
+ulimit -m unlimited
+ulimit -s unlimited
 

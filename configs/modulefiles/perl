@@ -1,0 +1,19 @@
+#%Module1.0#####################################################################
+##
+## perl environment, some are from cpan configuration
+##
+
+proc ModulesHelp { } {
+	puts stderr "\tAdd environments for Perl."
+}
+
+module-whatis	"Add environments for Perl"
+
+setenv PERL_LOCAL_LIB_ROOT /home/ou/perl5
+setenv PERL_MB_OPT "--install_base /home/ou/perl5"
+setenv PERL_MM_OPT "INSTALL_BASE=/home/ou/perl5"
+
+setenv PERL5LIB /home/ou/perl5/lib/perl5/i686-linux-gnu-thread-multi-64int:/home/ou/perl5/lib/perl5
+prepend-path PERL5LIB /home/ou/archive/coded/perl
+
+prepend-path PATH /home/ou/perl5/bin

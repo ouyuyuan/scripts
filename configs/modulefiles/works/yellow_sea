@@ -1,0 +1,18 @@
+#%Module1.0#####################################################################
+##
+## Hai Yang Zhuan Xiang preference
+##
+
+proc ModulesHelp { } {
+	puts stderr "\tSetup Yellow Sea environment"
+}
+
+module-whatis	"Setup Yellow Sea environment"
+
+set root /home/ou/archive
+
+setenv DAR ${root}/models/roms/roms_734/Apps/yellow_sea/in
+setenv FIR ${root}/drawing/roms/yellow_sea
+setenv CAR ${root}/scripts/calculate/roms/yellow_sea
+setenv DRR ${root}/scripts/draw/roms/yellow_sea
+setenv COR ${root}/models/roms/roms_734/Apps/yellow_sea

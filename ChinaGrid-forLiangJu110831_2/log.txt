@@ -1,0 +1,19 @@
+
+Grid Analysis and Display System (GrADS) Version 2.0.a8
+Copyright (c) 1988-2010 by Brian Doty and the 
+Institute for Global Environment and Society (IGES)
+GrADS comes with ABSOLUTELY NO WARRANTY
+See file COPYRIGHT for more information
+
+Config: v2.0.a8 little-endian readline printim grib2 netcdf hdf4-sds hdf5 opendap-grids,stn geotiff shapefile
+Issue 'q config' command for more information.
+GX Package Initialization: Size = 11 8.5 
+Running in Batch mode
+No hardcopy metafile open
+All files closed; all defined objects released;
+All GrADS attributes have been reinitialized
+No hardcopy metafile open
+All files closed; all defined objects released;
+All GrADS attributes have been reinitialized
+No hardcopy metafile open
+GX package terminated 

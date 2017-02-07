@@ -147,6 +147,10 @@ nmap <C-j> <C-w>j
 nmap <C-h> <C-w>h
 nmap <C-l> <C-w>l
 
+" insert timestamp at normal and insert mode with Ctrl-t 
+nmap <C-t> i<C-R>=strftime("%Y-%m-%d %H:%M:%S CST")<CR><Esc>
+imap <C-t> <C-R>=strftime("%Y-%m-%d %H:%M:%S CST")<CR>
+
 " Disable commands for creating and deleting folds.
 noremap zf <Nop>
 noremap zF <Nop>

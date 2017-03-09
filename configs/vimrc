@@ -130,6 +130,8 @@ set foldmethod=marker
 "set foldmarker=<<<,>>>
 <<<<<<< HEAD
 colo ron
+" prevent autoindent when paste text from another application
+set paste   
 
 " Return to last edit position when opening files (You want this!)
 autocmd BufReadPost *
@@ -148,7 +150,7 @@ nmap <C-h> <C-w>h
 nmap <C-l> <C-w>l
 
 " insert timestamp at normal and insert mode with Ctrl-t 
-nmap <C-t> i<C-R>=strftime("%Y-%m-%d %H:%M:%S CST")<CR><Esc>
+nmap <C-t> i<C-R>=strftime(" %Y-%m-%d %H:%M:%S CST")<CR><Esc>
 imap <C-t> <C-R>=strftime("%Y-%m-%d %H:%M:%S CST")<CR>
 
 " Disable commands for creating and deleting folds.

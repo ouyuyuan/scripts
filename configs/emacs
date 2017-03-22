@@ -1,0 +1,172 @@
+
+;;;; Description: emacs配置文件，均经过测试 
+;;;;
+;;;;      Author: OU Yuyuan <ouyuyuan@lasg.iap.ac.cn>
+;;;;     Created: Fri Jul 13 10:13:00 UTC+8 2012
+;;;; Last Change: 2013-01-13 10:43:18 CST
+
+
+;;; 由GUI自动生成的配置
+;字体
+(custom-set-faces
+  ;; custom-set-faces was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+ '(default ((t (:inherit nil :stipple nil :background "black" :foreground "navajo white" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 151 :width normal :foundry "unknown" :family "DejaVu Sans Mono")))))
+
+(custom-set-variables
+  ;; custom-set-variables was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+ '(blink-cursor-mode nil)
+ '(column-number-mode t)
+ '(display-time-mode t)
+ '(imaxima-fnt-size "huge")
+ '(imaxima-max-scale 0.75)
+ '(imaxima-pt-size 12)
+ '(rst-level-face-base-color "black")
+ '(rst-toc-insert-max-level 4)
+ '(rst-toc-insert-style (quote fixed))
+ '(show-paren-mode t))
+
+;;; 手动添加的配置
+;;;
+
+;;所有的备份文件都放置在~/backups目录下
+;;对于每个备份文件，保留最原始的两个版本和最新的五个版本。
+;;备份时，备份文件是复件
+;;不产生备份文件 (setq make-backup-files nil)
+(setq backup-directory-alist (quote (("." . "~/archive/backup"))))
+(setq version-control t)
+(setq kept-old-versions 2)
+(setq kept-new-versions 5)
+(setq delete-old-versions t)
+(setq backup-directory-alist '(("." . "~/archive/backup")))
+(setq backup-by-copying t)
+
+(add-to-list 'load-path "~/archive/codes/lib/emacsplugins")  ; 扩展目录
+
+(add-to-list 'load-path "~/archive/codes/lib/emacsplugins/color-theme") 
+(require 'color-theme)
+(eval-after-load "color-theme"
+  '(progn
+     (color-theme-initialize)
+     (color-theme-hober)))
+;(color-theme-subtle-hacker)
+;(color-theme-robin-hood)   ; (不管用)
+(define-key global-map "\C-cc" 'color-theme-robin-hood)   ; 配色快捷键
+
+(setq system-time-locale "C")  ; using English timestamp
+
+(setq inhibit-startup-message t) ;关闭启动画面
+
+(setq-default major-mode 'text-mode)
+(add-hook 'text-mode-hook 'turn-on-auto-fill) ; 在text-mode中启用自动折行
+
+(setq-default indent-tabs-mode nil) ; 在indent-region中不插入tab键
+
+(setq slime-net-coding-system 'utf-8-unix) ; 使slime环境支持中文
+
+(global-linum-mode t)     ; 显示行号
+(column-number-mode t) ;在模式栏中显示行列号
+(show-paren-mode t) ;显示匹配括号
+
+(setq frame-title-format "%b@emacs") ;在标题栏显示buffer的名字
+
+;(mouse-avoidance-mode 'animate) ; 光标靠近鼠标指针时，鼠标自动让开
+(blink-cursor-mode -1) ;光标不闪
+
+(setq-default kill-whole-line t) ; 在行首 C-k 时，同时删除该行
+
+;;显示时间日期
+(setq display-time-day-and-date t)
+(display-time)
+
+(setq fill-column 78) ; 设置行宽
+
+;;; 键绑定
+(global-set-key "\C-x\C-b" 'buffer-menu) ;  打开buffer list时同时跳至该窗口
+
+;;; 定制函数
+(defun line-to-top-of-window ()
+  "Move the current line to the top of the window.
+Replace the threee keystrok sequence C-u 0 C-l"
+  (interactive)
+  (recenter 0))
+;
+(global-set-key [f6] 'line-to-top-of-window)
+
+
+;;; 模式设置
+;; org-mode
+(require 'org-install)
+;
+(add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
+(setq org-agenda-files (list                         ; what directories/files to scan
+                        "~/archive/org/"
+                        ))
+(setq org-log-done t)
+(setq org-todo-keywords '((sequence "TODO(t!)" 
+                                    "WAITING(w)"
+                                    "GOINGON(g!)" 
+                                    "PERIODIC(p)"
+                                    "|" "DONE(d/!)" "ABORT(a@/!)")))
+;
+(setq org-tag-alist '(
+                      ("blog" . ?b)        ; useful blogs the website in
+                      (:startgroup . nil)
+                      ("python" . ?p) ("fortran" . ?f)
+                      (:endgroup .nil)
+                      ))
+;
+(define-key global-map "\C-cl" 'org-store-link)
+(define-key global-map "\C-ca" 'org-agenda)
+(define-key global-map "\C-cb" 'org-iswitchb)
+(define-key global-map "\C-cd" 'org-time-stamp)
+(define-key global-map [f12] 'org-remember)
+;
+;; PDFs visited in Org-mode are opened in Evince (and not in the default choice) 
+;;http://stackoverflow.com/a/8836108/789593
+(add-hook 'org-mode-hook
+      '(lambda ()
+         (delete '("\\.pdf\\'" . default) org-file-apps)
+         (add-to-list 'org-file-apps '("\\.pdf\\'" . "evince %s"))))
+;; PNGs opened in eog
+(add-hook 'org-mode-hook
+      '(lambda ()
+         (delete '("\\.png\\'" . default) org-file-apps)
+         (add-to-list 'org-file-apps '("\\.png\\'" . "eog %s"))))
+;; EPS opened in evince
+(add-hook 'org-mode-hook
+      '(lambda ()
+         (delete '("\\.eps\\'" . default) org-file-apps)
+         (add-to-list 'org-file-apps '("\\.eps\\'" . "evince %s"))))
+;; djvu opened in evince
+(add-hook 'org-mode-hook
+      '(lambda ()
+         (delete '("\\.djvu\\'" . default) org-file-apps)
+         (add-to-list 'org-file-apps '("\\.djvu\\'" . "evince %s"))))
+;; CSV opened in gedit
+(add-hook 'org-mode-hook
+      '(lambda ()
+         (delete '("\\.csv\\'" . default) org-file-apps)
+         (add-to-list 'org-file-apps '("\\.csv\\'" . "gedit %s"))))
+;; CHM opened in chmsee
+(add-hook 'org-mode-hook
+      '(lambda ()
+         (delete '("\\.chm\\'" . default) org-file-apps)
+         (add-to-list 'org-file-apps '("\\.chm\\'" . "chmsee %s"))))
+
+;; latex auctex
+;; http://soundandcomplete.com/post/21038270357/emacs-as-the-ultimate-latex-editor
+(setq TeX-auto-save t) 
+(setq TeX-parse-self t) 
+(setq TeX-save-query nil)
+(setq TeX-PDF-mode t)            ; using pdflatex
+
+;; TRAMP for remote editting
+(setq  tramp-default-user "lyh"
+       tramp-default-host "172.16.0.77")
+; then use /ssh::ou/temp/temp.txt to open remote file

@@ -1,62 +1,137 @@
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"        File: .vimrc                                                        "
-" Description: vim settings file                                             "
-"                                                                            "
-"      Author: OU Yuyuan (ouyuyuan AT lasg DOT iap DOT ac DOT cn)            "
-"     Created: Sun Mar 18 16:06:09 UT+8 2012                                 "
-" Last Change: 2016-09-04 17:15:29 BJT        
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" make link at ~/.vimrc
+" An example for a vimrc file.
+"
+" Maintainer:	Bram Moolenaar <Bram@vim.org>
+" Last change:	2011 Apr 15
+"
+" To use it, copy it to
+"     for Unix and OS/2:  ~/.vimrc
+"	      for Amiga:  s:.vimrc
+"  for MS-DOS and Win32:  $VIM\_vimrc
+"	    for OpenVMS:  sys$login:.vimrc
 
-" when started as "evim", evim.vim will already have done these settings.
-if v:progname =~? "evim" 
-  finish 
+" system default <<<1
+
+" When started as "evim", evim.vim will already have done these settings.
+if v:progname =~? "evim"
+  finish
 endif
 
-set hlsearch
-set nocompatible               " not compatible with vi
-set mouse=a                    " enable mouse click
-set mouse=v                    " enable mouse select
-set clipboard=unnamed          " enable copy paste cross platform
-set backspace=2                " see :help backspace
-"set nonumber                    " donot show line number
-"set number                    " show line number
-set ruler                      " show cursor position
-set ignorecase smartcase       " ignorecase in search, see :help smartcase
-set helplang=en
-:syntax on                     " see :help syntax
-set backspace=indent,eol,start " backspacing over everything in insert mode
-filetype plugin indent on      " auto detect plugins, etc
+" Use Vim settings, rather than Vi settings (much better!).
+" This must be first, because it changes other options as a side effect.
+set nocompatible
+
+" allow backspacing over everything in insert mode
+set backspace=indent,eol,start
 
 if has("vms")
   set nobackup		" do not keep a backup file, use versions instead
-"else
-"  set backup		" keep a backup file
+else
+  set backup		" keep a backup file
+endif
+set history=50		" keep 50 lines of command line history
+set ruler		" show the cursor position all the time
+set showcmd		" display incomplete commands
+set incsearch		" do incremental searching
+
+" For Win32 GUI: remove 't' flag from 'guioptions': no tearoff menu entries
+" let &guioptions = substitute(&guioptions, "t", "", "g")
+
+" Don't use Ex mode, use Q for formatting
+map Q gq
+
+" CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
+" so that you can undo CTRL-U after inserting a line break.
+inoremap <C-U> <C-G>u<C-U>
+
+" In many terminal emulators the mouse works just fine, thus enable it.
+if has('mouse')
+  set mouse=a
 endif
 
-set history=50   " keep 50 lines of command line history
-set showcmd      " display incomplete commands
-set expandtab    " use spaces to insert <TAB>
-set tabstop=2    " tab indent 4 spaces
-"set shiftwidth=4 " number of spaces in autoindent
+" Switch syntax highlighting on, when the terminal has colors
+" Also switch on highlighting the last used search pattern.
+if &t_Co > 2 || has("gui_running")
+  syntax on
+  set hlsearch
+endif
+
+" Only do this part when compiled with support for autocommands.
+if has("autocmd")
+
+  " Enable file type detection.
+  " Use the default filetype settings, so that mail gets 'tw' set to 72,
+  " 'cindent' is on in C files, etc.
+  " Also load indent files, to automatically do language-dependent indenting.
+  filetype plugin indent on
+
+  " Put these in an autocmd group, so that we can delete them easily.
+  augroup vimrcEx
+  au!
+
+  " For all text files set 'textwidth' to 78 characters.
+  autocmd FileType text setlocal textwidth=78
+"  autocmd FileType text setlocal textwidth=70
+
+  " When editing a file, always jump to the last known cursor position.
+  " Don't do it when the position is invalid or when inside an event handler
+  " (happens when dropping a file on gvim).
+  " Also don't do it when the mark is in the first line, that is the default
+  " position when opening a file.
+  autocmd BufReadPost *
+    \ if line("'\"") > 1 && line("'\"") <= line("$") |
+    \   exe "normal! g`\"" |
+    \ endif
+
+  augroup END
+
+else
+
+  set autoindent		" always set autoindenting on
+
+endif " has("autocmd")
+
+" Convenient command to see the difference between the current buffer and the
+" file it was loaded from, thus the changes you made.
+" Only define it when not defined already.
+if !exists(":DiffOrig")
+  command DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis
+		  \ | wincmd p | diffthis
+endif
+
+
+" 自行添加的设置 <<<1
+
+" 通用设置 <<<2
+
+" highlight the current tab with a star
+au TabEnter * let t:current = 1
+au TabLeave * let t:current = 0
+set guitablabel=%{exists('t:current')&&t:current?'*':''}%N/\ %t\ %M
+
+set textwidth=60
+colo ron                     " 使用配色主题 ron.vim
+let mapleader = ","          " 用于快速注释等插件
+"set number			         " 显示行号
+set nobackup                 " 不生成备份文件
+
+set showtabline=2
+
+set expandtab   	    " 插入有<TAB>键时以空格取代
+set tabstop=4    		" 一个<TAB>等于4个空格
+set smarttab
+set smartindent
+"set shiftwidth=4 		" 自动缩进时的空格数
 set shiftwidth=2
 
-set encoding=utf-8
-set fileencodings=ucs-bom,utf-8,cp936,gb18030,gb2312,big5,euc-jp,euc-kr,latin1
-"set ambiwidth=double
-set smarttab 
-set textwidth=60
-set formatoptions+=mB
-set smartindent
-set wildmenu
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" User define settings
-"set foldmethod=syntax
+"set nolinebreak         " 取消自动折行(just effect display, not content)
+"set foldmethod=indent   " 按缩进折叠
 set foldmethod=marker
 "set foldmarker=<<<,>>>
+<<<<<<< HEAD
 colo ron
+" prevent autoindent when paste text from another application
+set paste   
 
 " Return to last edit position when opening files (You want this!)
 autocmd BufReadPost *
@@ -73,6 +148,10 @@ nmap <C-k> <C-w>k
 nmap <C-j> <C-w>j
 nmap <C-h> <C-w>h
 nmap <C-l> <C-w>l
+
+" insert timestamp at normal and insert mode with Ctrl-t 
+nmap <C-t> i<C-R>=strftime(" %Y-%m-%d %H:%M:%S CST")<CR><Esc>
+imap <C-t> <C-R>=strftime("%Y-%m-%d %H:%M:%S CST")<CR>
 
 " Disable commands for creating and deleting folds.
 noremap zf <Nop>
@@ -94,41 +173,123 @@ nmap a= :Tabularize /=
 vmap a= :Tabularize /=
 nmap a: :Tabularize /:\zs
 vmap a: :Tabularize /:\zs
+=======
+set ignorecase smartcase " 搜索时忽略大小写，智能搜索。见: help smartcase
+set infercase       " ctrl-N/P 补全时区分大小写
+
+"set colorcolumn=+1,+2,+3 " highlight three columns after textwidth
+"set colorcolumn=71,72 " highlight three columns after textwidth
+highlight ColorColumn ctermbg=Black
+
+set noautoindent
+"filetype indent off    " disable auto-indent, annoying when pasting
+
+" html 缩进众多，特别设置
+autocmd FileType html setlocal shiftwidth=2 tabstop=2
+
+" 键映射 <<<2
+
+" 大写O键插入空白行
+nnoremap O O<ESC>       
+" insert just read mark to a line of Fortran code
+nnoremap <F2> $a!<>justunderstood<ESC>j
+nnoremap <F3> $a!<>question<ESC>j
+
+" for aspell checker
+nnoremap <C-T> :w!<CR>:!aspell check %<CR>:e! %<CR>
+
+ " Disable commands for creating and deleting folds.
+ noremap zf <Nop>
+ noremap zF <Nop>
+ noremap zd <Nop>
+ noremap zD <Nop>
+ noremap zE <Nop>
+
+
+" 编程语言设置 <<<2
+
+" Fortran <<<3
+
+" 根据文件后缀名匹配格式
+let s:extfname = expand("%:e")
+if s:extfname ==? "f90"
+    let fortran_free_source=1
+    unlet! fortran_fixed_source
+else
+    let fortran_fixed_source=1
+    unlet! fortran_free_source
+>>>>>>> c25c9c1d40c174370dd6784620b78063f48b65c2
 endif
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let fortran_more_precise=1
+let fortran_do_enddo=1
+let fortran_have_tabs=1             "去掉固定格式每行开头的红色填充
+
+"Show autocomplete menus.
+set complete-=k complete+=k " Add dictionary search (as per dictionary option)
+au! BufRead,BufNewFile *.f90 set dictionary=~/.vim/dictionary/fortran.dic
+
+
+" 一些插件安装后的设置 <<<2
+
+"_____________________________________________________________________
+" asy.vim for asyptote highlight,etc
+augroup filetypedetect
+au BufNewFile,BufRead *.asy     setf asy
+augroup END
+"
+"Show autocomplete menus.
+set complete-=k complete+=k " Add dictionary search (as per dictionary option)
+au! BufRead,BufNewFile *.asy set dictionary=~/.vim/dictionary/asy.dic
+"^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+"_____________________________________________________________________
+" indent_guides.vim（显示对齐线）
+"let g:indent_guides_guide_size=4 " 对齐线宽度(单位：字符)
+let g:indent_guides_guide_size=1 " 对齐线宽度(单位：字符)
+let g:indent_guides_auto_colors = 0 " 以下3行自定义对齐线颜色
+autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=red   ctermbg=3
+autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=green ctermbg=4
+"^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+"_____________________________________________________________________
+" mark.vim multi-words highlighs
+" http://www.vim.org/scripts/script.php?script_id=2666
+"
+set viminfo+=! " for mark persistence
+"^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+"_____________________________________________________________________
 " for taglist plugin
-"let Tlist_Auto_Open=1         " auto open Tlist
 let Tlist_Show_One_File = 1   " show only one file's tags
 let Tlist_Exit_OnlyWindow = 1 " if taglist is the last-leave window, exit
+"^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"
-" NCL plugin
-"
-"syntax highlighting
-au! BufRead,BufNewFile *.res set filetype=resource
-au! BufRead,BufNewFile *.ncl set filetype=ncl
+"_____________________________________________________________________
+" for VOoM
+" To make .txt Body headlines highlighted.
+let g:voom_tree_width = 22
+
+au BufWinEnter *.txt if &ft==#'text' | exe 'syn match ModeMsg /\V\.\*' . split(&fmr, ',')[0] . '\.\*/' | endif
+"^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+" ncl <<<3
+
+au BufRead,BufNewFile *.res set filetype=ncl
+au BufRead,BufNewFile *.ncl set filetype=ncl
 au! Syntax newlang source $VIM/ncl.vim
 "Show autocomplete menus.
 set complete-=k complete+=k " Add dictionary search (as per dictionary option)
 set wildmode=list:full
 set wildmenu
-au! BufRead,BufNewFile *.ncl set dictionary=~/.vim/dictionary/ncl.dic
+au BufRead,BufNewFile *.ncl set dictionary=~/.vim/dictionary/ncl.dic
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"
-" indent_guides.vim
-"
-let g:indent_guides_guide_size=1
-let g:indent_guides_auto_colors = 0 " 以下3行自定义对齐线颜色
-autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=red   ctermbg=3
-autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=green ctermbg=4
+" maxima <<<3
+au BufRead,BufNewFile *.mac set filetype=maxima
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"
-" voom
-"
-let g:voom_tree_width = 22
+" ferret <<<3
+
+au BufRead,BufNewFile *.jnl set filetype=ferret
+
+" sage
+autocmd BufRead,BufNewFile *.sage,*.pyx,*.spyx set filetype=python

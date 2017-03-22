@@ -1,0 +1,17 @@
+#%Module1.0#####################################################################
+##
+## NetCDF environment
+##
+
+proc ModulesHelp { } {
+	puts stderr "\tNetCDF environment"
+}
+
+module-whatis	"NetCDF environment"
+
+set           root              /home/ou/opt/ifc/netcdf-4.1.3
+
+setenv        NETCDF            ${root}
+
+prepend-path   PATH              ${root}/bin
+prepend-path   LD_LIBRARY_PATH   ${root}/lib

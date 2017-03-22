@@ -7,3 +7,9 @@
 	editor = vim
 [color]
 	ui = auto
+[gui]
+	recentrepo = /home/ou/archive/coded
+[giggle]
+	main-window-maximized = true
+	main-window-geometry = 430x172+409+331
+	history-view-vpane-position = 741

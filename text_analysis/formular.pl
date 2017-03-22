@@ -13,7 +13,7 @@ use warnings;
 use strict;
 use Cwd 'abs_path';
 
-my $rest_dir = "/root/docs/notes/math_display";
+my $rest_dir = "/home/ou/docs/notes/math_display";
 my $rest_file = "$rest_dir/source/formula.rst";
 my $src_txt = abs_path($ARGV[0]);
 my $compile_rest = "make html";

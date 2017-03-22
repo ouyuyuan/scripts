@@ -1,0 +1,8 @@
+# Auto complete for shell input
+# Put this in $HOME/.inputrc
+# From: http://ubuntuforums.org/showthread.php?t=1024973&page=2
+
+"\e[A": history-search-backward
+"\e[B": history-search-forward
+#"\e[C": forward-char
+#"\e[D": backward-char 

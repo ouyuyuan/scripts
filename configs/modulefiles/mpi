@@ -1,0 +1,17 @@
+#%Module1.0#####################################################################
+##
+## openmpi
+##
+
+proc ModulesHelp { } {
+	puts stderr "\tOpenMPI environments"
+}
+
+module-whatis	"OpenMPI environments"
+
+set             root            /home/ou/opt/ifc/openmpi-1.6.1
+
+setenv          MPI             ${root}
+
+prepend-path    PATH            ${root}/bin
+prepend-path    LD_LIBRARY_PATH ${root}/lib

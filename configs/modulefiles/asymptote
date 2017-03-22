@@ -1,0 +1,12 @@
+#%Module1.0#####################################################################
+##
+## XeLaTeX environments
+##
+
+proc ModulesHelp { } {
+	puts stderr "\tAsymptote environments"
+}
+
+module-whatis	"Asymptote environments (manualy installed)"
+
+setenv                  ASYMPTOTE_HOME          /home/ou/archive/scripts/modules

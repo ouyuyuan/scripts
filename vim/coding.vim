@@ -31,6 +31,7 @@ def readScriptrc():
             variable = variable
             var_pattern = re.compile(r'^%s\s*\=\s*(?P<value>.*)'%(variable))
             for line in open(self.rcFileDir + self.rcFileName, 'r'):
+                #for line in open('/home/ou/.scriptrc', 'r'):
                 try:
                     return var_pattern.match(line).group('value').rstrip()
                 except:
